@@ -9,4 +9,4 @@ __pycache__
 *.log
 uploads
 .DS_Store
-settings_local.py
+*local
