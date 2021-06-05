@@ -43,6 +43,9 @@ INSTALLED_APPS = [
 
     # lib apps
     'django_tgbot',
+
+    # custom apps,
+    'kitchen5bot',
 ]
 
 MIDDLEWARE = [
