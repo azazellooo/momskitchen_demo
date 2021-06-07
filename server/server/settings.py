@@ -46,6 +46,8 @@ INSTALLED_APPS = [
 
     # custom apps,
     'kitchen5bot',
+
+    'accounts'
 ]
 
 MIDDLEWARE = [

@@ -7,6 +7,9 @@ from django_tgbot.models import AbstractTelegramUser, AbstractTelegramChat, Abst
 class TelegramUser(AbstractTelegramUser):
     pass
 
+    def __str__(self):
+        return f'{self.telegram_id} - {self.username} '
+
 
 class TelegramChat(AbstractTelegramChat):
     pass
