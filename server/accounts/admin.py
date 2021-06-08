@@ -4,7 +4,7 @@ from kitchen5bot.models import TelegramUser
 # Register your models here.
 
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'secondary_key']
+    list_display = ['id', 'name', 'secondary_key', 'generate_link']
     list_filter = ['name']
     search_fields = ['name']
     fields = ['id', 'name', 'secondary_key']

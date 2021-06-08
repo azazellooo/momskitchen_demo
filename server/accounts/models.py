@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import MinLengthValidator
 import uuid
 
+BASE_URL = 'http://t.me/kitchen5bot/'
+
 
 class Organization(models.Model):
     name = models.CharField(max_length=300, blank=False, null=False)
@@ -11,6 +13,10 @@ class Organization(models.Model):
         db_table = 'Organization'
         verbose_name = 'Организация'
         verbose_name_plural = 'Организации'
+
+    @property
+    def generate_link(self):
+        return f'{BASE_URL}?start={self.secondary_key}'
 
     def __str__(self):
         return self.name
