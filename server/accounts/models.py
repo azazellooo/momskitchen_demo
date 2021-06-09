@@ -26,6 +26,7 @@ class Users(models.Model):
     tg_user = models.OneToOneField('kitchen5bot.TelegramUser', on_delete = models.CASCADE)
     organization_id = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE, null=True, blank=True)
     username = models.CharField(max_length=200, null=False, blank=False, unique=True, validators=[MinLengthValidator(3)])
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'Users'
