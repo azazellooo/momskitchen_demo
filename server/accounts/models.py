@@ -32,3 +32,13 @@ class Users(models.Model):
         db_table = 'Users'
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+
+class UserToken(models.Model):
+    key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
+    user = models.OneToOneField('accounts.Users', on_delete=models.CASCADE, related_name='user_token')
+
+    class Meta:
+        db_table = 'UserTokens'
+        verbose_name = 'Токен пользователя'
+        verbose_name_plural = 'Токены Пользователей'
