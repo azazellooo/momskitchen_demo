@@ -12,10 +12,10 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 
 class UsersAdmin(admin.ModelAdmin):
-    list_display = ['id', 'tg_user', 'organization_id', 'username']
+    list_display = ['id', 'tg_user', 'organization_id', 'username', 'is_active']
     list_filter = ['organization_id']
     search_fields = ['organization_id', 'username']
-    fields = ['id', 'tg_user', 'organization_id', 'username']
+    fields = ['id', 'tg_user', 'organization_id', 'username', 'is_active']
     readonly_fields = ['id']
 
 
