@@ -7,29 +7,66 @@ from .bot import state_manager
 from .models import TelegramState
 from .bot import TelegramBot
 from accounts.models import Organization, Users
+from .parse_and_validations import deep_link_parce, is_organization, is_user, deep_len_validator
 
 DEEP_LINK = '/start '
-ORGANIZATION_ID = ''
-@processor(state_manager, from_states=state_types.All, success='is_deep_link', fail='not_deep_link')
+ORGANIZATION_ID = None
+
+# Задаем декоратору fail=state_types.Keep который будет выполнять операцию возврата на исходное положение процессора то есть в саоме начало, затем добавляем методы
+# raise ProcessFailure где нам нужно возвращать исходное положение процессора, затем я добавил ветвление elif state.name != 'iv, которое отвечает на любое сообщение, почему state.name != 'iv?
+# потому что в базе сохраняется state.name пока мы его не удалим командой state.set_name(''), а как раз таки мы это делаем в процессоре 'iv' который апдейтит юзернейм для контейнеров
+# и при первой итерации когда он попадает в success то есть в наш 'iv', то он одновременно с name который лежит в базе так как мы казали success='iv', запускал наше ветвление else так как это не токен.
+# надеюсь обьяснил понятно....
+
+@processor(state_manager,  from_states=state_types.All, update_types=update_types.Message, message_types=message_types.Text, success='iv', fail=state_types.Keep)
 def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
-    try:
-        if (DEEP_LINK in update.message.text) and len(update.message.text) > 40:
-            ORGANIZATION_ID = parse_message_text(update.message.text)
-            org = is_organization(ORGANIZATION_ID)
-            new_user = Users.objects.get_or_create(tg_user=state.telegram_user, organization_id=org, username=state.telegram_user.username)
-            bot.sendMessage(update.get_chat().get_id(), f'Добро пожаловать к боту! Мы успешно сохранили данные о Вас, {state.telegram_user.username}, но перед тем, как пойти дальше, Вы должны указать Ваше имя следующим сообщением. Оно будет использоваться для подписи контейнеров с Вашей заказанной едой. В будущем Вы в любой момент сможете его изменить.')
-            raise ProcessFailure
+    state.reset_memory()
+    if DEEP_LINK in update.message.text and deep_len_validator(update.message.text):
+        ORGANIZATION_ID = deep_link_parce(update.message.text)
+        org = is_organization(ORGANIZATION_ID)
+        if org is not None:
+            if Users.objects.filter(tg_user=state.telegram_user, organization_id=org).exists():
+                bot.sendMessage(update.get_chat().get_id(), f'Ты уже переходил мать его, {state.telegram_user.username}!')
+                raise ProcessFailure
+            else:
+                Users.objects.create(
+                    tg_user=state.telegram_user,
+                    organization_id=org
+                )
+                bot.sendMessage(update.get_chat().get_id(), f'Добро пожаловать к боту! Мы успешно сохранили данные о Вас, {state.telegram_user.username}, но перед тем, как пойти дальше, Вы должны указать Ваше имя следующим сообщением. Оно будет использоваться для подписи контейнеров с Вашей заказанной едой. В будущем Вы в любой момент сможете его изменить.')
+                return
         else:
-            bot.sendMessage(update.get_chat().get_id(), f'Привет, {state.telegram_user.username}! ')
+            bot.sendMessage(update.get_chat().get_id(), 'Прекрасно подделываешь токен, научи так же')
+            bot.sendMessage(update.get_chat().get_id(), f'Не пиши сюда больше, {state.telegram_user.username}! ')
+            raise ProcessFailure
+    elif state.name != 'iv':
+        bot.sendMessage(update.get_chat().get_id(), f'Здарова, {state.telegram_user.username}! ')
+        raise ProcessFailure
 
-    except AttributeError:
-        pass
 
-@processor(state_manager, from_states='not_deep_link')
+@processor(state_manager, from_states='iv')
 def hello_level_2(bot, update, state):
-    new_user = Users.objects.get(tg_user=state.telegram_user)
-    new_user.username = update.message.text
-    new_user.save()
+    user = Users.objects.get(tg_user=state.telegram_user)
+    user.username = update.message.text
+    user.save()
+    bot.sendMessage(update.get_chat().get_id(), f'Сохранили тебя, {state.telegram_user.username}!')
+    state.set_name('')
+
+
+# @processor(state_manager, from_states='invalid_token')
+# def hello_level_3(bot: TelegramBot, update: Update, state: TelegramState):
+#     print('dfdfdfdfdfd')
+#     bot.sendMessage(update.get_chat().get_id(), 'Прекрасно подделываешь токен, научи так же')
+#     bot.sendMessage(update.get_chat().get_id(), f'Не пиши сюда больше, {state.telegram_user.username}! ')
+
+
+# @processor(state_manager, from_states='fucking_talk')
+# def hello_level_4(bot: TelegramBot, update: Update, state: TelegramState):
+#     bot.sendMessage(update.get_chat().get_id(), f'Здарова, {state.telegram_user.username}! ')
+
+
+
+
 
 # Дополнительные методы для последующмх задач
 
@@ -60,20 +97,5 @@ def hello_level_2(bot, update, state):
     # organization = is_organization(second_key)
     # bot.sendMessage(update.get_chat().get_id(), f'Рады видеть Вас, {state.telegram_user.username}')
 
-
-def is_organization(second_key):
-    try:
-        return Organization.objects.get(secondary_key=second_key)
-    except ObjectDoesNotExist:
-        return False
-
-def is_user(user_id):
-    try:
-        return Users.objects.get(tg_user=user_id)
-    except ObjectDoesNotExist:
-        return False
-
-def parse_message_text(message_text):
-    return message_text.split(' ')[-1]
 
 
