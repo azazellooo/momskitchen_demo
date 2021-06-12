@@ -10,6 +10,7 @@ from accounts.models import Organization, Users
 from .parse_and_validations import deep_link_parce, is_organization, is_user, deep_len_validator
 
 DEEP_LINK = '/start '
+STOP = '/stop'
 ORGANIZATION_ID = None
 
 # Задаем декоратору fail=state_types.Keep который будет выполнять операцию возврата на исходное положение процессора то есть в саоме начало, затем добавляем методы
@@ -39,9 +40,20 @@ def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
             bot.sendMessage(update.get_chat().get_id(), 'Прекрасно подделываешь токен, научи так же')
             bot.sendMessage(update.get_chat().get_id(), f'Не пиши сюда больше, {state.telegram_user.username}! ')
             raise ProcessFailure
+    elif update.message.text == STOP:
+        try:
+            the_user = Users.objects.get(tg_user=state.telegram_user)
+            the_user.is_active = False
+            the_user.save()
+            bot.sendMessage(update.get_chat().get_id(), 'Рассылка отключена.')
+            raise ProcessFailure
+        except ObjectDoesNotExist:
+            bot.sendMessage(update.get_chat().get_id(), 'К сожалению мы не смогли найти ваш аккаунт. Пройдите регистрацию перейдя по ссылке, которую даст вам Никита.')
+            raise ProcessFailure
     elif state.name != 'iv':
         bot.sendMessage(update.get_chat().get_id(), f'Здарова, {state.telegram_user.username}! ')
         raise ProcessFailure
+
 
 
 @processor(state_manager, from_states='iv')
