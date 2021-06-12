@@ -11,6 +11,7 @@ from .parse_and_validations import deep_link_parce, is_organization, is_user, de
 
 DEEP_LINK = '/start '
 STOP = '/stop'
+START = '/start'
 ORGANIZATION_ID = None
 
 # Задаем декоратору fail=state_types.Keep который будет выполнять операцию возврата на исходное положение процессора то есть в саоме начало, затем добавляем методы
@@ -43,10 +44,28 @@ def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
     elif update.message.text == STOP:
         try:
             the_user = Users.objects.get(tg_user=state.telegram_user)
-            the_user.is_active = False
-            the_user.save()
-            bot.sendMessage(update.get_chat().get_id(), 'Рассылка отключена.')
+            if the_user.is_active == True:
+                the_user.is_active = False
+                the_user.save()
+                bot.sendMessage(update.get_chat().get_id(), 'Рассылка отключена.')
+                raise ProcessFailure
+            else:
+                bot.sendMessage(update.get_chat().get_id(), 'Рассылка уже отключена.')
+                raise ProcessFailure
+        except ObjectDoesNotExist:
+            bot.sendMessage(update.get_chat().get_id(), 'К сожалению мы не смогли найти ваш аккаунт. Пройдите регистрацию перейдя по ссылке, которую даст вам Никита.')
             raise ProcessFailure
+    elif update.message.text == START:
+        try:
+            the_user = Users.objects.get(tg_user=state.telegram_user)
+            if the_user.is_active == False:
+                the_user.is_active = True
+                the_user.save()
+                bot.sendMessage(update.get_chat().get_id(), f'Привет, {state.telegram_user.username}! Рады видеть Вас снова в KitchenBot!')
+                raise ProcessFailure
+            else:
+                bot.sendMessage(update.get_chat().get_id(), 'Рассылка уже включена.')
+                raise ProcessFailure
         except ObjectDoesNotExist:
             bot.sendMessage(update.get_chat().get_id(), 'К сожалению мы не смогли найти ваш аккаунт. Пройдите регистрацию перейдя по ссылке, которую даст вам Никита.')
             raise ProcessFailure
