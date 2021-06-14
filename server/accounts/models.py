@@ -6,8 +6,13 @@ BASE_URL = 'http://t.me/kitchen5bot/'
 
 
 class Organization(models.Model):
+    PAYMENT_TYPES = [('actual', 'фактический расчет'), ('cumulative', 'накопительный расчет')]
     name = models.CharField(max_length=300, blank=False, null=False)
     secondary_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
+    payment = models.CharField(max_length=400, choices=PAYMENT_TYPES, default=PAYMENT_TYPES[0])
+    address = models.CharField(max_length=400, blank=False, null=False, default='Bishkek')
+    bonus_activation = models.BooleanField(default=False)
+    leave_review = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'Organization'
