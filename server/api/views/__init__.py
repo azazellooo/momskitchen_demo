@@ -1,0 +1,1 @@
+from api.views.organization import OrganizationDetailView
