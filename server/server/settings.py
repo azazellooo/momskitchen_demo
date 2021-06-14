@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'kitchen5bot',
     'accounts',
     'KitchenWeb',
+    'api',
 
 ]
 
