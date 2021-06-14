@@ -43,13 +43,11 @@ INSTALLED_APPS = [
 
     # lib apps
     'django_tgbot',
+    'rest_framework',
 
     # custom apps,
     'kitchen5bot',
-
     'accounts',
-
-    # Web app
     'KitchenWeb',
 
 ]
