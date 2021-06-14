@@ -6,5 +6,5 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Organization
-        fields = ['name', 'secondary_key', 'generate_link']
-        read_only_fields = ['id']
+        fields = ['name', 'payment', 'address', 'bonus_activation', 'leave_review']
+        read_only_fields = ['id', 'secondary_key', 'generate_link']
