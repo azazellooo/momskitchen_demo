@@ -6,12 +6,13 @@ from django_tgbot.types.update import Update
 from .bot import state_manager
 from .models import TelegramState
 from .bot import TelegramBot
-from accounts.models import Organization, Users
+from accounts.models import Organization, Users, UserToken
 from .parse_and_validations import deep_link_parce, is_organization, is_user, deep_len_validator
 
 DEEP_LINK = '/start '
 STOP = '/stop'
 START = '/start'
+LOGIN = '/login'
 ORGANIZATION_ID = None
 
 # Задаем декоратору fail=state_types.Keep который будет выполнять операцию возврата на исходное положение процессора то есть в саоме начало, затем добавляем методы
@@ -40,6 +41,20 @@ def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
         else:
             bot.sendMessage(update.get_chat().get_id(), 'Прекрасно подделываешь токен, научи так же')
             bot.sendMessage(update.get_chat().get_id(), f'Не пиши сюда больше, {state.telegram_user.username}! ')
+            raise ProcessFailure
+    elif update.message.text == LOGIN:
+        try:
+            user = Users.objects.get(tg_user=state.telegram_user)
+            if UserToken.objects.filter(user=user).exists():
+                bot.sendMessage(update.get_chat().get_id(), 'Вам уже был выделен токен')
+                raise ProcessFailure
+            else:
+                UserToken.objects.create(user=user)
+                token2 = UserToken.objects.get(user=user)
+                bot.sendMessage(update.get_chat().get_id(), f'Прекрасно, держи свой линк на профиль : https://localhost:8080/profiles/{token2.key}')
+                raise ProcessFailure
+        except ObjectDoesNotExist:
+            bot.sendMessage(update.get_chat().get_id(), 'Вы не можете получить токен, пока не зарегестрируетесь по токену который должен был вам выдать Никитыч ')
             raise ProcessFailure
     elif update.message.text == STOP:
         try:
