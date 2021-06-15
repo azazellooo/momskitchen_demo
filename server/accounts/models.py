@@ -13,6 +13,7 @@ class Organization(models.Model):
     address = models.CharField(max_length=400, blank=False, null=False, default='Bishkek')
     bonus_activation = models.BooleanField(default=False)
     leave_review = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'Organization'
