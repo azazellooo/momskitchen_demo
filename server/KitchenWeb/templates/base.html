@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+        <link rel="stylesheet" href="{% static "css/navbar.css" %}">
+
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="menu">
+
+            {% if perms.KitchenWeb.view_organization %}
+                <li><a href="{% url "organizations:list" %}">Все компании</a></li>
+                {% endif %}
+        {% block menu %}{% endblock %}
+        </ul>
+    </nav>
+    <div class="container">
+        {% block page_header %}{% endblock %} {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>
