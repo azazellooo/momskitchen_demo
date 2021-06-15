@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('kitchen5bot/', include('kitchen5bot.urls')),
     # path('accounts/', include('accounts.urls')),
-    path('api/', include('api.urls'))
+    path('api/', include('api.urls')),
+    path('kitchenweb', include('KitchenWeb.urls'))
 ]
