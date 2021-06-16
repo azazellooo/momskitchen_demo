@@ -4,13 +4,13 @@
             {% include "partial/search_form.html" %}
     {% endif %}
 
-    {% for organization in organizations %}
+    {% for supplement in supplements %}
     <div class="box">
-        <h3>{{ organization.name }}</h3>
+        <p>{{ supplement.name }}. Цена: {{ supplement.price }}</p>
     </div>
 
 {% empty %}
-    <h2 class="text-center">Нет ещё такой Организации </h2>
+    <h2 class="text-center">Надбавок нет. </h2>
 {% endfor %}
 <br>
     {% include 'partial/paginate.html' %}

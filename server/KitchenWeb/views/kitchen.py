@@ -1,22 +1,22 @@
 from django.db.models import Q
 from django.shortcuts import render
-from accounts.models import Organization
+from KitchenWeb.models import Supplement
 from django.views.generic import ListView
 from KitchenWeb.forms import SearchForm
 from django.utils.http import urlencode
 
 
-class OrganizationsListView(ListView):
-    template_name = 'organizations/list.html'
+class SupplementListView(ListView):
+    template_name = 'supplements/list.html'
     paginate_by = 5
-    model = Organization
+    model = Supplement
     paginate_orphans = 1
-    context_object_name = 'organizations'
+    context_object_name = 'supplements'
 
     def get(self, request, **kwargs):
         self.form = SearchForm(request.GET)
         self.search_data = self.get_search_data()
-        return super(OrganizationsListView, self).get(request, **kwargs)
+        return super(SupplementListView, self).get(request, **kwargs)
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -38,5 +38,4 @@ class OrganizationsListView(ListView):
 
         if self.search_data:
             context['query'] = urlencode({'search_value': self.search_data})
-
         return context

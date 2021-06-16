@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% block content %}
+    {% if organizations %}
+            {% include "partial/search_form.html" %}
+    {% endif %}
+
+    {% for organization in organizations %}
+    <div class="box">
+        <p>1. {{ organization.name }}</p>
+    </div>
+
+{% empty %}
+    <h2 class="text-center">Нет ещё такой Организации </h2>
+{% endfor %}
+<br>
+    {% include 'partial/paginate.html' %}
+
+{% endblock %}
