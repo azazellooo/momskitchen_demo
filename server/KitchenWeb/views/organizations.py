@@ -7,7 +7,7 @@ from django.utils.http import urlencode
 
 
 class OrganizationsListView(ListView):
-    template_name = 'organizations/index.html'
+    template_name = 'organizations/list.html'
     paginate_by = 5
     model = Organization
     paginate_orphans = 1
