@@ -15,7 +15,7 @@ class SupplementAdmin(admin.ModelAdmin):
     list_filter = ['name']
     search_fields = ['name']
     fields = ['id', 'name', 'price']
-    readonly_fields = ['id', 'price']
+    readonly_fields = ['id', ]
 
 
 admin.site.register(Supplement, SupplementAdmin)
