@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Create supplement{% endblock %}
+
+
+
+{% block content %}
+    <div>
+        <h1>Create supplement</h1>
+        <form method="post" action="{% url "kitchen:create_supplement" %}">
+            {% include "partial/form.html" with button_text="Create" %}
+        </form>
+    </div>
+{% endblock %}
