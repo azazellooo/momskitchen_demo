@@ -11,7 +11,7 @@
 
     {% for supplement in supplements %}
     <div class="box">
-        <p>{{ supplement.name }}. Цена: {{ supplement.price }}</p>
+    <span><a href="{% url "kitchen:detail_supplement" supplement.id %}"> id надбавки: {{ supplement.id }}. Название: {{ supplement.name }} </a></span>
     </div>
 
 {% empty %}
