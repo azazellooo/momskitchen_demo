@@ -15,6 +15,23 @@
         {% endfor %}
 {% if not fields_only %}
         <br/>
-        <input type="submit" value="{{ button_text|default:"Submit" }}"/>
+{#        <input type="submit" value="{{ button_text|default:"Submit" }}"/>#}
     </form>
 {% endif %}
+
+<script>
+    function b() {
+        $('#form input[type="text"]').val(localStorage.getItem('username'))
+        localStorage.removeItem('username')
+        localStorage.removeItem('is_active')
+    }
+    if (document.getElementsByClassName('error')[0]){
+      b()
+    }
+    else if (document.getElementsByClassName('form-error')[0]){
+        b()
+    }
+    else if (document.getElementsByClassName('form-field-error')[0]){
+        b()
+    }
+</script>
