@@ -1,4 +1,9 @@
 {% extends 'base.html'%}
+
+{% block menu %}
+    <li><a href="{% url 'kitchen:create_supplement'  %}">Создать надбавку</a></li>
+{% endblock %}
+
 {% block content %}
     {% if organizations %}
             {% include "partial/search_form.html" %}
