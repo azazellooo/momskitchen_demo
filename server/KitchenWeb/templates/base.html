@@ -10,11 +10,10 @@
 <body>
     <nav class="navbar">
         <ul class="menu">
-
-            {% if perms.KitchenWeb.view_organization %}
+{#            {% if perms.KitchenWeb.view_organization %}#}
                 <li><a href="{% url "kitchen:organization-list" %}">Все компании</a></li>
                 <li><a href="{% url "kitchen:supplement-list" %}">надбавки</a></li>
-                {% endif %}
+{#                {% endif %}#}
         {% block menu %}{% endblock %}
         </ul>
     </nav>
