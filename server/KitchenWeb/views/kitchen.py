@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from KitchenWeb.models import Supplement
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DetailView
 from KitchenWeb.forms import SearchForm, SupplementForm
 from django.utils.http import urlencode
 
@@ -50,3 +50,9 @@ class SupplementCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('kitchen:supplement-list')
+
+
+class SupplementDetailView(DetailView):
+    template_name = 'supplements/detail.html'
+    model = Supplement
+    context_object_name = 'supplement'
