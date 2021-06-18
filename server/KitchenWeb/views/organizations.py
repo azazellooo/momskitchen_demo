@@ -1,8 +1,10 @@
 from django.db.models import Q
 from django.shortcuts import render
+from django.urls import reverse
+
 from accounts.models import Organization
-from django.views.generic import ListView
-from KitchenWeb.forms import SearchForm
+from django.views.generic import ListView, CreateView
+from KitchenWeb.forms import SearchForm, OrganizationForm
 from django.utils.http import urlencode
 
 
@@ -40,3 +42,12 @@ class OrganizationsListView(ListView):
             context['query'] = urlencode({'search_value': self.search_data})
 
         return context
+
+
+class OrganizationCreateView(CreateView):
+    model = Organization
+    template_name = 'organizations/create.html'
+    form_class = OrganizationForm
+
+    def get_success_url(self):
+        return reverse('kitchen:organization-list')
