@@ -9,9 +9,15 @@
             {% include "partial/search_form.html" %}
     {% endif %}
 
+    {% if supplements %}
+        <h3 class="m-3">Надбавки</h3>
+    {% endif %}
+
     {% for supplement in supplements %}
     <div class="box">
-        <p>{{ supplement.name }}. Цена: {{ supplement.price }}</p>
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-success"><a href="{% url "kitchen:detail_supplement" supplement.id %}"> id: {{ supplement.id }}. Название: {{ supplement.name }} </a></li>
+    </ul>
     </div>
 
 {% empty %}
