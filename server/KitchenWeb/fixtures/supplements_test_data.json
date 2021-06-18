@@ -1,0 +1,58 @@
+[
+{
+  "model": "KitchenWeb.supplement",
+  "pk": 1,
+  "fields": {
+    "name": "caramel syrup",
+    "price": 123
+  }
+},
+{
+  "model": "KitchenWeb.supplement",
+  "pk": 2,
+  "fields": {
+    "name": "strawberry jam",
+    "price": 11
+  }
+},
+{
+  "model": "KitchenWeb.supplement",
+  "pk": 3,
+  "fields": {
+    "name": "blueberry jam",
+    "price": 111
+  }
+},
+{
+  "model": "KitchenWeb.supplement",
+  "pk": 4,
+  "fields": {
+    "name": "sour cream",
+    "price": 87
+  }
+},
+{
+  "model": "KitchenWeb.supplement",
+  "pk": 5,
+  "fields": {
+    "name": "berries",
+    "price": 123
+  }
+},
+{
+  "model": "KitchenWeb.supplement",
+  "pk": 6,
+  "fields": {
+    "name": "fruit syrup",
+    "price": 111
+  }
+},
+{
+  "model": "KitchenWeb.supplement",
+  "pk": 7,
+  "fields": {
+    "name": "condensed milk",
+    "price": 99
+  }
+}
+]
