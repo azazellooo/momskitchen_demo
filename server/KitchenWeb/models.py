@@ -12,7 +12,7 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'
 
     def __str__(self):
-        return f'Категория: {self.category_name}, порядковый номер: {self.order}'
+        return f'Категория: {self.category_name}, очередность: {self.order}'
 
 
 class Supplement(models.Model):
