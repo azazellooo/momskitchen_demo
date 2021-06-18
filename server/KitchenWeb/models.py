@@ -2,6 +2,14 @@ from django.core.validators import MinValueValidator
 from django.db import models
 
 
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 class Category(models.Model):
     category_name = models.TextField(max_length=30, null=False, blank=False, verbose_name='Category')
     order = models.IntegerField(null=False, blank=False, verbose_name='Category Order', validators=(MinValueValidator(1),))
@@ -15,7 +23,7 @@ class Category(models.Model):
         return f'Категория: {self.category_name}, очередность: {self.order}'
 
 
-class Supplement(models.Model):
+class Supplement(BaseModel):
     name = models.CharField(max_length=300, blank=False, null=False, verbose_name='Надбавка')
     price = models.PositiveIntegerField(blank=False, null=False, verbose_name='Цена за надбавку')
 

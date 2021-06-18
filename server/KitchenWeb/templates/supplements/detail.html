@@ -2,6 +2,7 @@
 
 
 {% block menu %}
+    <li><a href="{% url 'kitchen:update_supplement' supplement.id %}">Редактировать надбавку</a></li>
 {% endblock menu %}
 
 {% block title %}{{ supplement.name }}{% endblock %}
