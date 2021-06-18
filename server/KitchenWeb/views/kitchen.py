@@ -50,7 +50,7 @@ class SupplementCreateView(CreateView):
     form_class = SupplementForm
 
     def get_success_url(self):
-        return reverse('kitchen:supplement-list')
+        return reverse('kitchen:detail_supplement', kwargs={'pk': self.object.pk})
 
 
 class SupplementDetailView(DetailView):
