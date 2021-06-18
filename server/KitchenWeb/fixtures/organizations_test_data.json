@@ -1,0 +1,171 @@
+[
+{
+  "model": "accounts.organization",
+  "pk": 14,
+  "fields": {
+    "name": "acer",
+    "secondary_key": "e87c9226-bdb2-4e29-b88a-3d6f3a322ca1",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 15,
+  "fields": {
+    "name": "attractor",
+    "secondary_key": "aa95743d-dcba-45d0-9e18-17ffad242441",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 16,
+  "fields": {
+    "name": "lenova",
+    "secondary_key": "f38dee70-6451-42cd-b635-043b98c6b0d6",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 17,
+  "fields": {
+    "name": "macBook",
+    "secondary_key": "a9c902bb-ed8d-4af0-b348-bd399f76e702",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 18,
+  "fields": {
+    "name": "redmi",
+    "secondary_key": "b15a5f6f-cf8a-400e-8ba2-1ef9aae9fb8d",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 19,
+  "fields": {
+    "name": "Tenda",
+    "secondary_key": "b38d8e35-2dbd-44e8-befe-627f7799dc02",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 20,
+  "fields": {
+    "name": "asu",
+    "secondary_key": "5841b6ac-0e0c-4164-857c-ffcc5389c9c4",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 21,
+  "fields": {
+    "name": "legenda",
+    "secondary_key": "871a9dd9-796f-48d1-a806-f8bdd5ef3829",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 22,
+  "fields": {
+    "name": "deli",
+    "secondary_key": "297d5094-d32f-41c0-b396-186245cb2d2a",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 23,
+  "fields": {
+    "name": "google",
+    "secondary_key": "559ece28-c8b0-4384-a0aa-570f0ab4486c",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 24,
+  "fields": {
+    "name": "firefox",
+    "secondary_key": "e1600665-b47e-432a-b89e-abedb7abedaa",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 25,
+  "fields": {
+    "name": "proglib",
+    "secondary_key": "41f3ec23-d048-40dd-b6c9-efe3e9ddaaa2",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.organization",
+  "pk": 26,
+  "fields": {
+    "name": "gitlab",
+    "secondary_key": "bd8a0e67-bccf-4cf8-9711-ec64c7328aaf",
+    "payment": "('actual', 'фактический расчет')",
+    "address": "Bishkek",
+    "bonus_activation": false,
+    "leave_review": true,
+    "is_active": true
+  }
+}
+]
