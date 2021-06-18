@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Update supplement{% endblock %}
+{% block menu %}
+    <li><a href="{% url 'kitchen:detail_supplement' supplement.id %}">Back</a></li>
+{% endblock %}
+{% block content %}
+    <div>
+        <h1>Update supplement</h1>
+
+        <form method="post" action="{% url "kitchen:update_supplement" supplement.id %}">
+            {% include "partial/form.html" with button_text="Update" %}
+        </form>
+    </div>
+{% endblock %}

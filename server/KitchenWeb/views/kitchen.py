@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from KitchenWeb.models import Supplement
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from KitchenWeb.forms import SearchForm, SupplementForm
 from django.utils.http import urlencode
 
@@ -14,6 +14,7 @@ class SupplementListView(ListView):
     model = Supplement
     paginate_orphans = 1
     context_object_name = 'supplements'
+    queryset = Supplement.objects.order_by('-created_at')
 
     def get(self, request, **kwargs):
         self.form = SearchForm(request.GET)
@@ -56,3 +57,14 @@ class SupplementDetailView(DetailView):
     template_name = 'supplements/detail.html'
     model = Supplement
     context_object_name = 'supplement'
+
+
+class SupplementUpdateView(UpdateView):
+    model = Supplement
+    template_name = 'supplements/update.html'
+    form_class = SupplementForm
+    context_object_name = 'supplement'
+
+    def get_success_url(self):
+        return reverse('kitchen:detail_supplement', kwargs={'pk': self.object.pk})
+
