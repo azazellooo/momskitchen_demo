@@ -7,13 +7,16 @@ BASE_URL = 'http://t.me/kitchen5bot/'
 
 class Organization(models.Model):
     PAYMENT_TYPES = [('actual', 'фактический расчет'), ('cumulative', 'накопительный расчет')]
-    name = models.CharField(max_length=300, blank=False, null=False)
-    secondary_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
-    payment = models.CharField(max_length=400, choices=PAYMENT_TYPES, default=PAYMENT_TYPES[0])
-    address = models.CharField(max_length=400, blank=False, null=False, default='Bishkek')
-    bonus_activation = models.BooleanField(default=False)
-    leave_review = models.BooleanField(default=True)
-    is_active = models.BooleanField(default=True)
+    name = models.CharField(max_length=300, blank=False, null=False, verbose_name='Название компании')
+    secondary_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True,
+                                     db_index=True, verbose_name='Вторичный ключ(UUID)')
+    payment = models.CharField(max_length=400, choices=PAYMENT_TYPES,
+                               default=PAYMENT_TYPES[0], verbose_name='Тип расчета')
+    address = models.CharField(max_length=400, blank=False, null=False,
+                               default='Bishkek', verbose_name='Адрес компании')
+    bonus_activation = models.BooleanField(default=False, verbose_name='Возможность активирования бонуса')
+    leave_review = models.BooleanField(default=True, verbose_name='Возможность оставлять отзывы')
+    is_active = models.BooleanField(default=True, verbose_name='Активна ли компания')
 
     class Meta:
         db_table = 'Organization'
@@ -29,10 +32,13 @@ class Organization(models.Model):
 
 
 class Users(models.Model):
-    tg_user = models.OneToOneField('kitchen5bot.TelegramUser', on_delete = models.CASCADE)
-    organization_id = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE, null=True, blank=True)
-    username = models.CharField(max_length=200, null=True, blank=True, unique=True, validators=[MinLengthValidator(3)])
-    is_active = models.BooleanField(default=True)
+    tg_user = models.OneToOneField('kitchen5bot.TelegramUser',
+                                   on_delete=models.CASCADE, verbose_name='Пользователь телеграма')
+    organization_id = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE,
+                                        null=True, blank=True, verbose_name='Внешний ключ на организацию')
+    username = models.CharField(max_length=200, null=True, blank=True,
+                                unique=True, validators=[MinLengthValidator(3)], verbose_name='Username')
+    is_active = models.BooleanField(default=True, verbose_name='Активен ли пользователь')
 
     class Meta:
         db_table = 'Users'
