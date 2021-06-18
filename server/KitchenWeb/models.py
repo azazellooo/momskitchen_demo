@@ -8,11 +8,11 @@ class Category(models.Model):
 
     class Meta:
         db_table = 'categories'
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
-        return f'Catgory: {self.category_name}, order: {self.order}'
+        return f'Категория: {self.category_name}, порядковый номер: {self.order}'
 
 
 class Supplement(models.Model):
