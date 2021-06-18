@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Supplement
+from .models import Category, Supplement, Dish
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -17,6 +17,14 @@ class SupplementAdmin(admin.ModelAdmin):
     fields = ['id', 'name', 'price']
     readonly_fields = ['id', ]
 
+class DishAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'description', 'category', 'image', 'base_price', 'extra_price']
+    list_filter = ['name']
+    search_fields = ['name']
+    fields = ['id', 'name', 'description', 'category', 'image', 'base_price', 'extra_price']
+    readonly_fields = ['id', ]
 
+
+admin.site.register(Dish, DishAdmin)
 admin.site.register(Supplement, SupplementAdmin)
 admin.site.register(Category, CategoryAdmin)
