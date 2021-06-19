@@ -15,6 +15,7 @@
 {#            {% if perms.KitchenWeb.view_organization %}#}
                 <li><a href="{% url "kitchen:organization-list" %}">Все компании</a></li>
                 <li><a href="{% url "kitchen:supplement-list" %}">надбавки</a></li>
+                <li><a href="{% url "kitchen:create_position" %}">Добавить позицию</a></li>
 {#                {% endif %}#}
         {% block menu %}{% endblock %}
         </ul>
