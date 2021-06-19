@@ -9,7 +9,9 @@ from KitchenWeb.views.kitchen import (
     SupplementDetailView,
     SupplementUpdateView,
 )
-
+from KitchenWeb.views.position import (
+    PositionCreateView
+)
 app_name = 'kitchen'
 
 organization_urls = [
@@ -22,6 +24,7 @@ kitchen_urls = [
     path('supplements/create/', SupplementCreateView.as_view(), name='create_supplement'),
     path('supplement/<int:pk>', SupplementDetailView.as_view(), name='detail_supplement'),
     path('supplement/<int:pk>/update/', SupplementUpdateView.as_view(), name='update_supplement'),
+    path('position/create/', PositionCreateView.as_view(), name='create_position'),
 ]
 
 urlpatterns = [
