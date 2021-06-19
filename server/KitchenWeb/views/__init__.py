@@ -3,3 +3,5 @@ from KitchenWeb.views.organizations import (
     OrganizationCreateView
 )
 from KitchenWeb.views.kitchen import SupplementListView
+
+from KitchenWeb.views.position import PositionCreateView
