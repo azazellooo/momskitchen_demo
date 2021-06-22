@@ -50,3 +50,20 @@ class Dish(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+class Garnish(BaseModel):
+    name = models.CharField(max_length=250, blank=False, null=False, verbose_name='Гарнир')
+    order = models.IntegerField(null=False, blank=False, verbose_name='Очередность', validators=(MinValueValidator(1),))
+    base_price = models.IntegerField(blank=False, null=False, verbose_name='Базовая цена')
+    extra_price = models.JSONField(blank=True, null=True, verbose_name='Дополнительная цена')
+
+
+    class Meta:
+        db_table = 'garnishes'
+        verbose_name = 'Гарнир'
+        verbose_name_plural = 'Гарниры'
+
+    def __str__(self):
+        return self.name
