@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+{% block content %}
+    {% if dishes %}
+            {% include "partial/search_form.html" %}
+    {% endif %}
+
+    {% for dish in dishes %}
+    <div class="box">
+    <ul class="list-group">
+         id: {{ dish.id }}. Название: {{ dish.name }}
+    </ul>
+    </div>
+
+{% empty %}
+    <h2 class="text-center">Нет ещё такого Блюда </h2>
+{% endfor %}
+<br>
+    {% include 'partial/paginate.html' %}
+
+{% endblock %}
