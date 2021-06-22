@@ -50,21 +50,15 @@ class SupplementCreateView(CreateView):
     form_class = SupplementForm
 
     def get_success_url(self):
-        return reverse('kitchen:detail_supplement', kwargs={'pk': self.object.pk})
+        return reverse('kitchen:detail_update_supplement', kwargs={'pk': self.object.pk})
 
 
-class SupplementDetailView(DetailView):
-    template_name = 'supplements/detail.html'
+class SupplementDetailUpdateView(UpdateView):
     model = Supplement
-    context_object_name = 'supplement'
-
-
-class SupplementUpdateView(UpdateView):
-    model = Supplement
-    template_name = 'supplements/update.html'
+    template_name = 'supplements/detail_update.html'
     form_class = SupplementForm
     context_object_name = 'supplement'
 
     def get_success_url(self):
-        return reverse('kitchen:detail_supplement', kwargs={'pk': self.object.pk})
+        return reverse('kitchen:detail_update_supplement', kwargs={'pk': self.object.pk})
 
