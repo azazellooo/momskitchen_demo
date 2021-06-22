@@ -40,11 +40,10 @@ class OrganizationCreateViewTests(TestCase):
     }
     request = RequestFactory().post(reverse("kitchen:organization-create"), data=data)
     response = OrganizationCreateView.as_view()(request)
-    organization = Organization.objects.create(**data)
 
     def setUp(self):
         self.factory = RequestFactory()
-        Organization.objects.create(**self.data)
+        self.organization = Organization.objects.create(**self.data)
 
     def test_proper_template(self):
         self.assertTemplateUsed("organizations/create.html")
