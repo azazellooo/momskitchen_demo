@@ -28,8 +28,8 @@ class UserTgAdmin(admin.ModelAdmin):
 
 
 class UserTokenAdmin(admin.ModelAdmin):
-    list_display = ['id', 'key', 'user']
-    readonly_fields = ['id', 'key']
+    list_display = ['id', 'key', 'user', 'created_at']
+    readonly_fields = ['id', 'key', 'created_at']
 
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Users, UsersAdmin)
