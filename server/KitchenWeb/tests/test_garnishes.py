@@ -25,3 +25,4 @@ class PositionListViewTests(TestCase):
 
     def test_is_paginated_by_5(self):
         self.assertLessEqual(len(self.response.context['garnishes']), 5)
+
