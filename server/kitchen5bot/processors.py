@@ -51,7 +51,7 @@ def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
             else:
                 UserToken.objects.create(user=user)
                 token2 = UserToken.objects.get(user=user)
-                bot.sendMessage(update.get_chat().get_id(), f'Прекрасно, держи свой линк на профиль : https://localhost:8080/profiles/{token2.key}')
+                bot.sendMessage(update.get_chat().get_id(), f'Прекрасно, держи свой линк на профиль : https://9af8f9261799.ngrok.io/accounts/{token2.key}')
                 raise ProcessFailure
         except ObjectDoesNotExist:
             bot.sendMessage(update.get_chat().get_id(), 'Вы не можете получить токен, пока не зарегестрируетесь по токену который должен был вам выдать Никитыч ')
