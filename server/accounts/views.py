@@ -1,19 +1,28 @@
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import DetailView, TemplateView, UpdateView
 from django.urls import reverse
 
 from accounts.forms import UsersForm
 from accounts.models import Users, UserToken
-
-
+from django.contrib.sessions.models import Session
+from datetime import datetime, timedelta
+from celery import shared_task
+from accounts.tasks import drop_time_token
+from django.contrib.sessions.backends.db import SessionStore
 
 
 class UserProfileView(TemplateView):
     template_name = 'accounts/profile.html'
 
     def get(self, request, **kwargs):
-        user_token = get_object_or_404(UserToken, key=kwargs['token'])
+        if kwargs:
+            user_token = get_object_or_404(UserToken, key=kwargs['token'])
+            token = kwargs['token']
+            request.session['token'] = str(token)
+            drop_time_token.apply_async(args=[token, request.session.session_key], countdown=30)
+        else:
+            user_token = get_object_or_404(UserToken, key=request.session['token'])
         self.user = get_object_or_404(Users, user_token=user_token)
         return super().get(request, **kwargs)
 
@@ -29,7 +38,7 @@ class UserUpdateView(UpdateView):
     context_object_name = 'user'
 
     def get_object(self):
-        self.user_token = get_object_or_404(UserToken, key=self.kwargs['token'])
+        self.user_token = get_object_or_404(UserToken, key=self.request.session['token'])
         self.user = get_object_or_404(Users, user_token=self.user_token)
         return self.user
 
@@ -38,5 +47,4 @@ class UserUpdateView(UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse('organizations:list')
-
+        return reverse('profile_distoken')
