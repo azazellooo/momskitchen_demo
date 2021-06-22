@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="container">
-    <form action="{% url 'user_update'  user.user_token.key %}" method='post' id="form">
+    <form action="{% url 'user_update'%}" method='post' id="form">
     {% include 'partial/form.html' %}
 
 </form>
