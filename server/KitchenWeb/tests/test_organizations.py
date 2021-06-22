@@ -1,5 +1,7 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
+
+from KitchenWeb.views import OrganizationCreateView
 from accounts.models import Organization
 
 
@@ -26,3 +28,47 @@ class OrganizationsListViewTests(TestCase):
     def test_is_paginated_by_5(self):
         self.assertLessEqual(len(self.response.context['organizations']), 5)
 
+
+class OrganizationCreateViewTests(TestCase):
+    data = {
+        "name": "Test Organization",
+        "payment": "('actual', 'фактический расчет')",
+        "address": "Bishkek",
+        "bonus_activation": False,
+        "leave_review": True,
+        "is_active": True
+    }
+    request = RequestFactory().post(reverse("kitchen:organization-create"), data=data)
+    response = OrganizationCreateView.as_view()(request)
+
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.organization = Organization.objects.create(**self.data)
+
+    def test_proper_template(self):
+        self.assertTemplateUsed("organizations/create.html")
+
+    def test_get_request_returns_200(self):
+
+        # get request means request by method "GET"
+
+        response = self.client.get(reverse("kitchen:organization-create"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_proper_path(self):
+        self.assertEqual('/organizations/create/', self.request.path)
+
+    def test_create(self):
+        self.assertTrue(Organization.objects.filter(name='Test Organization').exists())
+
+    def test_post(self):
+        self.assertEqual(self.response.status_code, 200)
+        self.assertContains(self.response, 'Test Organization')
+
+    def test_field_values(self):
+        self.assertEqual(self.organization.name, 'Test Organization')
+        self.assertEqual(self.organization.address, 'Bishkek')
+        self.assertFalse(self.organization.bonus_activation)
+        self.assertTrue(self.organization.leave_review)
+        self.assertTrue(self.organization.is_active)
+        self.assertEqual(self.organization.payment, "('actual', 'фактический расчет')")
