@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
 from pathlib import Path
 import os
 
@@ -51,6 +50,8 @@ INSTALLED_APPS = [
     'accounts',
     'KitchenWeb',
     'api',
+    'django_celery_beat',
+    'django_celery_results'
 
 ]
 
@@ -91,7 +92,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME', 'kitchen_bot'),
+        'NAME': os.environ.get('DB_NAME'),
         'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('DB_PORT'),
         'USER': os.environ.get('DB_USER'),
@@ -147,7 +148,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_TIMEZONE = "Asia/Bishkek"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
 try:
     import server.local_settings
