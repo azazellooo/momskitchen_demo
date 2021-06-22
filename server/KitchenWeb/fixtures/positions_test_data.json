@@ -1,0 +1,22 @@
+[
+{
+  "model": "KitchenWeb.dish",
+  "pk": 1,
+  "fields": {
+    "name": "adssad",
+    "description": "asdas",
+    "category": 1,
+    "image": "",
+    "base_price": 23,
+    "extra_price": 32
+  }
+},
+{
+  "model": "KitchenWeb.category",
+  "pk": 1,
+  "fields": {
+    "category_name": "test",
+    "order": 1
+  }
+}
+]

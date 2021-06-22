@@ -99,49 +99,4 @@ def hello_level_2(bot, update, state):
     state.set_name('')
 
 
-# @processor(state_manager, from_states='invalid_token')
-# def hello_level_3(bot: TelegramBot, update: Update, state: TelegramState):
-#     print('dfdfdfdfdfd')
-#     bot.sendMessage(update.get_chat().get_id(), 'Прекрасно подделываешь токен, научи так же')
-#     bot.sendMessage(update.get_chat().get_id(), f'Не пиши сюда больше, {state.telegram_user.username}! ')
-
-
-# @processor(state_manager, from_states='fucking_talk')
-# def hello_level_4(bot: TelegramBot, update: Update, state: TelegramState):
-#     bot.sendMessage(update.get_chat().get_id(), f'Здарова, {state.telegram_user.username}! ')
-
-
-
-
-
-# Дополнительные методы для последующмх задач
-
-# @processor(state_manager, from_states='is_deep_link', success='is_user', fail='not_user')
-# def hello_level_3(bot, update, state):
-#     if not is_user(state.telegram_user):
-#         raise ProcessFailure
-
-# @processor(state_manager, from_states='is_user')
-# def hello_level_4(bot, update, state):
-#     bot.sendMessage(update.get_chat().get_id(), f'Ты {state.telegram_user.username}')
-#
-# @processor(state_manager, from_states='not_user', success='to_sign_up')
-# def hello_level_5(bot, update, state):
-#     bot.sendMessage(update.get_chat().get_id(), f'{state.telegram_user.username}, нужна регистрация! отправь имя ')
-
-#
-# @processor(state_manager, from_states='to_sign_up')
-# def hello_level_5(bot, update, state):
-#     new_user = Users()
-#     new_user.username = update.message.text
-#     new_user.tg_user = state.telegram_user
-#     new_user.organization_id = is_organization(ORGANIZATION_ID)
-#     new_user.save()
-
-    # second_key = parse_message_text(update.message.text)
-    # print(update.message.text)
-    # organization = is_organization(second_key)
-    # bot.sendMessage(update.get_chat().get_id(), f'Рады видеть Вас, {state.telegram_user.username}')
-
-
 
