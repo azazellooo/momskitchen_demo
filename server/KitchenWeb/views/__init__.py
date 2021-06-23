@@ -5,3 +5,5 @@ from KitchenWeb.views.organizations import (
 from KitchenWeb.views.kitchen import SupplementListView
 
 from KitchenWeb.views.position import PositionCreateView
+
+from KitchenWeb.views.category import CategoryListView
