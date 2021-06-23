@@ -31,3 +31,14 @@ class SupplementListViewTests(TestCase):
     #     self.assertEqual(self.response.context['supplements'], search_response.context['supplements'])
 
 
+class SupplementUpdateTest(TestCase):
+    def test_update_supplement(self):
+        self.supplement = Supplement.objects.create(name='Гречка', price=130)
+        self.supplement.save()
+        response = self.client.post(
+            reverse('kitchen:detail_update_supplement', kwargs={'pk': self.supplement.id}),
+            {'name': 'Рис', 'price': '131'}
+        )
+        self.assertEqual(response.status_code, 302)
+        self.supplement.refresh_from_db()
+        self.assertEqual('Рис', self.supplement.name)
