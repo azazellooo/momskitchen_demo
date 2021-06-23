@@ -1,6 +1,7 @@
 from KitchenWeb.views.organizations import (
     OrganizationsListView,
-    OrganizationCreateView
+    OrganizationCreateView,
+    OrganizationDetailUpdateView
 )
 from KitchenWeb.views.kitchen import SupplementListView
 

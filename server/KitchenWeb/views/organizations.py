@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from accounts.models import Organization
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from KitchenWeb.forms import SearchForm, OrganizationForm
 from django.utils.http import urlencode
 
@@ -48,6 +48,16 @@ class OrganizationCreateView(CreateView):
     model = Organization
     template_name = 'organizations/create.html'
     form_class = OrganizationForm
+
+    def get_success_url(self):
+        return reverse('kitchen:organization-list')
+
+
+class OrganizationDetailUpdateView(UpdateView):
+    template_name = 'organizations/detail_update.html'
+    model = Organization
+    form_class = OrganizationForm
+    context_object_name = 'organization'
 
     def get_success_url(self):
         return reverse('kitchen:organization-list')
