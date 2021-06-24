@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import CreateView, ListView, UpdateView
 from KitchenWeb.forms import PositionForm, SearchForm
 from KitchenWeb.models import Dish, Category
@@ -61,15 +62,18 @@ class PositionCreateView(CreateView):
         position.category = Category.objects.get(id=int(form.data['category']))
         position.base_price = int(form.data['base_price'])
         position.image = form.cleaned_data['image']
-        if form.data[str(len(TYPES))]:
-            counter = len(TYPES)
-            to_json = {}
-            for key, value in form.data.items():
-                if key.isnumeric():
-                    to_json[value] = {"comment": (form.data.getlist(f'comment{counter}'))[0], "pricing": (form.data.getlist(f'pricing{counter}'))[0]}
-                    counter -= 1
-        json_var = json.dumps(to_json)
-        position.extra_price = json_var
+        try:
+            if form.data[str(len(TYPES))]:
+                counter = len(TYPES)
+                to_json = {}
+                for key, value in form.data.items():
+                    if key.isnumeric():
+                        to_json[value] = {"comment": (form.data.getlist(f'comment{counter}'))[0], "pricing": (form.data.getlist(f'pricing{counter}'))[0]}
+                        counter -= 1
+                json_var = json.dumps(to_json)
+                position.extra_price = json_var
+        except MultiValueDictKeyError:
+            position.save()
         position.save()
         return redirect('kitchen:organization-list')
 
