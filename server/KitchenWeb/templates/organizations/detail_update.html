@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Organization {{ organization.id }}{% endblock %}
+
+
+
+{% block content %}
+    <h2>
+        {{ organization.id }}. Компания "{{ organization.name }}"
+    </h2>
+    <button type="button" id="edit_btn" class="btn btn-info">редактировать</button>
+    <button type="button" id="cancel_btn" class="btn btn-info">отмена</button>
+    <div id="form" class="d-grid gap-5">
+    <form action="{% url "kitchen:organization-detail-update" organization.id %}" method="post">
+            {% include "partial/form.html" with button_text="Обновить" %}
+        </form>
+    <div>
+
+
+    <script>
+    $(document).ready(function(){
+        $("input").prop('disabled', true);
+        $("select").prop('disabled', true);
+        $("#cancel_btn").hide()
+
+
+    $("#edit_btn").click(function(){
+        $("input").prop('disabled', false);
+        $("select").prop('disabled', false);
+        $(this).hide()
+        $("#cancel_btn").show()
+    });
+
+    $("#cancel_btn").click(function (){
+        $("input").prop('disabled', true);
+        $("#edit_btn").show()
+        $(this).hide()
+    })
+});
+    </script>
+{% endblock %}

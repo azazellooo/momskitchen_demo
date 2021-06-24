@@ -6,7 +6,7 @@
 
     {% for organization in organizations %}
     <div class="box">
-        <p>{{ organization.name }}</p>
+        <p><a href="{% url 'kitchen:organization-detail-update' organization.id %}">{{ organization.name }}</a></p>
     </div>
 
 {% empty %}

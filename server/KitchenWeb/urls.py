@@ -1,7 +1,8 @@
 from django.urls import path, include
 from KitchenWeb.views.organizations import (
     OrganizationsListView,
-    OrganizationCreateView
+    OrganizationCreateView,
+    OrganizationDetailUpdateView
 )
 from KitchenWeb.views.kitchen import (
     SupplementListView,
@@ -22,7 +23,8 @@ app_name = 'kitchen'
 
 organization_urls = [
     path("", OrganizationsListView.as_view(), name="organization-list"),
-    path('create/', OrganizationCreateView.as_view(), name='organization-create')
+    path('create/', OrganizationCreateView.as_view(), name='organization-create'),
+    path('<int:pk>/', OrganizationDetailUpdateView.as_view(), name='organization-detail-update')
 ]
 
 kitchen_urls = [
