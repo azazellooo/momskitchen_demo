@@ -3,7 +3,7 @@ from django.urls import reverse
 from accounts.models import Organization
 
 
-class PositionListViewTests(TestCase):
+class GarnishListViewTests(TestCase):
     fixtures = ['garnishes_test_data.json']
     response = None
 

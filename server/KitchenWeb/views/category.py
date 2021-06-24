@@ -1,6 +1,7 @@
-from django.views.generic import ListView
+from django.urls import reverse
+from django.views.generic import ListView, CreateView
 from KitchenWeb.models import Category
-from KitchenWeb.forms import SearchForm
+from KitchenWeb.forms import SearchForm, CategoryForm
 from django.utils.http import urlencode
 from django.db.models import Q
 
@@ -37,4 +38,14 @@ class CategoryListView(ListView):
 
         if self.search_data:
             context['query'] = urlencode({'search_value': self.search_data})
+
         return context
+
+
+class CategoryCreateView(CreateView):
+    model = Category
+    template_name = 'category/create.html'
+    form_class = CategoryForm
+
+    def get_success_url(self):
+        return reverse('kitchen:category_list')
