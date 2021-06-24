@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+    {% for category in categories %}
+    <div class="box">
+        <p>{{ category.category_name }}</p>
+    </div>
+
+{% empty %}
+    <h2 class="text-center">Увы но пока что Категории нет</h2>
+{% endfor %}
+<br>
+    {% include 'partial/paginate.html' %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+{% block content %}
+    {% if garnishes %}
+            {% include "partial/search_form.html" %}
+    {% endif %}
+
+    {% for garnish in garnishes %}
+    <div class="box">
+    <ul class="list-group">
+         id: {{ garnish.id }}. Название: {{ garnish.name }}
+    </ul>
+    </div>
+
+{% empty %}
+    <h2 class="text-center">Нет ещё такого гарнира </h2>
+{% endfor %}
+<br>
+    {% include 'partial/paginate.html' %}
+
+{% endblock %}

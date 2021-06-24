@@ -27,3 +27,10 @@ class PositionForm(forms.ModelForm):
         model = Dish
         category = forms.ModelChoiceField(queryset=Category.objects.all())
         fields = ('name','description', 'category', 'image', 'base_price')
+
+
+class CategoryForm(forms.ModelForm):
+
+    class Meta:
+        model = Category
+        fields = ('category_name', 'order')
