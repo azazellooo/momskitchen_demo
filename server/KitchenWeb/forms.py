@@ -1,6 +1,6 @@
 from django import forms
 
-from KitchenWeb.models import Supplement, Dish, Category
+from KitchenWeb.models import Supplement, Dish, Category, Garnish
 from accounts.models import Organization
 
 
@@ -27,6 +27,14 @@ class PositionForm(forms.ModelForm):
         model = Dish
         category = forms.ModelChoiceField(queryset=Category.objects.all())
         fields = ('name','description', 'category', 'image', 'base_price')
+
+
+class GarnishForm(forms.ModelForm):
+
+    class Meta:
+        model = Garnish
+        fields = ['name', 'order', 'base_price']
+
 
 
 class CategoryForm(forms.ModelForm):
