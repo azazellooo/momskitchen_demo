@@ -16,7 +16,7 @@
     {% for supplement in supplements %}
     <div class="box">
     <ul class="list-group">
-        <li class="list-group-item list-group-item-success"><a href="{% url "kitchen:detail_supplement" supplement.id %}"> id: {{ supplement.id }}. Название: {{ supplement.name }} </a></li>
+        <li class="list-group-item list-group-item-success"><a href="{% url "kitchen:detail_update_supplement" supplement.id %}"> id: {{ supplement.id }}. Название: {{ supplement.name }} </a></li>
     </ul>
     </div>
 

@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, UpdateView
 from KitchenWeb.forms import PositionForm, SearchForm
 from KitchenWeb.models import Dish, Category
 from django.db.models import Q

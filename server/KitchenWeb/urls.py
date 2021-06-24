@@ -7,12 +7,11 @@ from KitchenWeb.views.organizations import (
 from KitchenWeb.views.kitchen import (
     SupplementListView,
     SupplementCreateView,
-    SupplementDetailView,
-    SupplementUpdateView,
+    SupplementDetailUpdateView,
 )
 from KitchenWeb.views.position import (
     PositionCreateView,
-    PositionListView
+    PositionListView,
 )
 from KitchenWeb.views.garnish import (
     GarnishListView
@@ -33,8 +32,7 @@ organization_urls = [
 kitchen_urls = [
     path('supplements/', SupplementListView.as_view(), name='supplement-list'),
     path('supplements/create/', SupplementCreateView.as_view(), name='create_supplement'),
-    path('supplement/<int:pk>', SupplementDetailView.as_view(), name='detail_supplement'),
-    path('supplement/<int:pk>/update/', SupplementUpdateView.as_view(), name='update_supplement'),
+    path('supplement/<int:pk>/detail_update/', SupplementDetailUpdateView.as_view(), name='detail_update_supplement'),
     path('position/create/', PositionCreateView.as_view(), name='create_position'),
     path('position/list/', PositionListView.as_view(), name='list_position'),
     path('garnish/list/', GarnishListView.as_view(), name='list_garnish'),

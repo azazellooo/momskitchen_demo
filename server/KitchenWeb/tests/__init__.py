@@ -1,1 +1,1 @@
-from .test_kitchen import SupplementListViewTests
+from .test_kitchen import SupplementListViewTests, SupplementUpdateTest
