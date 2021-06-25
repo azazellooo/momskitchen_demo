@@ -1,4 +1,6 @@
 from django.urls import path, include
+
+from KitchenWeb.views import GarnishCreateView
 from KitchenWeb.views.organizations import (
     OrganizationsListView,
     OrganizationCreateView,
@@ -37,7 +39,8 @@ kitchen_urls = [
     path('position/list/', PositionListView.as_view(), name='list_position'),
     path('garnish/list/', GarnishListView.as_view(), name='list_garnish'),
     path('categories/list/', CategoryListView.as_view(), name='category_list'),
-    path('categories/create/', CategoryCreateView.as_view(), name='category_create')
+    path('categories/create/', CategoryCreateView.as_view(), name='category_create'),
+    path('garnish/create/', GarnishCreateView.as_view(), name='create_garnish'),
 
 ]
 
