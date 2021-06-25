@@ -1,23 +1,19 @@
-from celery import shared_task
+
 from accounts.models import UserToken
 from datetime import datetime, timedelta
 from django.contrib.sessions.backends.db import SessionStore
 import pytz
 from django.utils import timezone
 
-@shared_task()
 def drop_time_token(token, key_session1):
     utc = pytz.UTC
     token_user = UserToken.objects.get(key=token)
-    # finish_time = token_user.created_at.replace(tzinfo=utc) + timedelta(minutes=1)
-    # now = timezone.now()
-    # if now >= finish_time:
-    s = SessionStore(session_key=key_session1)
-    s.delete()
-    token_user.delete()
-    return 'hello'
-    # else:
-    #     return 'broken'
+    finish_time = token_user.created_at.replace(tzinfo=utc) + timedelta(minutes=1)
+    now = timezone.now()
+    if now >= finish_time:
+        s = SessionStore(session_key=key_session1)
+        s.delete()
+        token_user.delete()
 
 
 
