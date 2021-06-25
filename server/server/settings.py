@@ -49,9 +49,7 @@ INSTALLED_APPS = [
     'kitchen5bot',
     'accounts',
     'KitchenWeb',
-    'api',
-    'django_celery_beat',
-    'django_celery_results'
+    'api'
 
 ]
 
