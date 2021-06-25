@@ -10,7 +10,7 @@ from KitchenWeb.views import OrganizationCreateView
 from accounts.models import Organization
 
 
-class OrganizationsListViewTests(TestCase):
+class AdditionalListViewTests(TestCase):
     fixtures = ['additional_test_data.json']
     response = None
 
