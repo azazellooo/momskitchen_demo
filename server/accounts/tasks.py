@@ -15,7 +15,12 @@ def drop_time_token(token, key_session1):
         s.delete()
         token_user.delete()
 
-
+def validation_token(token):
+    try:
+        UserToken.objects.get(key=token)
+        return True
+    except:
+        return False
 
 
 

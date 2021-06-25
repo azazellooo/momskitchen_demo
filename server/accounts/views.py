@@ -7,7 +7,7 @@ from accounts.forms import UsersForm
 from accounts.models import Users, UserToken
 from django.contrib.sessions.models import Session
 from datetime import datetime, timedelta
-from accounts.tasks import drop_time_token
+from accounts.tasks import drop_time_token, validation_token
 from django.contrib.sessions.backends.db import SessionStore
 
 
@@ -16,10 +16,14 @@ class UserProfileView(TemplateView):
 
     def get(self, request, **kwargs):
         if kwargs:
-            drop_time_token(kwargs['token'], request.session.session_key)
-            user_token = get_object_or_404(UserToken, key=kwargs['token'])
-            token = kwargs['token']
-            request.session['token'] = str(token)
+            val_tok = validation_token(kwargs['token'])
+            if val_tok == True:
+                drop_time_token(kwargs['token'], request.session.session_key)
+                user_token = get_object_or_404(UserToken, key=kwargs['token'])
+                token = kwargs['token']
+                request.session['token'] = str(token)
+            else:
+                raise KeyError
         else:
             drop_time_token(request.session['token'], request.session.session_key)
             user_token = get_object_or_404(UserToken, key=request.session['token'])
