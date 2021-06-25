@@ -67,3 +67,18 @@ class Garnish(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class Additional(BaseModel):
+    name = models.CharField(max_length=200, blank=False, null=False, verbose_name='Дополнение к позиции')
+    sampling_order = models.IntegerField(blank=False, null=False, verbose_name='Очередность при выборке')
+    base_price = models.IntegerField(blank=False, null=False, verbose_name='Базовая цена')
+    extra_price = models.JSONField(blank=True, null=True, verbose_name='Дополнительная цена')
+
+    class Meta:
+        db_table = 'Additional'
+        verbose_name = 'Дополнение к позиции'
+        verbose_name_plural = 'Дополнения к позициям'
+
+    def __str__(self):
+        return self.name
