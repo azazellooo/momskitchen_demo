@@ -1,5 +1,5 @@
 from django.urls import reverse
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from KitchenWeb.models import Category
 from KitchenWeb.forms import SearchForm, CategoryForm
 from django.utils.http import urlencode
@@ -46,6 +46,16 @@ class CategoryCreateView(CreateView):
     model = Category
     template_name = 'category/create.html'
     form_class = CategoryForm
+
+    def get_success_url(self):
+        return reverse('kitchen:category_list')
+
+
+class CategoryDetailUpdateView(UpdateView):
+    template_name = 'category/update_detail.html'
+    model = Category
+    form_class = CategoryForm
+    context_object_name = 'category'
 
     def get_success_url(self):
         return reverse('kitchen:category_list')

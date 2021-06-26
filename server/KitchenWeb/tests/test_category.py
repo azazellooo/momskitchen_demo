@@ -1,9 +1,14 @@
+from time import sleep
+import requests
+
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from KitchenWeb.views.category import CategoryCreateView
 from KitchenWeb.models import Category
-from KitchenWeb.tests.factory_boy import CategoryFactory
-
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium.webdriver import Chrome
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class CategoryListViewTest(TestCase):
@@ -67,3 +72,45 @@ class CategoryCreateViewTest(TestCase):
     def test_field_values(self):
         self.assertEqual(self.category.category_name, 'Test Category')
         self.assertEqual(self.category.order, 5)
+
+
+class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
+
+    def setUp(self):
+        self.o = Category.objects.create(**{
+        'category_name': 'test category ',
+        'order': '6'
+        })
+        self.driver = webdriver.Chrome(ChromeDriverManager().install())
+
+    def tearDown(self):
+        self.o.delete()
+        self.driver.close()
+
+    def test_update_organization(self):
+        self.driver.get(url=f'{self.live_server_url}/kitchen/category/update/detail/{self.o.pk}/')
+        self.driver.find_element_by_id('edit_btn').click()
+        self.driver.find_element_by_name('category_name').clear()
+        self.driver.find_element_by_name('category_name').send_keys('test updated category_name')
+        self.driver.find_element_by_name('order').clear()
+        self.driver.find_element_by_name('order').send_keys('9')
+        self.driver.find_element_by_id('submit').click()
+        self.o.refresh_from_db()
+        self.assertEqual(f'{self.live_server_url}/kitchen/categories/list/', self.driver.current_url)
+        self.assertEqual('test updated category_name', self.o.category_name)
+        self.assertEqual(9, self.o.order)
+        response = requests.get(self.driver.current_url)
+        self.assertEqual(200, response.status_code)
+
+    def test_form_disabled_enabled(self):
+        self.driver.get(url=f'{self.live_server_url}/kitchen/category/update/detail/{self.o.pk}/')
+        inputs = self.driver.find_elements_by_tag_name('input')
+        category_name = self.driver.find_element_by_id('id_category_name')
+        self.assertFalse(inputs[0].is_enabled())
+        self.assertFalse(category_name.is_enabled())
+        self.driver.find_element_by_id('edit_btn').click()
+        self.assertTrue(inputs[0].is_enabled())
+        self.assertTrue(category_name.is_enabled())
+        self.driver.find_element_by_id('cancel_btn').click()
+        self.assertFalse(inputs[0].is_enabled())
+        self.assertFalse(category_name.is_enabled())
