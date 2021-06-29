@@ -15,11 +15,6 @@ START = '/start'
 LOGIN = '/login'
 ORGANIZATION_ID = None
 
-# Задаем декоратору fail=state_types.Keep который будет выполнять операцию возврата на исходное положение процессора то есть в саоме начало, затем добавляем методы
-# raise ProcessFailure где нам нужно возвращать исходное положение процессора, затем я добавил ветвление elif state.name != 'iv, которое отвечает на любое сообщение, почему state.name != 'iv?
-# потому что в базе сохраняется state.name пока мы его не удалим командой state.set_name(''), а как раз таки мы это делаем в процессоре 'iv' который апдейтит юзернейм для контейнеров
-# и при первой итерации когда он попадает в success то есть в наш 'iv', то он одновременно с name который лежит в базе так как мы казали success='iv', запускал наше ветвление else так как это не токен.
-# надеюсь обьяснил понятно....
 
 @processor(state_manager,  from_states=state_types.All, update_types=update_types.Message, message_types=message_types.Text, success='iv', fail=state_types.Keep)
 def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):

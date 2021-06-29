@@ -12,7 +12,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 class CategoryListViewTest(TestCase):
-    fixtures =['category_test_data.json']
+    fixtures = ['category_test_data.json']
     response = None
 
     def setUp(self):
@@ -101,6 +101,7 @@ class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
         self.assertEqual(9, self.o.order)
         response = requests.get(self.driver.current_url)
         self.assertEqual(200, response.status_code)
+
 
     def test_form_disabled_enabled(self):
         self.driver.get(url=f'{self.live_server_url}/kitchen/category/update/detail/{self.o.pk}/')
