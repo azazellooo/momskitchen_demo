@@ -1,4 +1,6 @@
 from django.urls import path, include
+
+from KitchenWeb.views import GarnishCreateView
 from KitchenWeb.views.organizations import (
     OrganizationsListView,
     OrganizationCreateView,
@@ -20,6 +22,9 @@ from KitchenWeb.views.category import (
     CategoryListView,
     CategoryCreateView,
     CategoryDetailUpdateView
+)
+from KitchenWeb.views.additional import (
+    AdditionalListView
 )
 
 app_name = 'kitchen'

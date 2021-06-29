@@ -34,8 +34,10 @@ class CategoryListViewTest(TestCase):
         self.assertLessEqual(len(self.response.context['categories']), 5)
 
 
-
 class CategoryCreateViewTest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.category = Category.objects.create(**self.data)
 
     data = {
         "category_name": "Test Category",
@@ -45,9 +47,6 @@ class CategoryCreateViewTest(TestCase):
     request = RequestFactory().post(reverse("kitchen:category_create"), data=data)
     response = CategoryCreateView.as_view()(request)
 
-    def setUp(self):
-        self.factory = RequestFactory()
-        self.category = Category.objects.create(**self.data)
 
     def test_proper_template(self):
         self.assertTemplateUsed("category/create.html")
