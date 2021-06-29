@@ -9,4 +9,5 @@ __pycache__
 *.log
 uploads
 .DS_Store
+.env
 server/local_settings.py
