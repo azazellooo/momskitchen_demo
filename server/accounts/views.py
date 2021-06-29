@@ -7,8 +7,7 @@ from accounts.forms import UsersForm
 from accounts.models import Users, UserToken
 from django.contrib.sessions.models import Session
 from datetime import datetime, timedelta
-from celery import shared_task
-from accounts.tasks import drop_time_token
+from accounts.tasks import drop_time_token, validation_token
 from django.contrib.sessions.backends.db import SessionStore
 
 
@@ -17,11 +16,16 @@ class UserProfileView(TemplateView):
 
     def get(self, request, **kwargs):
         if kwargs:
-            user_token = get_object_or_404(UserToken, key=kwargs['token'])
-            token = kwargs['token']
-            request.session['token'] = str(token)
-            drop_time_token.apply_async(args=[token, request.session.session_key], countdown=30)
+            val_tok = validation_token(kwargs['token'])
+            if val_tok == True:
+                drop_time_token(kwargs['token'], request.session.session_key)
+                user_token = get_object_or_404(UserToken, key=kwargs['token'])
+                token = kwargs['token']
+                request.session['token'] = str(token)
+            else:
+                raise KeyError
         else:
+            drop_time_token(request.session['token'], request.session.session_key)
             user_token = get_object_or_404(UserToken, key=request.session['token'])
         self.user = get_object_or_404(Users, user_token=user_token)
         return super().get(request, **kwargs)
@@ -38,6 +42,7 @@ class UserUpdateView(UpdateView):
     context_object_name = 'user'
 
     def get_object(self):
+        drop_time_token(self.request.session['token'], self.request.session.session_key)
         self.user_token = get_object_or_404(UserToken, key=self.request.session['token'])
         self.user = get_object_or_404(Users, user_token=self.user_token)
         return self.user

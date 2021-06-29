@@ -2,7 +2,7 @@
 {% block content %}
     {% for category in categories %}
     <div class="box">
-        <p>{{ category.category_name }}</p>
+        <p><a href="{% url 'kitchen:category_update_detail' category.id %}">{{ category.category_name }}</a></p>
     </div>
 
 {% empty %}

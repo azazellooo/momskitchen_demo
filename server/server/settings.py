@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 import server
-
+from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -22,10 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l87w5hu551=#rh)1bbtw+=&uar+_+0a4yzq&29&g^%82^rtnnh'
-
+SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -49,13 +48,12 @@ INSTALLED_APPS = [
     'kitchen5bot',
     'accounts',
     'KitchenWeb',
-    'api',
-    'django_celery_beat',
-    'django_celery_results'
+    'api'
 
 ]
 
 MIDDLEWARE = [
+    'accounts.middlewares.auth.CustomAuthMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -92,11 +90,11 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'NAME': config('DB_NAME'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
     }
 }
 
@@ -153,7 +151,3 @@ CELERY_TIMEZONE = "Asia/Bishkek"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
-try:
-    import server.local_settings
-except ImportError:
-    pass

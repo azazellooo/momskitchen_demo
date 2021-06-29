@@ -39,7 +39,7 @@ class Users(models.Model):
     username = models.CharField(max_length=200, null=True, blank=True,
                                 unique=True, validators=[MinLengthValidator(3)], verbose_name='Username')
     is_active = models.BooleanField(default=True, verbose_name='Активен ли пользователь')
-
+    is_admin = models.BooleanField(default=False)
     class Meta:
         db_table = 'Users'
         verbose_name = 'Пользователь'
