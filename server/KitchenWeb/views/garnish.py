@@ -1,11 +1,13 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
-from django.views.generic import CreateView, ListView
-from KitchenWeb.forms import SearchForm
+from django.utils.datastructures import MultiValueDictKeyError
+from django.views.generic import CreateView, ListView, UpdateView
+from KitchenWeb.forms import SearchForm, GarnishForm
 from KitchenWeb.models import Garnish
 from django.db.models import Q
 from django.utils.http import urlencode
 import json
+TYPES = [0.3, 0.5, 0.7, 1.3, 1.5, 1.7, 2]
 
 
 class GarnishListView(ListView):
@@ -39,3 +41,42 @@ class GarnishListView(ListView):
         if self.search_data:
             context['query'] = urlencode({'search_value': self.search_data})
         return context
+
+
+class GarnishDetailUpdateView(UpdateView):
+    template_name = 'garnishes/detail_update.html'
+    model = Garnish
+    form_class = GarnishForm
+    context_object_name = 'garnish'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Garnish, pk=self.kwargs.get('pk'))
+
+    def form_valid(self, form):
+        garnish = self.get_object()
+        garnish.name = form.data['name']
+        garnish.order = form.data['order']
+        garnish.base_price = form.data['base_price']
+        try:
+            to_json = {}
+            for key, value in form.data.items():
+                if "select" in key:
+                    counter = int(key.replace('select', ""))
+                    to_json[value] = {"comment": (form.data.get(f'comment{counter}')),
+                                      "pricing": (form.data.get(f'pricing{counter}'))}
+            json_var = json.dumps(to_json)
+
+            garnish.extra_price = json_var
+        except MultiValueDictKeyError:
+            garnish.save()
+        garnish.save()
+        return redirect('kitchen:list_garnish')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        garnish = self.get_object()
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['type'] = TYPES
+        if garnish.extra_price:
+            context['extra_price'] = json.loads(garnish.extra_price)
+        return context
+
