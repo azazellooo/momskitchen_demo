@@ -3,12 +3,48 @@
   "model": "KitchenWeb.garnish",
   "pk": 1,
   "fields": {
-    "created_at": "2021-06-22T10:27:49.873Z",
-    "updated_at": "2021-06-22T10:27:49.873Z",
-    "name": "test",
+    "created_at": "2021-06-24T07:41:01.843Z",
+    "updated_at": "2021-06-28T10:59:09.564Z",
+    "name": "гречA lol",
+    "order": 1,
+    "base_price": 12,
+    "extra_price": "{\"0.3\": {\"comment\": \"Comment3\", \"pricing\": \"20\"}, \"0.5\": {\"comment\": \"Comment22222\", \"pricing\": \"20\"}}"
+  }
+},
+{
+  "model": "KitchenWeb.garnish",
+  "pk": 2,
+  "fields": {
+    "created_at": "2021-06-24T07:41:21.335Z",
+    "updated_at": "2021-06-29T07:19:38.650Z",
+    "name": "пюреirf",
     "order": 2,
-    "base_price": 2,
-    "extra_price": null
+    "base_price": 666,
+    "extra_price": "{\"0.5\": {\"comment\": \"Comment 05\", \"pricing\": \"20\"}}"
+  }
+},
+{
+  "model": "KitchenWeb.garnish",
+  "pk": 3,
+  "fields": {
+    "created_at": "2021-06-24T07:41:42.993Z",
+    "updated_at": "2021-06-29T07:11:19.311Z",
+    "name": "овощи-гриль",
+    "order": 3,
+    "base_price": 122,
+    "extra_price": "{\"0.5\": {\"comment\": \"Comment05\", \"pricing\": \"20\"}}"
+  }
+},
+{
+  "model": "KitchenWeb.garnish",
+  "pk": 4,
+  "fields": {
+    "created_at": "2021-06-24T07:41:58.685Z",
+    "updated_at": "2021-06-28T09:30:02.705Z",
+    "name": "рис",
+    "order": 4,
+    "base_price": 89,
+    "extra_price": "{\"0.3\": {\"comment\": \"rice rice \", \"pricing\": \"999\"}}"
   }
 }
 ]
