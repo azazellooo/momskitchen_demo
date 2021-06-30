@@ -7,7 +7,7 @@
     {% for garnish in garnishes %}
     <div class="box">
     <ul class="list-group">
-         id: {{ garnish.id }}. Название: {{ garnish.name }}
+        id: {{ garnish.id }}. Название: <a href="{% url 'kitchen:garnish-detail-update' garnish.id %}">{{ garnish.name }}</a>
     </ul>
     </div>
 
