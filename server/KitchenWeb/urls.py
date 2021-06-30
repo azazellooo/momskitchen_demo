@@ -16,7 +16,8 @@ from KitchenWeb.views.position import (
     PositionListView,
 )
 from KitchenWeb.views.garnish import (
-    GarnishListView
+    GarnishListView,
+    GarnishDetailUpdateView
 )
 from KitchenWeb.views.category import (
     CategoryListView,
@@ -42,6 +43,7 @@ kitchen_urls = [
     path('position/create/', PositionCreateView.as_view(), name='create_position'),
     path('position/list/', PositionListView.as_view(), name='list_position'),
     path('garnish/list/', GarnishListView.as_view(), name='list_garnish'),
+    path('garnish/<int:pk>/', GarnishDetailUpdateView.as_view(), name='garnish-detail-update'),
     path('categories/list/', CategoryListView.as_view(), name='category_list'),
     path('categories/create/', CategoryCreateView.as_view(), name='category_create'),
     path('category/update/detail/<int:pk>/', CategoryDetailUpdateView.as_view(), name='category_update_detail')
