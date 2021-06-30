@@ -4,7 +4,7 @@ function addExtra(event){
     let block = document.getElementById('selects')
     let add = document.getElementById('add')
     TYPES = JSON.parse(document.getElementById('types').textContent);
-    add.remove()
+    add.style.visibility = 'hidden'
 	$("<div/>").attr({id:'selectBlock'}).appendTo(block)
 	$("<input/>").attr({type: 'text', id:'comment', value:
         'Comment', name:('comment' + TYPES.length)}).appendTo('#selectBlock');
@@ -18,8 +18,8 @@ function addExtra(event){
         option.innerHTML = i
         select.appendChild(option)
     }
-    $("<button>⊕</button>").attr({type:'submit', onclick:" return addExtraBtn(event);"}).appendTo('#selectBlock');
-    $("<button>(-)</button>").attr({type:'submit', onclick:" return removeExtraBtn(event);"}).appendTo('#selectBlock');
+    $("<button><i class=\"fas fa-plus-circle\"></i></button>").attr({type:'submit', onclick:" return addExtraBtn(event);"}).appendTo('#selectBlock');
+    $("<button><i class=\"fas fa-minus-circle\"></i></button>").attr({type:'submit', onclick:" return removeExtraBtn(event);"}).appendTo('#selectBlock');
 }
 
  function  addExtraBtn(event) {
@@ -43,8 +43,8 @@ function addExtra(event){
 			 option.innerHTML = i
 			 select1.appendChild(option)
 		 }
-		 $("<button>⊕</button>").attr({ onclick:"return addExtraBtn(event);"}).appendTo('#selectBlock1');
-		 $("<button>(-)</button>").attr({type:'submit', onclick:" return removeExtraBtn(event);"}).appendTo('#selectBlock1');
+		 $("<button><i class=\"fas fa-plus-circle\"></button>").attr({ onclick:"return addExtraBtn(event);"}).appendTo('#selectBlock1');
+		 $("<button><i class=\"fas fa-minus-circle\"></i></button>").attr({type:'submit', onclick:" return removeExtraBtn(event);"}).appendTo('#selectBlock1');
 		 return false
 	}
 	else {
@@ -55,6 +55,10 @@ function addExtra(event){
 
  function removeExtraBtn(event){
 	 event.stopPropagation()
-	 let toRemove = event.currentTarget.parentElement
+	 let toRemove = event.currentTarget.parentNode
 	 toRemove.remove()
- }
+	 if ( $('.selects').children().length == 0 ) {
+	 	let add = document.getElementById('add')
+		 add.style.visibility = 'visible'
+}
+}

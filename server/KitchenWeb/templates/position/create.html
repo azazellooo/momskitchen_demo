@@ -7,7 +7,7 @@
         <h1>Новая позиция</h1>
         <form id="myForm" action="{% url 'kitchen:create_position' %}" method="post" enctype="multipart/form-data">
             {% include "partial/kitchen_form.html"  %}
-            <btn class='btn btn-secondary' type="submit" id="add" onclick="addExtra(event);">Добавить дополнительные цены</btn>
+            <btn class='btn btn-secondary' type="submit" id="add" onclick="return addExtra(event);">Добавить дополнительные цены</btn>
 			<div class="selects" id="selects"></div>
 			<p><input type="submit" id="savePosition" value="Создать" class='btn btn-dark'></p>
         </form>
@@ -15,5 +15,5 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
-<script src="{% static 'js/position.js' %}"></script>
+<script src="{% static 'js/kitchen.js' %}"></script>
 {% endblock %}
