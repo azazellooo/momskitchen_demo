@@ -10,6 +10,10 @@ cache:
   paths:
     - ~/.cache/pip/
 
+before_script:
+  - python -V  # Print out python version for debugging
+  - pip install -r requirements.txt
+
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
