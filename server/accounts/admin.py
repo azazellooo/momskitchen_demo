@@ -1,5 +1,5 @@
 from django.contrib import admin
-from accounts.models import Organization, Users, UserToken
+from accounts.models import Organization, Employe, UserToken
 from kitchen5bot.models import TelegramUser
 # Register your models here.
 
@@ -11,7 +11,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'secondary_key']
 
 
-class UsersAdmin(admin.ModelAdmin):
+class EmployeAdmin(admin.ModelAdmin):
     list_display = ['id', 'tg_user', 'organization_id', 'username', 'is_active']
     list_filter = ['organization_id']
     search_fields = ['organization_id', 'username']
@@ -32,6 +32,6 @@ class UserTokenAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'key', 'created_at']
 
 admin.site.register(Organization, OrganizationAdmin)
-admin.site.register(Users, UsersAdmin)
+admin.site.register(Employe, EmployeAdmin)
 admin.site.register(TelegramUser, UserTgAdmin)
 admin.site.register(UserToken, UserTokenAdmin)
