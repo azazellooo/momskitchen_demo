@@ -6,7 +6,7 @@ from django_tgbot.types.update import Update
 from .bot import state_manager
 from .models import TelegramState
 from .bot import TelegramBot
-from accounts.models import Organization, Users, UserToken
+from accounts.models import Organization, Employe, UserToken
 from .parse_and_validations import deep_link_parce, is_organization, is_user, deep_len_validator
 
 DEEP_LINK = '/start '
@@ -23,11 +23,11 @@ def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
         ORGANIZATION_ID = deep_link_parce(update.message.text)
         org = is_organization(ORGANIZATION_ID)
         if org is not None:
-            if Users.objects.filter(tg_user=state.telegram_user, organization_id=org).exists():
+            if Employe.objects.filter(tg_user=state.telegram_user, organization_id=org).exists():
                 bot.sendMessage(update.get_chat().get_id(), f'Ты уже переходил мать его, {state.telegram_user.username}!')
                 raise ProcessFailure
             else:
-                Users.objects.create(
+                Employe.objects.create(
                     tg_user=state.telegram_user,
                     organization_id=org
                 )
@@ -39,7 +39,7 @@ def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
             raise ProcessFailure
     elif update.message.text == LOGIN:
         try:
-            user = Users.objects.get(tg_user=state.telegram_user)
+            user = Employe.objects.get(tg_user=state.telegram_user)
             if UserToken.objects.filter(user=user).exists():
                 bot.sendMessage(update.get_chat().get_id(), 'Вам уже был выделен токен')
                 raise ProcessFailure
@@ -53,7 +53,7 @@ def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
             raise ProcessFailure
     elif update.message.text == STOP:
         try:
-            the_user = Users.objects.get(tg_user=state.telegram_user)
+            the_user = Employe.objects.get(tg_user=state.telegram_user)
             if the_user.is_active == True:
                 the_user.is_active = False
                 the_user.save()
@@ -67,7 +67,7 @@ def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
             raise ProcessFailure
     elif update.message.text == START:
         try:
-            the_user = Users.objects.get(tg_user=state.telegram_user)
+            the_user = Employe.objects.get(tg_user=state.telegram_user)
             if the_user.is_active == False:
                 the_user.is_active = True
                 the_user.save()
@@ -87,7 +87,7 @@ def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
 
 @processor(state_manager, from_states='iv')
 def hello_level_2(bot, update, state):
-    user = Users.objects.get(tg_user=state.telegram_user)
+    user = Employe.objects.get(tg_user=state.telegram_user)
     user.username = update.message.text
     user.save()
     bot.sendMessage(update.get_chat().get_id(), f'Сохранили тебя, {state.telegram_user.username}!')
