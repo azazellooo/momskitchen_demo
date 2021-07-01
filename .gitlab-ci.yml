@@ -1,4 +1,4 @@
-image: pyhthon:latest
+image: python:latest
 
 services:
   - postgres:latest
