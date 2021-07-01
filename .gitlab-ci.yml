@@ -1,5 +1,6 @@
 image: python:latest
 
+
 services:
   - postgres:latest
 
@@ -20,6 +21,8 @@ before_script:
   - pip install -r requirements.txt
 
 test:
+  tags:
+    - gitlab-org
   variables:
     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
   script:
