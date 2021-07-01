@@ -1,3 +1,12 @@
+image: pyhthon:latest
+
+services:
+  - postgres:latest
+
+cache:
+  paths:
+    - ~/.cache/pip/
+
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
