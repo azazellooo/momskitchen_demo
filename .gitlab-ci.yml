@@ -3,6 +3,9 @@ image: pyhthon:latest
 services:
   - postgres:latest
 
+variables:
+  POSTGRES_DB: my_db_name
+
 cache:
   paths:
     - ~/.cache/pip/
