@@ -21,7 +21,7 @@ unit-test-job:   # This job runs in the test stage.
   stage: test    
   variables:
     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
-    DEBUG: True
+    DEBUG: "true"
     SECRET_KEY: 1n2m!82uff1-7b0_)x=!$xh$k1!mq)co4$&_+*ya23#4tj-y4@
     DB_NAME: my_db_name
     DB_USER: my_user
