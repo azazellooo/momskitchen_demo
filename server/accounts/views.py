@@ -18,10 +18,17 @@ class UserProfileView(TemplateView):
         if kwargs:
             val_tok = validation_token(kwargs['token'])
             if val_tok == True:
-                drop_time_token(kwargs['token'], request.session.session_key)
-                user_token = get_object_or_404(UserToken, key=kwargs['token'])
-                token = kwargs['token']
-                request.session['token'] = str(token)
+                status = UserToken.objects.get(key=kwargs['token'])
+                if status.activated == False:
+                    drop_time_token(kwargs['token'], request.session.session_key)
+                    user_token = get_object_or_404(UserToken, key=kwargs['token'])
+                    token = kwargs['token']
+                    request.session['token'] = str(token)
+                    user_token.activated = True
+                    user_token.save()
+                    return redirect('profile_distoken')
+                else:
+                    raise ValueError
             else:
                 raise KeyError
         else:
