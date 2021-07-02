@@ -1,7 +1,7 @@
 image: python:latest
 
 services:
-  - postgres:latest
+  - postgres:10.11
 
 variables:
   POSTGRES_DB: my_dn_name
