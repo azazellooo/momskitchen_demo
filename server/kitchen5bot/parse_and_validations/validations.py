@@ -1,4 +1,4 @@
-from accounts.models import Organization, Users
+from accounts.models import Organization, Employe
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -10,7 +10,7 @@ def is_organization(second_key):
 
 def is_user(user_id):
     try:
-        return Users.objects.get(tg_user=user_id)
+        return Employe.objects.get(tg_user=user_id)
     except ObjectDoesNotExist:
         return None
 

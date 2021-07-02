@@ -31,7 +31,7 @@ class Organization(models.Model):
         return self.name
 
 
-class Users(models.Model):
+class Employe(models.Model):
     tg_user = models.OneToOneField('kitchen5bot.TelegramUser',
                                    on_delete=models.CASCADE, verbose_name='Пользователь телеграма')
     organization_id = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE,
@@ -48,8 +48,7 @@ class Users(models.Model):
 
 class UserToken(models.Model):
     key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
-    user = models.OneToOneField('accounts.Users', on_delete=models.CASCADE, related_name='user_token')
-    activated = models.BooleanField(default=False)
+    user = models.OneToOneField('accounts.Employe', on_delete=models.CASCADE, related_name='user_token')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

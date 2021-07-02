@@ -1,5 +1,5 @@
 from django.utils.deprecation import MiddlewareMixin
-from accounts.models import Users, UserToken
+from accounts.models import Employe, UserToken
 import datetime
 import pytz
 from django.utils import timezone
@@ -45,7 +45,7 @@ class CustomAuthMiddleware(MiddlewareMixin):
                         try:
                             user = token.user
                             return
-                        except Users.DoesNotExist:
+                        except Employe.DoesNotExist:
                             return HttpResponse('Unauthorized', status=401)
                 else:
                     return HttpResponse('Unauthorized', status=401)

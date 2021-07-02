@@ -1,9 +1,9 @@
 from django import forms
 
-from accounts.models import Users
+from accounts.models import Employe
 
 
-class UsersForm(forms.ModelForm):
+class EmployeForm(forms.ModelForm):
     class Meta:
-        model = Users
+        model = Employe
         fields = ['username', 'is_active']
