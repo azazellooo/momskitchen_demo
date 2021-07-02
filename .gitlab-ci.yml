@@ -4,7 +4,7 @@ services:
   - postgres:latest
 
 variables:
-  POSTGRES_DB: my_db_name
+  POSTGRES_DB: ci
 
 cache:
   paths:
@@ -18,15 +18,15 @@ stages:
   - test
 
 unit-test-job:   # This job runs in the test stage.
-  stage: test    
+  stage: test
   variables:
     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
     DEBUG: "true"
     SECRET_KEY: 1n2m!82uff1-7b0_)x=!$xh$k1!mq)co4$&_+*ya23#4tj-y4@
-    DB_NAME: my_db_name
-    DB_USER: my_user
-    DB_PASSWORD: my_password
-    DB_HOST: localhost
+    DB_NAME: ci
+    DB_USER: postgres
+    DB_PASSWORD: postgres
+    DB_HOST: postgres
     DB_PORT: 5432
   script:
     - echo "Running unit tests... This will take about 60 seconds."
