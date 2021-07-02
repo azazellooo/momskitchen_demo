@@ -82,3 +82,19 @@ class Additional(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class Offering(BaseModel):
+    position = models.OneToOneField('KitchenWeb.Dish', blank=False, null=False, verbose_name='Позиция', on_delete=models.CASCADE, related_name='offering_position')
+    garnish = models.ForeignKey('KitchenWeb.Garnish', blank=True, null=True, verbose_name='Гарнир', on_delete=models.SET_NULL, related_name='offering_garnish')
+    supplement = models.ForeignKey('KitchenWeb.Supplement', blank=True, null=True, verbose_name='Надбавка', on_delete=models.SET_NULL, related_name='offering_supplement')
+    additional = models.ForeignKey('KitchenWeb.Additional', blank=True, null=True, verbose_name='Дополнения', on_delete=models.SET_NULL, related_name='offering_additional')
+    date = models.DateField(blank=False, null=False, verbose_name='Дата')
+
+    class Meta:
+        db_table = 'offerings'
+        verbose_name = 'Предложение по позиции'
+        verbose_name_plural = 'Предложения по позициям'
+
+    def __str__(self):
+        return f'{self.position}-{self.date}'
