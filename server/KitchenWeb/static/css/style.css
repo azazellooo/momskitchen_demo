@@ -1,10 +1,11 @@
 body {
-    margin-top: 60px;
-}
-
-.container{
-    width: 80%;
-    margin: 0 auto;
+    /*margin-top: 60px;*/
+    margin: 0;
+    background-color: #fff;
+    color: #000;
+    font-size: 16px;
+    line-height: 1.3;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .form-error {
@@ -16,4 +17,35 @@ body {
     border: solid 1px red;
     box-shadow: red 0 0 3px;
     display: inline-block;
+}
+
+.main-page {
+    background-color: #F0F3F4;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+
+.main-page h1 {
+    font-size: 40px;
+    color: #273746 ;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.main-page #slogan {
+    color: #85929E ;
+    text-align: center;
+}
+
+.main-text {
+    border: 5px black;
+    margin-top: 50px;
+}
+
+
+#123{
+    margin-top: 100px;
 }
