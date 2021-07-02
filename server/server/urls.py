@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
+
+from KitchenWeb.views.main_page import IndexView
 from server import settings
 
 urlpatterns = [
@@ -23,5 +25,6 @@ urlpatterns = [
     path('kitchen5bot/', include('kitchen5bot.urls')),
     path('accounts/', include('accounts.urls')),
     path('api/', include('api.urls')),
+    path('', IndexView.as_view(), name='index'),
     path('', include('KitchenWeb.urls'))
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
