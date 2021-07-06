@@ -1,6 +1,6 @@
 from django import forms
 
-from KitchenWeb.models import Supplement, Dish, Category, Garnish, Additional
+from KitchenWeb.models import Supplement, Dish, Category, Garnish, Additional, Offering
 from accounts.models import Organization
 
 
@@ -49,3 +49,10 @@ class AdditionalForm(forms.ModelForm):
     class Meta:
         model = Additional
         fields = ('name', 'sampling_order', 'base_price')
+
+
+class OfferingForm(forms.ModelForm):
+
+    class Meta:
+        model = Offering
+        fields = ('position', 'garnish', 'additional', 'supplement', 'date')
