@@ -7,7 +7,7 @@
     {% for additional in additionals %}
     <div class="box">
     <ul class="list-group">
-         id: {{ additional.id }}. Название: {{ additional.name }}
+         id: {{ additional.id }}. Название: <a  href="{% url 'kitchen:additional_detail_update' additional.id %}">{{ additional.name }}</a>
     </ul>
     </div>
 

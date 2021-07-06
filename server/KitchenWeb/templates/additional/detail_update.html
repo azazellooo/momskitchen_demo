@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Дополнение к позиции: {{ additional.id }}{% endblock %}
+
+
+{% block content %}
+    {{ extra_price|json_script:'extra_price' }}
+    {{ type|json_script:'types' }}
+    <h2>
+        Гарнир {{ additional.id }}. {{ additional.name }}
+    </h2>
+    <button type="button" id="edit_btn" class="btn btn-info">Редактировать</button>
+    <button type="button" id="cancel_btn" class="btn btn-info">Отмена</button>
+    <div id="Form" class="d-grid gap-5">
+        <form id="myForm" action="{% url "kitchen:additional_detail_update" additional.pk %}" method="post" enctype="multipart/form-data">
+                {% include "partial/kitchen_form.html"  %}
+                {% if not additional.extra_price or additional.extra_price == "{}" %}
+                    <btn class='btn' type="submit" id="add" onclick="addExtraBtn2(event);">Добавить дополнительные цены</btn>
+                {% endif %}
+                <div class="selects" id="selects"></div>
+                <p><input type="submit" id="savePosition" value="Обновить"></p>
+        </form>
+    </div>
+    <script>
+     let block = document.getElementById('selects')
+     const TYPES_UPDATE = JSON.parse(document.getElementById('types').textContent);
+     let COUNT = 1
+
+     let extra_price = JSON.parse(document.getElementById('extra_price').textContent);
+        if (extra_price) {
+
+            for (let volume in extra_price) {
+                console.log(volume)
+                $("<div/>").attr({id: 'selectBlock' + COUNT}).appendTo(block)
+                $("<input/>").attr({
+                    class: "extra_input", type: 'text', id: 'comment' + COUNT,required: true, value:
+                    extra_price[volume].comment, name: ('comment' + COUNT)
+                }).appendTo('#selectBlock' + COUNT);
+                $("<input/>").attr({
+                    class: "extra_input_2", type: 'number', id: 'pricing' + COUNT,required: true, value:
+                    extra_price[volume].pricing, name: ('pricing' + COUNT)
+                }).appendTo('#selectBlock' + COUNT);
+                $("<select/>").attr({ id: "select" + COUNT, name: "select"+ COUNT, class: "select"}).appendTo('#selectBlock' + COUNT);
+                let select = document.getElementById("select" + COUNT)
+                for (let i of TYPES_UPDATE) {
+
+                    let option = document.createElement('option')
+                    option.value = i
+                    option.innerHTML = i
+                    if (i == volume) {
+
+                        option.setAttribute('selected', true)
+                    }
+                    select.appendChild(option)
+                }
+
+                $("<button>⊕</button>").attr({
+                    class:'plus-min-btn',
+                    type: 'submit',
+                    onclick: "addExtraBtn2(event);"
+                }).appendTo('#selectBlock' + COUNT);
+                $("<button>(-)</button>").attr({
+                    class:'plus-min-btn',
+                    type: 'submit',
+                    onclick: "removeExtraBtn2(event);"
+                }).appendTo('#selectBlock' + COUNT);
+                COUNT += 1
+            }
+        }
+
+
+
+     function addExtraBtn2(event) {
+            event.preventDefault()
+            if (TYPES_UPDATE.length > 1){
+                 let select = event.currentTarget.parentElement.getElementsByClassName("select")[0]
+                if(select){
+                    let selected = select.value
+                 let toRemove = TYPES_UPDATE.indexOf(parseFloat(selected))
+                    TYPES_UPDATE.splice(toRemove, 1)
+                }
+                 $("<div/>").attr({id:'selectBlock'+COUNT}).appendTo(block)
+                 $("<input/>").attr({class: 'extra_input' ,type: 'text', id:'comment'+COUNT, required: true,  value:
+                'Comment', name:('comment' + COUNT)}).appendTo('#selectBlock'+COUNT);
+                 $("<input/>").attr({class: 'extra_input_2' , type: 'number', id:'pricing'+COUNT,required: true, value:
+                '20', name:('pricing' + COUNT)}).appendTo('#selectBlock'+COUNT);
+                 $("<select/>").attr({id:'select'+COUNT, name: "select"+ COUNT, class:"select"}).appendTo('#selectBlock'+COUNT);
+                 let select1 = document.getElementById("select"+COUNT)
+                 for (let i of TYPES_UPDATE) {
+                     let option = document.createElement('option')
+                     option.value = i
+                     option.innerHTML = i
+                     select1.appendChild(option)
+                 }
+                 $("<button>⊕</button>").attr({class:'plus-min-btn', onclick:"addExtraBtn2(event);"}).appendTo('#selectBlock'+COUNT);
+                 $("<button>(-)</button>").attr({class:'plus-min-btn', type:'submit', onclick:"removeExtraBtn2(event);"}).appendTo('#selectBlock'+COUNT);
+                 COUNT += 1
+            }
+            else {
+                window.alert("Больше типов нет!")
+                return false
+            }
+         }
+
+        function removeExtraBtn2(event){
+            event.preventDefault()
+            let toRemove = event.currentTarget.parentElement
+            let type = toRemove.getElementsByTagName("select")[0].value
+            if (TYPES_UPDATE.length < 2) {
+                TYPES_UPDATE.push(parseFloat(type))
+            }
+            toRemove.remove()
+        }
+
+    $(document).ready(function() {
+        let childNodes = document.getElementById("selects").getElementsByTagName('input', 'select', 'button');
+
+        for (let i of childNodes) {
+            console.log(i);
+            $(i).prop('disabled', true)
+        }
+
+        $("#selects *").prop('disabled', true)
+        $("input").prop('disabled', true);
+        $("select").prop('disabled', true);
+        $("#cancel_btn").hide()
+        $("#add").prop('disabled', true)
+
+
+        $("#edit_btn").click(function(){
+            $("input").prop('disabled', false);
+            $("select").prop('disabled', false);
+            $("option").prop('disabled', false)
+            $(".plus-min-btn").prop('disabled', false)
+            $("#add").prop('disabled', false)
+            $(this).hide()
+            $("#cancel_btn").show()
+        });
+
+        $("#cancel_btn").click(function (){
+        $("input").prop('disabled', true);
+        $("#edit_btn").show()
+        $(this).hide()
+        $("select").prop('disabled', true);
+        $(".plus-min-btn").prop('disabled', true)
+        $("#add").prop('disabled', true)
+        for (let i of childNodes) {
+            $(i).prop('disabled', true)
+            }
+        });
+    });
+    </script>
+{% endblock %}

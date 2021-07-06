@@ -25,7 +25,9 @@ from KitchenWeb.views.category import (
     CategoryDetailUpdateView
 )
 from KitchenWeb.views.additional import (
-    AdditionalListView, AdditionalCreateView
+    AdditionalListView,
+    AdditionalCreateView,
+    AdditionalDetailUpdateView
 )
 from KitchenWeb.views.offering import (
     OfferingCreateView
@@ -52,6 +54,7 @@ kitchen_urls = [
     path('category/update/detail/<int:pk>/', CategoryDetailUpdateView.as_view(), name='category_update_detail'),
     path('additional/list/', AdditionalListView.as_view(), name='additional_list'),
     path('additional/create/', AdditionalCreateView.as_view(), name='additional_create'),
+    path('additional/<int:pk>/', AdditionalDetailUpdateView.as_view(), name='additional_update_detail'),
     path('offering/create/', OfferingCreateView.as_view(), name='offering_create')
 
 
