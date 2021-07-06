@@ -1,16 +1,15 @@
 import json
-
 from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.datastructures import MultiValueDictKeyError
-
 from KitchenWeb.models import Additional
 from django.views.generic import ListView, CreateView, UpdateView
 from django.utils.http import urlencode
 from KitchenWeb.forms import SearchForm, AdditionalForm
 from KitchenWeb.views.garnish import TYPES
 
+TYPES = [0.3, 0.5, 0.7, 1.3, 1.5, 1.7, 2]
 
 class AdditionalListView(ListView):
     template_name = 'additional/list.html'
@@ -79,7 +78,42 @@ class AdditionalCreateView(CreateView):
         except MultiValueDictKeyError:
             additional.save()
         additional.save()
-        return redirect('kitchen:organization-list')
+        return redirect('kitchen:additional_list')
 
-    def get_success_url(self):
-        return reverse('index')
+
+class AdditionalDetailUpdateView(UpdateView):
+    template_name = 'additional/detail_update.html'
+    model = Additional
+    form_class = AdditionalForm
+    context_object_name = 'additional'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Additional, pk=self.kwargs.get('pk'))
+
+    def form_valid(self, form):
+        additional = self.get_object()
+        additional.name = form.data['name']
+        print(form.data)
+        additional.sampling_order = form.data['sampling_order']
+        additional.base_price = form.data['base_price']
+        try:
+            to_json = {}
+            for key, value in form.data.items():
+                if "select" in key:
+                    counter = int(key.replace('select', ""))
+                    to_json[value] = {"comment": (form.data.get(f'comment{counter}')),
+                                      "pricing": (form.data.get(f'pricing{counter}'))}
+            json_var = json.dumps(to_json)
+            additional.extra_price = json_var
+        except MultiValueDictKeyError:
+            additional.save()
+        additional.save()
+        return redirect('kitchen:additional_list')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        additional = self.get_object()
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['type'] = TYPES
+        if additional.extra_price:
+            context['extra_price'] = json.loads(additional.extra_price)
+        return context
