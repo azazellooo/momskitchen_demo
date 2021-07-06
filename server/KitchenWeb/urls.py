@@ -27,6 +27,9 @@ from KitchenWeb.views.category import (
 from KitchenWeb.views.additional import (
     AdditionalListView, AdditionalCreateView
 )
+from KitchenWeb.views.offering import (
+    OfferingCreateView
+)
 
 app_name = 'kitchen'
 
@@ -47,8 +50,9 @@ kitchen_urls = [
     path('categories/list/', CategoryListView.as_view(), name='category_list'),
     path('categories/create/', CategoryCreateView.as_view(), name='category_create'),
     path('category/update/detail/<int:pk>/', CategoryDetailUpdateView.as_view(), name='category_update_detail'),
-    path('additional/list', AdditionalListView.as_view(), name='additional_list'),
-    path('additional/create', AdditionalCreateView.as_view(), name='additional_create'),
+    path('additional/list/', AdditionalListView.as_view(), name='additional_list'),
+    path('additional/create/', AdditionalCreateView.as_view(), name='additional_create'),
+    path('offering/create/', OfferingCreateView.as_view(), name='offering_create')
 
 
 ]
