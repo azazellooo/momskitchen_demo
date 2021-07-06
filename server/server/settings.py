@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'kitchen5bot',
     'accounts',
     'KitchenWeb',
-    'api'
+    'api',
+    'psycopg2'
 
 ]
 
@@ -146,8 +147,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_TIMEZONE = "Asia/Bishkek"
-CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30 * 60
 

@@ -35,7 +35,7 @@ class Employe(models.Model):
     tg_user = models.OneToOneField('kitchen5bot.TelegramUser',
                                    on_delete=models.CASCADE, verbose_name='Пользователь телеграма')
     organization_id = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE,
-                                        null=True, blank=True, verbose_name='Внешний ключ на организацию')
+                                        null=True, related_name='employe_org', blank=True, verbose_name='Внешний ключ на организацию')
     username = models.CharField(max_length=200, null=True, blank=True,
                                 unique=True, validators=[MinLengthValidator(3)], verbose_name='Username')
     is_active = models.BooleanField(default=True, verbose_name='Активен ли пользователь')
@@ -50,6 +50,7 @@ class UserToken(models.Model):
     key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
     user = models.OneToOneField('accounts.Employe', on_delete=models.CASCADE, related_name='user_token')
     created_at = models.DateTimeField(auto_now_add=True)
+    activated = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'UserTokens'
