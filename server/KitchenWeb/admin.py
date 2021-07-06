@@ -40,7 +40,6 @@ class AdditionalAdmin(admin.ModelAdmin):
     readonly_fields = ['id', ]
 
 
-
 class OfferingAdmin(admin.ModelAdmin):
     list_display = ['id', 'position', 'garnish', 'supplement', 'additional', 'date']
     list_filter = ['date']
