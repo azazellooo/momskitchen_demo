@@ -1,5 +1,5 @@
 from django.contrib import admin
-from accounts.models import Organization, Employe, UserToken
+from accounts.models import Organization, Employe, UserToken, BalanceChange
 from kitchen5bot.models import TelegramUser
 # Register your models here.
 
@@ -31,7 +31,17 @@ class UserTokenAdmin(admin.ModelAdmin):
     list_display = ['id', 'key', 'user', 'created_at']
     readonly_fields = ['id', 'key', 'created_at']
 
+class BalanceChangeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'type', 'employe', 'sum_balance', 'created_at']
+    list_filter = ['type', 'employe']
+    search_fields = ['type', 'employe']
+    fields = ['id', 'type', 'employe', 'sum_balance', 'comment', 'created_at']
+    readonly_fields = ['id', 'created_at']
+
+
+
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Employe, EmployeAdmin)
 admin.site.register(TelegramUser, UserTgAdmin)
 admin.site.register(UserToken, UserTokenAdmin)
+admin.site.register(BalanceChange, BalanceChangeAdmin)
