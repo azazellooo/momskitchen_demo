@@ -5,9 +5,18 @@
     {% endif %}
 
     {% for organization in organizations %}
-    <div class="box">
-        <p><a href="{% url 'kitchen:organization-detail-update' organization.id %}">{{ organization.name }}</a></p>
+        <div class="col-sm-6 mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><a href="{% url 'kitchen:organization-detail-update' organization.id %}">{{ organization.name }}</a></h5>
+        <p class="card-text">Сотрудники: {{ organization.employe_org.count }}</p>
+          {% if organization.payment == 'cumulative'  %}
+        <p class="card-text"> </p>
+        <a href="#" class="btn btn-primary">страница балансов</a>
+                    {% endif %}
+      </div>
     </div>
+  </div>
 
 {% empty %}
     <h2 class="text-center">Нет ещё такой Организации </h2>

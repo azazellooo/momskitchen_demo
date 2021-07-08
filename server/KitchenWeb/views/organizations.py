@@ -27,7 +27,7 @@ class OrganizationsListView(ListView):
             queryset = queryset.filter(
                 Q(name__icontains=self.search_data)
             )
-        return queryset
+        return queryset.filter(is_active=True)
 
     def get_search_data(self):
         if self.form.is_valid():
@@ -37,6 +37,7 @@ class OrganizationsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_form'] = self.form
+
 
         if self.search_data:
             context['query'] = urlencode({'search_value': self.search_data})
