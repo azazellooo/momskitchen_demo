@@ -1,8 +1,10 @@
 from django.db import models
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, MinValueValidator
 import uuid
 
 BASE_URL = 'http://t.me/kitchen5bot/'
+
+choice_types = [('accrual', 'Accrual'), ('write-off', 'Write-off')]
 
 
 class Organization(models.Model):
@@ -40,10 +42,25 @@ class Employe(models.Model):
                                 unique=True, validators=[MinLengthValidator(3)], verbose_name='Username')
     is_active = models.BooleanField(default=True, verbose_name='Активен ли пользователь')
     is_admin = models.BooleanField(default=False)
+
     class Meta:
         db_table = 'Users'
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+
+class BalanceChange(models.Model):
+    type = models.CharField(max_length=200, choices=choice_types, blank=False, null=False, verbose_name='Тип')
+    employe = models.OneToOneField('accounts.Employe', on_delete=models.CASCADE, related_name='bal_em', verbose_name='Пользователь')
+    sum_balance = models.IntegerField(default=0, blank=False, null=False, verbose_name='Сумма', validators=[MinValueValidator(0)])
+    comment = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Комментарий')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'BalanceChange'
+        verbose_name = 'Изменение Баланса'
+        verbose_name_plural = 'Изменение Балансов'
+
 
 
 class UserToken(models.Model):
