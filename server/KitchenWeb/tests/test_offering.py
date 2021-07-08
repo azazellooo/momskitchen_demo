@@ -39,58 +39,26 @@ class OfferingCreateViewTests(TestCase):
     def test_proper_path(self):
         self.assertEqual('/kitchen/offering/create/', self.request.path)
 
-    # def test_create(self):
-    #     self.assertTrue(Offering.objects.filter(date=2021-07-06).exists())
 
-    # def test_field_values(self):
-    #     self.assertEqual('123', self.offering.position)
-    #     self.assertEqual('1', self.offering.garnish)
-    #     self.assertEqual('100', self.offering.additional)
-    #     self.assertEqual('asd', self.offering.supplement)
-    #     self.assertEqual('2021-07-06', self.offering.date)
+class OfferingListViewTests(TestCase):
+    fixtures = ['offering_test_data.json']
+    response = None
 
+    def setUp(self):
+        self.response = self.client.get(reverse('kitchen:offering_list'))
 
+    def test_status_code_200(self):
+        self.assertEqual(self.response.status_code, 200)
 
+    def test_no_offerings_response(self):
+        if len(self.response.context['offerings']) <= 0:
+            self.assertContains(self.response, 'Нет предложений по позиции')
 
-# class OfferingCreateViewTests(TestCase):
-#
-#     data = {
-#         "position": "123",
-#         "garnish": "1",
-#         "additional": '100',
-#         "supplement": 'asd',
-#         "date": '2021-07-06'
-#     }
-#     request = RequestFactory().post(reverse("kitchen:offering_create"), data=data)
-#     response = OfferingCreateViewTests.as_view()(request)
-#
-#     def setUp(self):
-#         self.factory = RequestFactory()
-#         self.organization = Organization.objects.create(**self.data)
-#
-#     def test_proper_template(self):
-#         self.assertTemplateUsed("organizations/create.html")
-#
-#     def test_get_request_returns_200(self):
-#
-#         # get request means request by method "GET"
-#
-#         response = self.client.get(reverse("kitchen:offering_create"))
-#         self.assertEqual(response.status_code, 200)
-#
-#     def test_proper_path(self):
-#         self.assertEqual('/offering/create/', self.request.path)
-#
-#     def test_create(self):
-#         self.assertTrue(Organization.objects.filter(name='Test Organization').exists())
-#
-#     def test_post(self):
-#         self.assertEqual(self.response.status_code, 200)
-#         self.assertContains(self.response, 'Test Organization')
-#
-#     def test_field_values(self):
-#         self.assertEqual(self.organization.position)
-#         self.assertEqual(self.organization.garnish)
-#         self.assertFalse(self.organization.additional)
-#         self.assertTrue(self.organization.supplement)
-#         self.assertTrue(self.organization.date)
+    def test_valid_response_for_search_query(self):
+        search_field_inner = 'd'
+        search_response = self.client.get('/kitchen/offering/list', {'search_value': search_field_inner})
+        print(search_response.context)
+        [self.assertIn(search_field_inner, offering.position) for offering in search_response.context['offerings']]
+
+    # def test_is_paginated_by_5(self):
+    #     self.assertLessEqual(len(self.response.context['offerings']), 5)
