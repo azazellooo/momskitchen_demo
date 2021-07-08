@@ -1,7 +1,7 @@
 from django import forms
 
 from KitchenWeb.models import Supplement, Dish, Category, Garnish, Additional, Offering
-from accounts.models import Organization
+from accounts.models import Organization, BalanceChange
 
 
 class SearchForm(forms.Form):
@@ -36,7 +36,6 @@ class GarnishForm(forms.ModelForm):
         fields = ['name', 'order', 'base_price']
 
 
-
 class CategoryForm(forms.ModelForm):
 
     class Meta:
@@ -56,3 +55,10 @@ class OfferingForm(forms.ModelForm):
     class Meta:
         model = Offering
         fields = ('position', 'garnish', 'additional', 'supplement', 'date')
+
+
+class BalanceChangeForm(forms.ModelForm):
+
+    class Meta:
+        model = BalanceChange
+        fields = ('type', 'sum_balance', 'comment')
