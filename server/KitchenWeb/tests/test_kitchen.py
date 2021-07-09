@@ -1,6 +1,7 @@
-from django.test import TestCase
+from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
-
+from accounts.models import Employe, UserToken, Organization
+from kitchen5bot.models import TelegramUser
 from KitchenWeb.models import Supplement
 
 
@@ -9,7 +10,29 @@ class SupplementListViewTests(TestCase):
     response = None
 
     def setUp(self):
-        self.response = self.client.get(reverse('kitchen:supplement-list'))
+        self.factory = RequestFactory()
+
+        self.organization = Organization.objects.create(**{
+            'name': 'Attractor'
+        })
+        self.tg_user = TelegramUser.objects.create(**{
+            'telegram_id': '1455413201',
+            'first_name': 'Begaiym',
+            'username': 'monpassan'
+        })
+        self.web_user = Employe.objects.create(**{
+            'tg_user': self.tg_user,
+            'organization_id': self.organization,
+            'username': 'Gosha'
+        })
+        self.user_token = UserToken.objects.create(**{
+            'user': self.web_user
+        })
+        kwargs = {'token': self.user_token.key}
+        url = reverse('profile', kwargs=kwargs)
+        self.request = Client()
+        self.response = self.request.get(url)
+        self.response = self.request.get(reverse('kitchen:supplement-list'))
 
     def test_status_code_200(self):
         self.assertEqual(self.response.status_code, 200)
@@ -20,21 +43,37 @@ class SupplementListViewTests(TestCase):
 
     def test_valid_response_for_search_query(self):
         search_field_inner = 'jam'
-        search_response = self.client.get('/kitchen/supplements/', {'search_value': search_field_inner})
+        search_response = self.request.get('/kitchen/supplements/', {'search_value': search_field_inner})
         [self.assertIn(search_field_inner, supplement.name) for supplement in search_response.context['supplements']]
 
     def test_is_paginated_by_5(self):
         self.assertLessEqual(len(self.response.context['supplements']), 5)
-
-    # def test_empty_search_field(self):
-    #     search_response = self.client.get(reverse('kitchen:supplement-list'), {'search_value': ''})
-    #     self.assertEqual(self.response.context['supplements'], search_response.context['supplements'])
 
 
 class SupplementUpdateTest(TestCase):
     def test_update_supplement(self):
         self.supplement = Supplement.objects.create(name='Гречка', price=130)
         self.supplement.save()
+        self.organization = Organization.objects.create(**{
+            'name': 'Attractor'
+        })
+        self.tg_user = TelegramUser.objects.create(**{
+            'telegram_id': '1455413201',
+            'first_name': 'Begaiym',
+            'username': 'monpassan'
+        })
+        self.web_user = Employe.objects.create(**{
+            'tg_user': self.tg_user,
+            'organization_id': self.organization,
+            'username': 'Gosha'
+        })
+        self.user_token = UserToken.objects.create(**{
+            'user': self.web_user
+        })
+        kwargs = {'token': self.user_token.key}
+        url = reverse('profile', kwargs=kwargs)
+        self.client = Client()
+        self.response = self.client.get(url)
         response = self.client.post(
             reverse('kitchen:detail_update_supplement', kwargs={'pk': self.supplement.id}),
             {'name': 'Рис', 'price': '131'}
