@@ -11,10 +11,10 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 
 class EmployeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'tg_user', 'organization_id', 'username', 'is_active', 'total_balance']
+    list_display = ['id', 'tg_user', 'organization_id', 'username', 'is_active', 'total_balance', 'is_admin']
     list_filter = ['organization_id']
     search_fields = ['organization_id', 'username']
-    fields = ['id', 'tg_user', 'organization_id', 'username', 'is_active', 'total_balance']
+    fields = ['id', 'tg_user', 'organization_id', 'username', 'is_active', 'total_balance', 'is_admin']
     readonly_fields = ['id']
 
 
@@ -32,7 +32,7 @@ class UserTokenAdmin(admin.ModelAdmin):
 
 
 class BalanceChangeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'type', 'employe', 'sum_balance', 'created_at']
+    list_display = ['id', 'type', 'employe', 'sum_balance', 'created_at', 'balance_after_transaction']
     list_filter = ['type', 'employe']
     search_fields = ['type', 'employe']
     fields = ['id', 'type', 'employe', 'sum_balance', 'comment', 'created_at']
