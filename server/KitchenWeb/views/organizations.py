@@ -1,10 +1,11 @@
 from django.db.models import Q
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from accounts.models import Organization
+from accounts.models import Organization, BalanceChange, Employe
 from django.views.generic import ListView, CreateView, UpdateView
-from KitchenWeb.forms import SearchForm, OrganizationForm
+from KitchenWeb.forms import SearchForm, OrganizationForm, BalanceChangeForm
 from django.utils.http import urlencode
 
 
@@ -62,3 +63,24 @@ class OrganizationDetailUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('kitchen:organization-list')
+
+
+class OrganizationBalancePageView(UpdateView):
+    template_name = 'organizations/balance.html'
+    model = Organization
+    form_class = BalanceChangeForm
+
+    def form_valid(self, form):
+        employee = Employe.objects.get(pk=form.data.get('employee'))
+
+        BalanceChange.objects.create(employe=employee,
+                                     comment=form.data.get('comment'),
+                                     type=form.data.get('type'),
+                                     sum_balance=form.data.get('sum_balance'))
+        if form.data.get('type') == 'accrual':
+            employee.total_balance += int(form.data.get('sum_balance'))
+            employee.save()
+        else:
+            employee.total_balance -= int(form.data.get('sum_balance'))
+            employee.save()
+        return redirect('kitchen:organization-balance', pk=self.kwargs.get('pk'))
