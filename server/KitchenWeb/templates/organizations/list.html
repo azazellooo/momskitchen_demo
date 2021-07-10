@@ -12,7 +12,7 @@
         <p class="card-text">Сотрудники: {{ organization.employe_org.count }}</p>
           {% if organization.payment == 'cumulative'  %}
         <p class="card-text"> </p>
-        <a href="#" class="btn btn-primary">страница балансов</a>
+        <a href="{% url 'kitchen:organization-balance' organization.id %}" class="btn btn-primary">страница балансов</a>
                     {% endif %}
       </div>
     </div>

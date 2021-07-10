@@ -6,8 +6,11 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium.webdriver import Chrome
 
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
 from KitchenWeb.views import OrganizationCreateView
-from accounts.models import Organization
+from KitchenWeb.views.organizations import OrganizationBalancePageView
+from accounts.models import Organization, BalanceChange, Employe, UserToken
+from kitchen5bot.models import TelegramUser
 
 
 class OrganizationsListViewTests(TestCase):
@@ -123,3 +126,54 @@ class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
         self.assertTrue(inputs[0].is_enabled())
         self.driver.find_element_by_id('cancel_btn').click()
         self.assertFalse(inputs[0].is_enabled())
+
+
+class OrganizationBalancePageViewTests(TestCase):
+
+    def setUp(self):
+        self.organization = OrganizationFactory()
+        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.token = UserTokenFactory(user=self.employee)
+        self.client.get(reverse('profile', kwargs={'token': self.token.key}))
+        self.path = reverse('kitchen:organization-balance', kwargs={'pk': self.organization.pk})
+        self.response = self.client.get(self.path)
+        self.client.session['token'] = self.token.key
+        self.session = self.client.session
+        self.session['token'] = self.token.key
+
+    def test_user_authenticated(self):
+        self.assertNotEqual(None, self.session.get('token', None))
+        self.assertTrue(UserToken.objects.filter(key=self.session.get('token')).exists())
+
+    def test_proper_template_used(self):
+        self.assertTemplateUsed(self.response, 'organizations/balance.html')
+
+    def test_status_200(self):
+        self.assertEqual(200, self.response.status_code)
+
+    def test_no_employees(self):
+        if self.organization.employe_org.count() < 1:
+            self.assertContains(self.response, f'Сотрудники компании "{self.organization.name}" еще не зарегистрированы.')
+
+    def test_form_exists(self):
+        if self.organization.employe_org.count() >= 1:
+            self.assertContains(self.response, 'обновить баланс')
+
+    def test_accrual(self):
+        self.assertEqual(10, self.employee.total_balance)
+        data = {"employee": self.employee.id, "type": 'accrual', "comment": 'test comment', "sum_balance": 100}
+        response = self.client.post(self.path, data=data)
+        self.assertRedirects(response, self.path)
+        self.assertEqual(302, response.status_code)
+        print(response.status_code)
+        self.employee.refresh_from_db()
+        self.assertEqual(110, self.employee.total_balance)
+
+    def test_write_off(self):
+        self.assertEqual(10, self.employee.total_balance)
+        data = {"employee": self.employee.id, "type": 'write-off', "comment": 'test comment', "sum_balance": 5}
+        response = self.client.post(self.path, data=data)
+        self.assertRedirects(response, self.path)
+        self.assertEqual(302, response.status_code)
+        self.employee.refresh_from_db()
+        self.assertEqual(5, self.employee.total_balance)

@@ -1,7 +1,6 @@
 from django.contrib import admin
-from accounts.models import Organization, Employe, UserToken, BalanceChange
+from accounts.models import Organization, UserToken, BalanceChange, Employe
 from kitchen5bot.models import TelegramUser
-# Register your models here.
 
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'secondary_key', 'generate_link']
@@ -12,10 +11,10 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 
 class EmployeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'tg_user', 'organization_id', 'username', 'is_active']
+    list_display = ['id', 'tg_user', 'organization_id', 'username', 'is_active', 'total_balance']
     list_filter = ['organization_id']
     search_fields = ['organization_id', 'username']
-    fields = ['id', 'tg_user', 'organization_id', 'username', 'is_active']
+    fields = ['id', 'tg_user', 'organization_id', 'username', 'is_active', 'total_balance']
     readonly_fields = ['id']
 
 
@@ -30,6 +29,7 @@ class UserTgAdmin(admin.ModelAdmin):
 class UserTokenAdmin(admin.ModelAdmin):
     list_display = ['id', 'key', 'user', 'created_at']
     readonly_fields = ['id', 'key', 'created_at']
+
 
 class BalanceChangeAdmin(admin.ModelAdmin):
     list_display = ['id', 'type', 'employe', 'sum_balance', 'created_at']

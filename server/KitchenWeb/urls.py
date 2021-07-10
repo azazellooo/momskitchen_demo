@@ -4,7 +4,8 @@ from KitchenWeb.views import GarnishCreateView
 from KitchenWeb.views.organizations import (
     OrganizationsListView,
     OrganizationCreateView,
-    OrganizationDetailUpdateView
+    OrganizationDetailUpdateView,
+    OrganizationBalancePageView
 )
 from KitchenWeb.views.kitchen import (
     SupplementListView,
@@ -39,7 +40,8 @@ app_name = 'kitchen'
 organization_urls = [
     path("", OrganizationsListView.as_view(), name="organization-list"),
     path('create/', OrganizationCreateView.as_view(), name='organization-create'),
-    path('<int:pk>/', OrganizationDetailUpdateView.as_view(), name='organization-detail-update')
+    path('<int:pk>/', OrganizationDetailUpdateView.as_view(), name='organization-detail-update'),
+    path('balance/<int:pk>/', OrganizationBalancePageView.as_view(), name='organization-balance')
 ]
 
 kitchen_urls = [
