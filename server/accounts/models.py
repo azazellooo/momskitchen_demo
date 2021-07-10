@@ -4,7 +4,7 @@ import uuid
 
 BASE_URL = 'http://t.me/kitchen5bot/'
 
-choice_types = [('accrual', 'Accrual'), ('write-off', 'Write-off')]
+choice_types = [('accrual', 'Начисление'), ('write-off', 'Списание')]
 
 
 class Organization(models.Model):
@@ -32,7 +32,6 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
-
 class Employe(models.Model):
     tg_user = models.OneToOneField('kitchen5bot.TelegramUser',
                                    on_delete=models.CASCADE, verbose_name='Пользователь телеграма')
@@ -42,17 +41,21 @@ class Employe(models.Model):
                                 unique=True, validators=[MinLengthValidator(3)], verbose_name='Username')
     is_active = models.BooleanField(default=True, verbose_name='Активен ли пользователь')
     is_admin = models.BooleanField(default=False)
+    total_balance = models.IntegerField(default=0, blank=True, null=True, verbose_name='Общий баланс')
 
     class Meta:
         db_table = 'Users'
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
+    def __str__(self):
+        return self.username
+
 
 class BalanceChange(models.Model):
     type = models.CharField(max_length=200, choices=choice_types, blank=False, null=False, verbose_name='Тип')
-    employe = models.OneToOneField('accounts.Employe', on_delete=models.CASCADE, related_name='bal_em', verbose_name='Пользователь')
-    sum_balance = models.IntegerField(default=0, blank=False, null=False, verbose_name='Сумма', validators=[MinValueValidator(0)])
+    employe = models.ForeignKey('accounts.Employe', on_delete=models.CASCADE, related_name='bal_em', verbose_name='Пользователь')
+    sum_balance = models.IntegerField(default=0, blank=False, null=False, verbose_name='Сумма', validators=[MinValueValidator(1)])
     comment = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Комментарий')
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -60,7 +63,6 @@ class BalanceChange(models.Model):
         db_table = 'BalanceChange'
         verbose_name = 'Изменение Баланса'
         verbose_name_plural = 'Изменение Балансов'
-
 
 
 class UserToken(models.Model):
@@ -73,3 +75,4 @@ class UserToken(models.Model):
         db_table = 'UserTokens'
         verbose_name = 'Токен пользователя'
         verbose_name_plural = 'Токены Пользователей'
+
