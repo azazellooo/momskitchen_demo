@@ -58,6 +58,7 @@ class BalanceChange(models.Model):
     sum_balance = models.IntegerField(default=0, blank=False, null=False, verbose_name='Сумма', validators=[MinValueValidator(1)])
     comment = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Комментарий')
     created_at = models.DateTimeField(auto_now_add=True)
+    balance_after_transaction = models.IntegerField(blank=True, null=True)
 
     class Meta:
         db_table = 'BalanceChange'

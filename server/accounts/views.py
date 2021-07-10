@@ -1,10 +1,11 @@
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import DetailView, TemplateView, UpdateView
+from django.views.generic import DetailView, TemplateView, UpdateView, ListView
 from django.urls import reverse
+from django.views.generic.list import MultipleObjectMixin
 
 from accounts.forms import EmployeForm
-from accounts.models import Employe, UserToken
+from accounts.models import Employe, UserToken, BalanceChange
 from django.contrib.sessions.models import Session
 from datetime import datetime, timedelta
 from accounts.tasks import drop_time_token, validation_token
@@ -60,3 +61,16 @@ class UserUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('profile_distoken')
+
+
+class EmployeeTransactionHistoryView(DetailView, MultipleObjectMixin):
+    template_name = 'accounts/transaction_history.html'
+    model = Employe
+    paginate_by = 5
+    paginate_orphans = 1
+    context_object_name = 'employee'
+
+    def get_context_data(self, **kwargs):
+        transactions = BalanceChange.objects.filter(employe=self.get_object()).order_by('-created_at')
+        context = super(EmployeeTransactionHistoryView, self).get_context_data(object_list=transactions, **kwargs)
+        return context

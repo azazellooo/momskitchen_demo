@@ -72,15 +72,19 @@ class OrganizationBalancePageView(UpdateView):
 
     def form_valid(self, form):
         employee = Employe.objects.get(pk=form.data.get('employee'))
+        sum_balance = int(form.data.get('sum_balance'))
 
-        BalanceChange.objects.create(employe=employee,
+        b = BalanceChange.objects.create(employe=employee,
                                      comment=form.data.get('comment'),
                                      type=form.data.get('type'),
                                      sum_balance=form.data.get('sum_balance'))
         if form.data.get('type') == 'accrual':
-            employee.total_balance += int(form.data.get('sum_balance'))
+            b.balance_after_transaction = employee.total_balance + sum_balance
+            employee.total_balance += sum_balance
             employee.save()
         else:
+            b.balance_after_transaction = employee.total_balance - sum_balance
             employee.total_balance -= int(form.data.get('sum_balance'))
             employee.save()
+        b.save()
         return redirect('kitchen:organization-balance', pk=self.kwargs.get('pk'))

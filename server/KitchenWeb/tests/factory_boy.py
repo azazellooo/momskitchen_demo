@@ -2,7 +2,7 @@ import factory
 from KitchenWeb.models import Category
 import random
 
-from accounts.models import Organization, Employe, UserToken
+from accounts.models import Organization, Employe, UserToken, BalanceChange
 from kitchen5bot.models import TelegramUser
 
 
@@ -43,8 +43,18 @@ class EmployeeFactory(factory.django.DjangoModelFactory):
     organization_id = factory.SubFactory(OrganizationFactory)
     username = 'test user'
     is_active = True
-    is_admin = False
+    is_admin = True
+    # bal_em = factory.RelatedFactoryList(BalanceChangeFactory, size=3)
     total_balance = 10
+
+
+class BalanceChangeFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = BalanceChange
+    employe = factory.SubFactory(EmployeeFactory)
+    type = 'accrual'
+    sum_balance = 12
+    comment = 'test comment for transaction'
 
 
 class UserTokenFactory(factory.django.DjangoModelFactory):
