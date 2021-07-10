@@ -7,7 +7,7 @@
     <div>
         {% if organization.employe_org.count >= 1 %}
             <h1>Баланс компании {{ organization.name }}</h1>
-        <table class="table">
+        <table class="table ">
             <thead>
                 <tr>
                 <th scope="col">id</th>
@@ -24,7 +24,7 @@
                 <td>{{ employee.username }}</td>
                 <td>{{ employee.tg_user.username }}</td>
                 <td>{{ employee.total_balance }}</td>
-                <td><a href="#" class="btn btn-success btn-sm">посмотреть историю</a></td>
+                <td><a href="{% url 'employee-transactions' employee.id %}" class="btn btn-success btn-sm">посмотреть историю</a></td>
                 </tr>
             {% endfor %}
             </tbody>

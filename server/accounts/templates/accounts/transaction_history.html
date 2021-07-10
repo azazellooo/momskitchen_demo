@@ -1,0 +1,42 @@
+{% extends 'base.html'%}
+{% block content %}
+    <h1>История транзакций (изменений баланса)</h1>
+    <h2>{{ employee.username }} (@{{ employee.tg_user.username }})</h2>
+    <p>Текущий баланс: {{ employee.total_balance }}</p>
+    <h4>Компания: {{ employee.organization_id.name }}</h4>
+    {% if object_list %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                <th scope="col">id</th>
+                <th scope="col">Тип</th>
+                <th scope="col">Комментарий </th>
+                <th scope="col">начислено/списано </th>
+                <th scope="col">баланс после совершенной операции</th>
+                <th scope="col">дата</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for transaction in object_list %}
+                <tr>
+                <th scope="row">{{ transaction.id }}</th>
+                    {% if transaction.type == 'accrual' %}
+                        <td>начисление</td>
+                    {% else %}
+                        <td>списание</td>
+                    {% endif %}
+                <td>{{ transaction.comment }}</td>
+                <td>{{ transaction.sum_balance }}</td>
+                <td>{{ transaction.balance_after_transaction }}</td>
+                <td>{{ transaction.created_at }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4>Нет транзакций</h4>
+    {% endif %}
+<br>
+    {% include 'partial/paginate.html' %}
+
+{% endblock %}
