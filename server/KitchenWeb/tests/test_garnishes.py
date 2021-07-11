@@ -1,4 +1,7 @@
 import json
+
+from webdriver_manager.chrome import ChromeDriverManager
+
 from accounts.models import Employe, UserToken, Organization
 from kitchen5bot.models import TelegramUser
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
@@ -88,7 +91,7 @@ class GarnishDetailUpdateViewTests(StaticLiveServerTestCase):
             "base_price": 100,
             "extra_price": json_field
         })
-        self.driver = Chrome()
+        self.driver = Chrome(ChromeDriverManager().install())
         self.driver.maximize_window()
         self.organization = OrganizationFactory()
         self.employee = EmployeeFactory(organization_id=self.organization)

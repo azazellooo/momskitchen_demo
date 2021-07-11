@@ -2,6 +2,8 @@ import json
 import time
 from time import sleep
 import requests
+from webdriver_manager.chrome import ChromeDriverManager
+
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
 from django.test import TestCase, RequestFactory, LiveServerTestCase, Client
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -89,7 +91,7 @@ class AdditionalDetailUpdateViewTests(StaticLiveServerTestCase):
             "base_price": 100,
             "extra_price": json_field
         })
-        self.driver = Chrome()
+        self.driver = Chrome(ChromeDriverManager().install())
         self.driver.maximize_window()
         self.organization = OrganizationFactory()
         self.employee = EmployeeFactory(organization_id=self.organization)
@@ -150,7 +152,7 @@ class AdditionalDetailUpdateViewTests(StaticLiveServerTestCase):
         self.assertEqual('123', extra_dict['0.3']['pricing'])
         self.assertEqual('123', extra_dict['0.5']['pricing'])
         self.assertEqual(f'{self.live_server_url}/kitchen/additional/list/', self.driver.current_url)
-        
+
 
     def test_delete_extra_price(self):
         self.driver.get(url=f'{self.live_server_url}/kitchen/additional/{self.additional.pk}/')

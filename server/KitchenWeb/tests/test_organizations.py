@@ -98,7 +98,7 @@ class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
         "leave_review": True,
         "is_active": True
         })
-        self.driver = Chrome()
+        self.driver = Chrome(ChromeDriverManager().install())
         self.driver.maximize_window()
         self.organization = OrganizationFactory()
         self.employee = EmployeeFactory(organization_id=self.organization)

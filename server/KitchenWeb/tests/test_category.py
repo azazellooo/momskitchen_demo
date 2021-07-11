@@ -86,7 +86,7 @@ class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
         'category_name': 'test category ',
         'order': '6'
         })
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Chrome(ChromeDriverManager().install())
         self.driver.maximize_window()
         self.organization = OrganizationFactory()
         self.employee = EmployeeFactory(organization_id=self.organization)
