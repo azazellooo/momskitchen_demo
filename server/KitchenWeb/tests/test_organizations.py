@@ -1,7 +1,9 @@
 from time import sleep
 import requests
+from accounts.models import Employe, UserToken, Organization
+from kitchen5bot.models import TelegramUser
 
-from django.test import TestCase, RequestFactory, LiveServerTestCase
+from django.test import TestCase, RequestFactory, LiveServerTestCase, Client
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium.webdriver import Chrome
@@ -18,7 +20,29 @@ class OrganizationsListViewTests(TestCase):
     response = None
 
     def setUp(self):
-        self.response = self.client.get(reverse('kitchen:organization-list'))
+        self.factory = RequestFactory()
+
+        self.organization = Organization.objects.create(**{
+            'name': 'Attractor'
+        })
+        self.tg_user = TelegramUser.objects.create(**{
+            'telegram_id': '1455413201',
+            'first_name': 'Begaiym',
+            'username': 'monpassan'
+        })
+        self.web_user = Employe.objects.create(**{
+            'tg_user': self.tg_user,
+            'organization_id': self.organization,
+            'username': 'Gosha'
+        })
+        self.user_token = UserToken.objects.create(**{
+            'user': self.web_user
+        })
+        kwargs = {'token': self.user_token.key}
+        url = reverse('profile', kwargs=kwargs)
+        self.request = Client()
+        self.response = self.request.get(url)
+        self.response = self.request.get(reverse('kitchen:organization-list'))
 
     def test_status_code_200(self):
         self.assertEqual(self.response.status_code, 200)
@@ -29,7 +53,7 @@ class OrganizationsListViewTests(TestCase):
 
     def test_valid_response_for_search_query(self):
         search_field_inner = 'a'
-        search_response = self.client.get('/organizations/', {'search_value': search_field_inner})
+        search_response = self.request.get('/organizations/', {'search_value': search_field_inner})
         [self.assertIn(search_field_inner, organization.name) for organization in
          search_response.context['organizations']]
 
@@ -50,6 +74,26 @@ class OrganizationCreateViewTests(TestCase):
     response = OrganizationCreateView.as_view()(request)
 
     def setUp(self):
+        self.organization = Organization.objects.create(**{
+            'name': 'Attractor'
+        })
+        self.tg_user = TelegramUser.objects.create(**{
+            'telegram_id': '1455413201',
+            'first_name': 'Begaiym',
+            'username': 'monpassan'
+        })
+        self.web_user = Employe.objects.create(**{
+            'tg_user': self.tg_user,
+            'organization_id': self.organization,
+            'username': 'Gosha'
+        })
+        self.user_token = UserToken.objects.create(**{
+            'user': self.web_user
+        })
+        kwargs = {'token': self.user_token.key}
+        url = reverse('profile', kwargs=kwargs)
+        self.client = Client()
+        self.response = self.client.get(url)
         self.factory = RequestFactory()
         self.organization = Organization.objects.create(**self.data)
 
@@ -70,8 +114,7 @@ class OrganizationCreateViewTests(TestCase):
         self.assertTrue(Organization.objects.filter(name='Test Organization').exists())
 
     def test_post(self):
-        self.assertEqual(self.response.status_code, 200)
-        self.assertContains(self.response, 'Test Organization')
+        self.assertEqual(self.response.status_code, 302)
 
     def test_field_values(self):
         self.assertEqual(self.organization.name, 'Test Organization')
@@ -94,7 +137,7 @@ class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
         "is_active": True
         })
         self.driver = Chrome()
-
+        self.driver.maximize_window()
     def tearDown(self):
         self.o.delete()
         self.driver.close()

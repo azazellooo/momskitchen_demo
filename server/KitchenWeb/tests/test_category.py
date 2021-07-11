@@ -1,7 +1,8 @@
 from time import sleep
 import requests
-
-from django.test import TestCase, RequestFactory
+from accounts.models import Employe, UserToken, Organization
+from kitchen5bot.models import TelegramUser
+from django.test import TestCase, RequestFactory, Client
 from django.urls import reverse
 from KitchenWeb.views.category import CategoryCreateView
 from KitchenWeb.models import Category
@@ -16,7 +17,29 @@ class CategoryListViewTest(TestCase):
     response = None
 
     def setUp(self):
-        self.response = self.client.get(reverse('kitchen:category_list'))
+        self.factory = RequestFactory()
+
+        self.organization = Organization.objects.create(**{
+            'name': 'Attractor'
+        })
+        self.tg_user = TelegramUser.objects.create(**{
+            'telegram_id': '1455413201',
+            'first_name': 'Begaiym',
+            'username': 'monpassan'
+        })
+        self.web_user = Employe.objects.create(**{
+            'tg_user': self.tg_user,
+            'organization_id': self.organization,
+            'username': 'Gosha'
+        })
+        self.user_token = UserToken.objects.create(**{
+            'user': self.web_user
+        })
+        kwargs = {'token': self.user_token.key}
+        url = reverse('profile', kwargs=kwargs)
+        self.request = Client()
+        self.response = self.request.get(url)
+        self.response = self.request.get(reverse('kitchen:category_list'))
 
     def test_status_code_200(self):
         self.assertEqual(self.response.status_code, 200)
@@ -27,7 +50,7 @@ class CategoryListViewTest(TestCase):
 
     def test_valid_response_for_search_query(self):
         search_field_inner = 'jam'
-        search_response = self.client.get('/kitchen/categories/list/', {'search_value': search_field_inner})
+        search_response = self.request.get('/kitchen/categories/list/', {'search_value': search_field_inner})
         [self.assertIn(search_field_inner, category.category_name) for category in search_response.context['categories']]
 
     def test_is_paginated_by_5(self):
@@ -36,6 +59,26 @@ class CategoryListViewTest(TestCase):
 
 class CategoryCreateViewTest(TestCase):
     def setUp(self):
+        self.organization = Organization.objects.create(**{
+            'name': 'Attractor'
+        })
+        self.tg_user = TelegramUser.objects.create(**{
+            'telegram_id': '1455413201',
+            'first_name': 'Begaiym',
+            'username': 'monpassan'
+        })
+        self.web_user = Employe.objects.create(**{
+            'tg_user': self.tg_user,
+            'organization_id': self.organization,
+            'username': 'Gosha'
+        })
+        self.user_token = UserToken.objects.create(**{
+            'user': self.web_user
+        })
+        kwargs = {'token': self.user_token.key}
+        url = reverse('profile', kwargs=kwargs)
+        self.client = Client()
+        self.response = self.client.get(url)
         self.factory = RequestFactory()
         self.category = Category.objects.create(**self.data)
 
@@ -81,6 +124,7 @@ class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
         'order': '6'
         })
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
+        self.driver.maximize_window()
 
     def tearDown(self):
         self.o.delete()
