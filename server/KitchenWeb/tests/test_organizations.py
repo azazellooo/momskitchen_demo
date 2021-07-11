@@ -20,29 +20,11 @@ class OrganizationsListViewTests(TestCase):
     response = None
 
     def setUp(self):
-        self.factory = RequestFactory()
-
-        self.organization = Organization.objects.create(**{
-            'name': 'Attractor'
-        })
-        self.tg_user = TelegramUser.objects.create(**{
-            'telegram_id': '1455413201',
-            'first_name': 'Begaiym',
-            'username': 'monpassan'
-        })
-        self.web_user = Employe.objects.create(**{
-            'tg_user': self.tg_user,
-            'organization_id': self.organization,
-            'username': 'Gosha'
-        })
-        self.user_token = UserToken.objects.create(**{
-            'user': self.web_user
-        })
-        kwargs = {'token': self.user_token.key}
-        url = reverse('profile', kwargs=kwargs)
-        self.request = Client()
-        self.response = self.request.get(url)
-        self.response = self.request.get(reverse('kitchen:organization-list'))
+        self.organization = OrganizationFactory()
+        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.token = UserTokenFactory(user=self.employee)
+        self.client.get(reverse('profile', kwargs={'token': self.token.key}))
+        self.response = self.client.get(reverse('kitchen:organization-list'))
 
     def test_status_code_200(self):
         self.assertEqual(self.response.status_code, 200)
@@ -53,7 +35,7 @@ class OrganizationsListViewTests(TestCase):
 
     def test_valid_response_for_search_query(self):
         search_field_inner = 'a'
-        search_response = self.request.get('/organizations/', {'search_value': search_field_inner})
+        search_response = self.client.get('/organizations/', {'search_value': search_field_inner})
         [self.assertIn(search_field_inner, organization.name) for organization in
          search_response.context['organizations']]
 
@@ -74,36 +56,16 @@ class OrganizationCreateViewTests(TestCase):
     response = OrganizationCreateView.as_view()(request)
 
     def setUp(self):
-        self.organization = Organization.objects.create(**{
-            'name': 'Attractor'
-        })
-        self.tg_user = TelegramUser.objects.create(**{
-            'telegram_id': '1455413201',
-            'first_name': 'Begaiym',
-            'username': 'monpassan'
-        })
-        self.web_user = Employe.objects.create(**{
-            'tg_user': self.tg_user,
-            'organization_id': self.organization,
-            'username': 'Gosha'
-        })
-        self.user_token = UserToken.objects.create(**{
-            'user': self.web_user
-        })
-        kwargs = {'token': self.user_token.key}
-        url = reverse('profile', kwargs=kwargs)
-        self.client = Client()
-        self.response = self.client.get(url)
         self.factory = RequestFactory()
         self.organization = Organization.objects.create(**self.data)
+        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.token = UserTokenFactory(user=self.employee)
+        self.client.get(reverse('profile', kwargs={'token': self.token.key}))
 
     def test_proper_template(self):
         self.assertTemplateUsed("organizations/create.html")
 
     def test_get_request_returns_200(self):
-
-        # get request means request by method "GET"
-
         response = self.client.get(reverse("kitchen:organization-create"))
         self.assertEqual(response.status_code, 200)
 
@@ -114,7 +76,7 @@ class OrganizationCreateViewTests(TestCase):
         self.assertTrue(Organization.objects.filter(name='Test Organization').exists())
 
     def test_post(self):
-        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.status_code, 200)
 
     def test_field_values(self):
         self.assertEqual(self.organization.name, 'Test Organization')
@@ -138,6 +100,11 @@ class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
         })
         self.driver = Chrome()
         self.driver.maximize_window()
+        self.organization = OrganizationFactory()
+        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.token = UserTokenFactory(user=self.employee)
+        self.driver.get(f'{self.live_server_url}/accounts/{self.token.key}/')
+
     def tearDown(self):
         self.o.delete()
         self.driver.close()
@@ -158,8 +125,7 @@ class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
         self.assertEqual('test updated name', self.o.name)
         self.assertEqual('Test updated address', self.o.address)
         self.assertEqual(f'{self.live_server_url}/organizations/', self.driver.current_url)
-        response = requests.get(self.driver.current_url)
-        self.assertEqual(200, response.status_code)
+
 
     def test_form_disabled_enabled(self):
         self.driver.get(url=f'{self.live_server_url}/organizations/{self.o.pk}')
