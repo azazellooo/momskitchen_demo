@@ -1,4 +1,6 @@
-image: joyzoursky/python-chromedriver:3.6
+image: python:latest
+
+
 
 
 services:
