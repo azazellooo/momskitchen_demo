@@ -1,6 +1,57 @@
 [
+  {
+     "model": "KitchenWeb.Category",
+    "pk": 1,
+    "fields": {
+      "category_name": "Dish",
+      "order": 1
+    }
+  },
+  {
+    "model": "KitchenWeb.Dish",
+    "pk": 1,
+    "fields": {
+      "name": "Krab",
+      "description": "tasty",
+      "category": 1,
+      "base_price": 120
+    }
+  },
+
+  {
+     "model": "KitchenWeb.Garnish",
+    "pk": 1,
+    "fields": {
+      "name": "Krab",
+      "order": 1,
+      "base_price": 120,
+      "created_at": "2021-07-06T09:59:37.855Z",
+    "updated_at": "2021-07-06T09:59:37.855Z"
+    }
+  },
+  {
+     "model": "KitchenWeb.Supplement",
+    "pk": 1,
+    "fields": {
+      "name": "Krab",
+      "price": 120,
+      "created_at": "2021-07-06T09:59:37.855Z",
+    "updated_at": "2021-07-06T09:59:37.855Z"
+    }
+  },
+  {
+     "model": "KitchenWeb.Additional",
+    "pk": 1,
+    "fields": {
+      "name": "Krab",
+      "sampling_order": 1,
+      "base_price": 120,
+      "created_at": "2021-07-06T09:59:37.855Z",
+    "updated_at": "2021-07-06T09:59:37.855Z"
+    }
+  },
 {
-  "model": "KitchenWeb.offering",
+  "model": "KitchenWeb.Offering",
   "pk": 2,
   "fields": {
     "created_at": "2021-07-06T09:59:37.855Z",
@@ -8,7 +59,7 @@
     "position": 1,
     "garnish": 1,
     "supplement": 1,
-    "additional": 2,
+    "additional": 1,
     "date": "1992-05-05"
   }
 }
