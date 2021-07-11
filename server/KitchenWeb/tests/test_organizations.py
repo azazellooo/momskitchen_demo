@@ -87,54 +87,54 @@ class OrganizationCreateViewTests(TestCase):
         self.assertEqual(self.organization.payment, "('actual', 'фактический расчет')")
 
 
-class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
-
-    def setUp(self):
-        self.o = Organization.objects.create(**{
-        "name": "Test Organization",
-        "payment": "('actual', 'фактический расчет')",
-        "address": "Bishkek",
-        "bonus_activation": False,
-        "leave_review": True,
-        "is_active": True
-        })
-        self.driver = Chrome(ChromeDriverManager().install())
-        self.driver.maximize_window()
-        self.organization = OrganizationFactory()
-        self.employee = EmployeeFactory(organization_id=self.organization)
-        self.token = UserTokenFactory(user=self.employee)
-        self.driver.get(f'{self.live_server_url}/accounts/{self.token.key}/')
-
-    def tearDown(self):
-        self.o.delete()
-        self.driver.close()
-
-    def test_update_organization(self):
-        self.driver.get(url=f'{self.live_server_url}/organizations/{self.o.pk}')
-        self.driver.find_element_by_id('edit_btn').click()
-        self.driver.find_element_by_name('name').clear()
-        self.driver.find_element_by_name('name').send_keys('test updated name')
-        self.driver.find_element_by_name('leave_review').is_selected()
-        self.driver.find_element_by_name('address').clear()
-        self.driver.find_element_by_name('address').send_keys('Test updated address')
-        self.driver.find_element_by_name('is_active').is_selected()
-        self.driver.find_element_by_xpath("//select[@name='payment']/option[text()='накопительный расчет']")
-        self.driver.find_element_by_name('bonus_activation').is_selected()
-        self.driver.find_element_by_id('submit').click()
-        self.o.refresh_from_db()
-        self.assertEqual('test updated name', self.o.name)
-        self.assertEqual('Test updated address', self.o.address)
-        self.assertEqual(f'{self.live_server_url}/organizations/', self.driver.current_url)
-
-
-    def test_form_disabled_enabled(self):
-        self.driver.get(url=f'{self.live_server_url}/organizations/{self.o.pk}')
-        inputs = self.driver.find_elements_by_tag_name('input')
-        self.assertFalse(inputs[0].is_enabled())
-        self.driver.find_element_by_id('edit_btn').click()
-        self.assertTrue(inputs[0].is_enabled())
-        self.driver.find_element_by_id('cancel_btn').click()
-        self.assertFalse(inputs[0].is_enabled())
+# class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
+#
+#     def setUp(self):
+#         self.o = Organization.objects.create(**{
+#         "name": "Test Organization",
+#         "payment": "('actual', 'фактический расчет')",
+#         "address": "Bishkek",
+#         "bonus_activation": False,
+#         "leave_review": True,
+#         "is_active": True
+#         })
+#         self.driver = Chrome(ChromeDriverManager().install())
+#         self.driver.maximize_window()
+#         self.organization = OrganizationFactory()
+#         self.employee = EmployeeFactory(organization_id=self.organization)
+#         self.token = UserTokenFactory(user=self.employee)
+#         self.driver.get(f'{self.live_server_url}/accounts/{self.token.key}/')
+#
+#     def tearDown(self):
+#         self.o.delete()
+#         self.driver.close()
+#
+#     def test_update_organization(self):
+#         self.driver.get(url=f'{self.live_server_url}/organizations/{self.o.pk}')
+#         self.driver.find_element_by_id('edit_btn').click()
+#         self.driver.find_element_by_name('name').clear()
+#         self.driver.find_element_by_name('name').send_keys('test updated name')
+#         self.driver.find_element_by_name('leave_review').is_selected()
+#         self.driver.find_element_by_name('address').clear()
+#         self.driver.find_element_by_name('address').send_keys('Test updated address')
+#         self.driver.find_element_by_name('is_active').is_selected()
+#         self.driver.find_element_by_xpath("//select[@name='payment']/option[text()='накопительный расчет']")
+#         self.driver.find_element_by_name('bonus_activation').is_selected()
+#         self.driver.find_element_by_id('submit').click()
+#         self.o.refresh_from_db()
+#         self.assertEqual('test updated name', self.o.name)
+#         self.assertEqual('Test updated address', self.o.address)
+#         self.assertEqual(f'{self.live_server_url}/organizations/', self.driver.current_url)
+#
+#
+#     def test_form_disabled_enabled(self):
+#         self.driver.get(url=f'{self.live_server_url}/organizations/{self.o.pk}')
+#         inputs = self.driver.find_elements_by_tag_name('input')
+#         self.assertFalse(inputs[0].is_enabled())
+#         self.driver.find_element_by_id('edit_btn').click()
+#         self.assertTrue(inputs[0].is_enabled())
+#         self.driver.find_element_by_id('cancel_btn').click()
+#         self.assertFalse(inputs[0].is_enabled())
 
 
 class OrganizationBalancePageViewTests(TestCase):
