@@ -1,9 +1,10 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import Client, RequestFactory
 import requests
-from accounts.models import Users, UserToken, Organization
+from accounts.models import Employe, UserToken, Organization
 from kitchen5bot.models import TelegramUser
 from accounts.views import *
+
 
 
 class CustomAuthMiddlewareTests(StaticLiveServerTestCase):
@@ -19,7 +20,7 @@ class CustomAuthMiddlewareTests(StaticLiveServerTestCase):
             'first_name': 'Begaiym',
             'username': 'monpassan'
         })
-        self.web_user = Users.objects.create(**{
+        self.web_user = Employe.objects.create(**{
             'tg_user': self.tg_user,
             'organization_id': self.organization,
             'username': 'Gosha'
@@ -58,4 +59,4 @@ class CustomAuthMiddlewareTests(StaticLiveServerTestCase):
         request = Client()
         response = request.get(url)
         self.assertEqual(request.session['token'], str(self.user_token.key))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)

@@ -1,6 +1,6 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory, Client
 from django.urls import reverse
-from accounts.models import Organization
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
 
 
 class PositionListViewTests(TestCase):
@@ -8,6 +8,10 @@ class PositionListViewTests(TestCase):
     response = None
 
     def setUp(self):
+        self.organization = OrganizationFactory()
+        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.token = UserTokenFactory(user=self.employee)
+        self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.response = self.client.get(reverse('kitchen:list_position'))
 
     def test_status_code_200(self):

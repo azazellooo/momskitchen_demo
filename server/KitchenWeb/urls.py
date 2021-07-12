@@ -20,6 +20,9 @@ from KitchenWeb.views.garnish import (
     GarnishListView,
     GarnishDetailUpdateView
 )
+from KitchenWeb.views.garnish_create import (
+    GarnishCreateView
+)
 from KitchenWeb.views.category import (
     CategoryListView,
     CategoryCreateView,
@@ -51,13 +54,14 @@ kitchen_urls = [
     path('position/create/', PositionCreateView.as_view(), name='create_position'),
     path('position/list/', PositionListView.as_view(), name='list_position'),
     path('garnish/list/', GarnishListView.as_view(), name='list_garnish'),
+    path('garnish/create/', GarnishCreateView.as_view(), name='create_garnish'),
     path('garnish/<int:pk>/', GarnishDetailUpdateView.as_view(), name='garnish-detail-update'),
     path('categories/list/', CategoryListView.as_view(), name='category_list'),
     path('categories/create/', CategoryCreateView.as_view(), name='category_create'),
     path('category/update/detail/<int:pk>/', CategoryDetailUpdateView.as_view(), name='category_update_detail'),
     path('additional/list/', AdditionalListView.as_view(), name='additional_list'),
     path('additional/create/', AdditionalCreateView.as_view(), name='additional_create'),
-    path('additional/<int:pk>/', AdditionalDetailUpdateView.as_view(), name='additional_update_detail'),
+    path('additional/<int:pk>/', AdditionalDetailUpdateView.as_view(), name='additional_detail_update'),
     path('offering/create/', OfferingCreateView.as_view(), name='offering_create'),
     path('offering/list/', OfferingListView.as_view(), name='offering_list')
 

@@ -1,7 +1,10 @@
-from django.test import TestCase
+from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
-
+from accounts.models import Employe, UserToken, Organization
+from kitchen5bot.models import TelegramUser
 from KitchenWeb.models import Supplement
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
+
 
 
 class SupplementListViewTests(TestCase):
@@ -9,6 +12,10 @@ class SupplementListViewTests(TestCase):
     response = None
 
     def setUp(self):
+        self.organization = OrganizationFactory()
+        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.token = UserTokenFactory(user=self.employee)
+        self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.response = self.client.get(reverse('kitchen:supplement-list'))
 
     def test_status_code_200(self):
@@ -26,15 +33,15 @@ class SupplementListViewTests(TestCase):
     def test_is_paginated_by_5(self):
         self.assertLessEqual(len(self.response.context['supplements']), 5)
 
-    # def test_empty_search_field(self):
-    #     search_response = self.client.get(reverse('kitchen:supplement-list'), {'search_value': ''})
-    #     self.assertEqual(self.response.context['supplements'], search_response.context['supplements'])
-
 
 class SupplementUpdateTest(TestCase):
     def test_update_supplement(self):
         self.supplement = Supplement.objects.create(name='Гречка', price=130)
         self.supplement.save()
+        self.organization = OrganizationFactory()
+        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.token = UserTokenFactory(user=self.employee)
+        self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         response = self.client.post(
             reverse('kitchen:detail_update_supplement', kwargs={'pk': self.supplement.id}),
             {'name': 'Рис', 'price': '131'}
