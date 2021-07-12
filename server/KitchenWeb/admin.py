@@ -41,10 +41,10 @@ class AdditionalAdmin(admin.ModelAdmin):
 
 
 class OfferingAdmin(admin.ModelAdmin):
-    list_display = ['id', 'position', 'garnish', 'supplement', 'additional', 'date']
+    list_display = ['id', 'position', 'garnish', 'supplement', 'additional', 'qty_portion', 'date']
     list_filter = ['date']
     search_fields = ['position']
-    fields = ['id', 'position', 'garnish', 'supplement', 'additional', 'date']
+    fields = ['id', 'position', 'garnish', 'supplement', 'additional', 'qty_portion', 'date']
     readonly_fields = ['id', ]
 
 

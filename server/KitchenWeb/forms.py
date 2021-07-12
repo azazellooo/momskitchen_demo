@@ -54,7 +54,7 @@ class OfferingForm(forms.ModelForm):
 
     class Meta:
         model = Offering
-        fields = ('position', 'garnish', 'additional', 'supplement', 'date')
+        fields = ('position', 'garnish', 'additional', 'supplement', 'date', 'qty_portion')
 
 
 class BalanceChangeForm(forms.ModelForm):
