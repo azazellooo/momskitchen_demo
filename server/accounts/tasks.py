@@ -25,10 +25,8 @@ def validation_token(token):
 def get_user(token):
     val_tok = UserToken.objects.get(key=token)
     user = val_tok.user
-    if user.is_admin == True:
-        return user
-    else:
-        return None
+    return user
+
 
 
 
