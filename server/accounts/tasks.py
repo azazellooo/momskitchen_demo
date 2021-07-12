@@ -1,5 +1,5 @@
 
-from accounts.models import UserToken
+from accounts.models import UserToken, Employe
 from datetime import datetime, timedelta
 from django.contrib.sessions.backends.db import SessionStore
 import pytz
@@ -21,6 +21,13 @@ def validation_token(token):
         return True
     except:
         return False
+
+def get_user(token):
+    val_tok = UserToken.objects.get(key=token)
+    user = val_tok.user
+    return user
+
+
 
 
 
