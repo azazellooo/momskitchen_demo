@@ -89,6 +89,7 @@ class Offering(BaseModel):
     garnish = models.ForeignKey('KitchenWeb.Garnish', blank=True, null=True, verbose_name='Гарнир', on_delete=models.SET_NULL, related_name='offering_garnish')
     supplement = models.ForeignKey('KitchenWeb.Supplement', blank=True, null=True, verbose_name='Надбавка', on_delete=models.SET_NULL, related_name='offering_supplement')
     additional = models.ForeignKey('KitchenWeb.Additional', blank=True, null=True, verbose_name='Дополнения', on_delete=models.SET_NULL, related_name='offering_additional')
+    qty_portion = models.IntegerField(blank=False, null=False, default=0)
     date = models.DateField(blank=False, null=False, verbose_name='Дата')
 
     class Meta:
