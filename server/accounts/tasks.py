@@ -26,9 +26,9 @@ def get_user(token):
     val_tok = UserToken.objects.get(key=token)
     user = val_tok.user
     if user.is_admin == True:
-        return True
+        return user
     else:
-        return False
+        return None
 
 
 
