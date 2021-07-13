@@ -14,10 +14,11 @@ class NotificationAfterTransactionTests(TestCase):
         self.state = TelegramStateFactory(telegram_chat=self.tg_chat, telegram_user=self.employee.tg_user)
         self.transaction = BalanceChangeFactory(employe=self.employee)
 
-    def test_a(self):
+    def test_proper_message(self):
         if self.transaction.type == 'accrual':
             self.assertEqual(f'на ваш баланс было начислено '
                              f'{self.transaction.sum_balance} сомов. Ваш текущий баланс: '
                              f'{self.transaction.employe.total_balance + self.transaction.sum_balance} '
                              f'сомов.Комментарий к транзакции: {self.transaction.comment}',
                              self.transaction.notification_text)
+
