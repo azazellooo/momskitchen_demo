@@ -153,7 +153,7 @@ class OrganizationBalancePageViewTests(TestCase):
 
     def setUp(self):
         self.organization = OrganizationFactory()
-        self.tg_user = TelegramUserFactory()
+        self.tg_user = TelegramUserFactory(telegram_id=941151624)
         self.employee = EmployeeFactory(organization_id=self.organization, tg_user=self.tg_user)
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))

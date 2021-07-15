@@ -1,14 +1,15 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from KitchenWeb.tests.factory_boy import BalanceChangeFactory, EmployeeFactory, UserTokenFactory
+from KitchenWeb.tests.factory_boy import BalanceChangeFactory, EmployeeFactory, UserTokenFactory, TelegramUserFactory
 from accounts.models import UserToken
 
 
 class EmployeeTransactionHistoryViewTests(TestCase):
 
     def setUp(self):
-        self.employee = EmployeeFactory()
+        self.tg_user = TelegramUserFactory(telegram_id=941151624)
+        self.employee = EmployeeFactory(tg_user=self.tg_user)
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.transactions = [BalanceChangeFactory(employe=self.employee, sum_balance=i, comment=f'comment {i}') for i in range(5)]
