@@ -78,7 +78,7 @@ class BalanceChange(models.Model):
 def send_notification(sender, instance, created, **kwargs):
     transaction = instance
     employee = transaction.employe
-    chat_user_id = employee.tg_user.telegram_states.first().telegram_chat.telegram_id
+    chat_user_id = employee.tg_user.telegram_id
     if created:
         if transaction.type == 'accrual':
             current_balance = employee.total_balance + int(transaction.sum_balance)
