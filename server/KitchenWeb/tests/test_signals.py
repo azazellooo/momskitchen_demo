@@ -2,14 +2,16 @@ from django.test import TestCase
 from django_tgbot import types
 
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, BalanceChangeFactory, \
-    TelegramChatFactory, TelegramStateFactory
+    TelegramChatFactory, TelegramStateFactory, TelegramUserFactory
+
 
 
 class NotificationAfterTransactionTests(TestCase):
 
     def setUp(self):
         self.organization = OrganizationFactory()
-        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.tg_user = TelegramUserFactory(telegram_id=941151624)
+        self.employee = EmployeeFactory(organization_id=self.organization, tg_user=self.tg_user)
         self.tg_chat = TelegramChatFactory(telegram_id=self.employee.tg_user.telegram_id)
         self.state = TelegramStateFactory(telegram_chat=self.tg_chat, telegram_user=self.employee.tg_user)
         self.transaction = BalanceChangeFactory(employe=self.employee)
