@@ -29,9 +29,9 @@ class UserProfileView(TemplateView):
                     user_token.save()
                     return redirect('profile_distoken')
                 else:
-                    raise ValueError
+                    return redirect('disposability_error')
             else:
-                raise KeyError
+                return redirect('invalid_token')
         else:
             drop_time_token(request.session['token'], request.session.session_key)
             user_token = get_object_or_404(UserToken, key=request.session['token'])
