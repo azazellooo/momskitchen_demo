@@ -3,6 +3,7 @@ from KitchenWeb.models import Category
 import random
 
 from accounts.models import Organization, Employe, UserToken, BalanceChange
+from KitchenWeb.models import Supplement
 from kitchen5bot.models import TelegramUser
 
 
@@ -61,4 +62,14 @@ class UserTokenFactory(factory.django.DjangoModelFactory):
         model = UserToken
 
     user = factory.SubFactory(EmployeeFactory)
+
+
+class SuplementFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Supplement
+
+    name = factory.Faker('name')
+    price = random.randint(100, 400)
+
+
 
