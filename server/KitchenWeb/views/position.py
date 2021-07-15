@@ -7,9 +7,10 @@ from KitchenWeb.models import Dish, Category
 from django.db.models import Q
 from django.utils.http import urlencode
 import json
+from KitchenWeb.mixin import PermissionMixin
 
 
-class PositionListView(ListView):
+class PositionListView(PermissionMixin, ListView):
     template_name = 'position/list.html'
     model = Dish
     context_object_name = 'dishes'
@@ -45,7 +46,7 @@ class PositionListView(ListView):
 TYPES = [0.5, 0.7]
 
 
-class PositionCreateView(CreateView):
+class PositionCreateView(PermissionMixin, CreateView):
     template_name = 'position/create.html'
     form_class = PositionForm
     model = Dish

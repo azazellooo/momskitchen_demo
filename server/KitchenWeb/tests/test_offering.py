@@ -2,6 +2,8 @@ import json
 import time
 from time import sleep
 import requests
+from django.contrib.sessions.middleware import SessionMiddleware
+
 from accounts.models import Employe, UserToken, Organization
 from kitchen5bot.models import TelegramUser
 from django.test import TestCase, RequestFactory, LiveServerTestCase, Client
@@ -29,6 +31,10 @@ class OfferingCreateViewTests(TestCase):
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.request = RequestFactory().post(reverse("kitchen:offering_create"), data=self.data)
+        self.middleware = SessionMiddleware()
+        self.middleware.process_request(self.request)
+        self.request.session.save()
+        self.request.session['token'] = self.token.key
         self.response = OfferingCreateView.as_view()(self.request)
 
     def test_proper_template(self):

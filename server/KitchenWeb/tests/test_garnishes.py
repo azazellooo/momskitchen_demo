@@ -1,7 +1,9 @@
 import json
 
+from django.contrib.sessions.middleware import SessionMiddleware
 from webdriver_manager.chrome import ChromeDriverManager
 
+from KitchenWeb.views.category import CategoryCreateView
 from accounts.models import Employe, UserToken, Organization
 from kitchen5bot.models import TelegramUser
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
@@ -57,6 +59,10 @@ class GarnishCreateViewTests(TestCase):
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.request = RequestFactory().post(reverse("kitchen:create_garnish"), data=self.data)
+        self.middleware = SessionMiddleware()
+        self.middleware.process_request(self.request)
+        self.request.session.save()
+        self.request.session['token'] = self.token.key
         self.response = GarnishCreateView.as_view()(self.request)
         self.factory = RequestFactory()
         self.garnish = Garnish.objects.create(**self.data)

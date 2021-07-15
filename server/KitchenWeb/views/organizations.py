@@ -8,9 +8,9 @@ from accounts.models import Organization, BalanceChange, Employe
 from django.views.generic import ListView, CreateView, UpdateView
 from KitchenWeb.forms import SearchForm, OrganizationForm, BalanceChangeForm
 from django.utils.http import urlencode
+from KitchenWeb.mixin import PermissionMixin
 
-
-class OrganizationsListView(ListView):
+class OrganizationsListView(PermissionMixin, ListView):
     template_name = 'organizations/list.html'
     paginate_by = 5
     model = Organization
@@ -47,7 +47,7 @@ class OrganizationsListView(ListView):
         return context
 
 
-class OrganizationCreateView(CreateView):
+class OrganizationCreateView(PermissionMixin, CreateView):
     model = Organization
     template_name = 'organizations/create.html'
     form_class = OrganizationForm
@@ -56,7 +56,7 @@ class OrganizationCreateView(CreateView):
         return reverse('kitchen:organization-list')
 
 
-class OrganizationDetailUpdateView(UpdateView):
+class OrganizationDetailUpdateView(PermissionMixin, UpdateView):
     template_name = 'organizations/detail_update.html'
     model = Organization
     form_class = OrganizationForm
@@ -66,7 +66,7 @@ class OrganizationDetailUpdateView(UpdateView):
         return reverse('kitchen:organization-list')
 
 
-class OrganizationBalancePageView(UpdateView):
+class OrganizationBalancePageView(PermissionMixin, UpdateView):
     template_name = 'organizations/balance.html'
     model = Organization
     form_class = BalanceChangeForm

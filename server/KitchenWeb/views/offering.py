@@ -8,9 +8,9 @@ import json
 
 from KitchenWeb.forms import OfferingForm, SearchForm
 from KitchenWeb.models import Offering
+from KitchenWeb.mixin import PermissionMixin
 
-
-class OfferingCreateView(CreateView):
+class OfferingCreateView(PermissionMixin, CreateView):
     model = Offering
     form_class = OfferingForm
     template_name = 'offering/create.html'
@@ -20,7 +20,7 @@ class OfferingCreateView(CreateView):
         return reverse('kitchen:offering_list')
 
 
-class OfferingListView(ListView):
+class OfferingListView(PermissionMixin, ListView):
     model = Offering
     template_name = 'offering/list.html'
     context_object_name = 'offerings'

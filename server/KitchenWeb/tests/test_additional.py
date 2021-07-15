@@ -2,6 +2,7 @@ import json
 import time
 from time import sleep
 import requests
+from django.contrib.sessions.middleware import SessionMiddleware
 from webdriver_manager.chrome import ChromeDriverManager
 
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
@@ -38,7 +39,6 @@ class AdditionalListViewTests(TestCase):
     def test_valid_response_for_search_query(self):
         search_field_inner = 'd'
         search_response = self.client.get('/kitchen/additional/list/', {'search_value': search_field_inner})
-        print(search_response.context)
         [self.assertIn(search_field_inner, additional.name) for additional in search_response.context['additionals']]
 
     def test_is_paginated_by_5(self):
@@ -59,6 +59,10 @@ class AdditionalCreateViewTest(TestCase):
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.request = RequestFactory().post(reverse("kitchen:additional_create"), data=self.data)
+        self.middleware = SessionMiddleware()
+        self.middleware.process_request(self.request)
+        self.request.session.save()
+        self.request.session['token'] = str(self.token.key)
         self.response = AdditionalCreateView.as_view()(self.request)
         self.factory = RequestFactory()
         self.garnish = Additional.objects.create(**self.data)
