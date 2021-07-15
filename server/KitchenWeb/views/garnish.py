@@ -7,10 +7,12 @@ from KitchenWeb.models import Garnish
 from django.db.models import Q
 from django.utils.http import urlencode
 import json
+from KitchenWeb.mixin import PermissionMixin
 TYPES = [0.3, 0.5, 0.7, 1.3, 1.5, 1.7, 2]
 
 
-class GarnishListView(ListView):
+
+class GarnishListView(PermissionMixin, ListView):
     template_name = 'garnishes/list.html'
     model = Garnish
     context_object_name = 'garnishes'
@@ -43,7 +45,7 @@ class GarnishListView(ListView):
         return context
 
 
-class GarnishDetailUpdateView(UpdateView):
+class GarnishDetailUpdateView(PermissionMixin, UpdateView):
     template_name = 'garnishes/detail_update.html'
     model = Garnish
     form_class = GarnishForm

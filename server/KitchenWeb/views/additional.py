@@ -8,10 +8,12 @@ from django.views.generic import ListView, CreateView, UpdateView
 from django.utils.http import urlencode
 from KitchenWeb.forms import SearchForm, AdditionalForm
 from KitchenWeb.views.garnish import TYPES
+from KitchenWeb.mixin import PermissionMixin
 
 TYPES = [0.3, 0.5, 0.7, 1.3, 1.5, 1.7, 2]
 
-class AdditionalListView(ListView):
+
+class AdditionalListView(PermissionMixin, ListView):
     template_name = 'additional/list.html'
     paginate_by = 5
     model = Additional
@@ -47,7 +49,7 @@ class AdditionalListView(ListView):
         return context
 
 
-class AdditionalCreateView(CreateView):
+class AdditionalCreateView(PermissionMixin, CreateView):
     template_name = 'additional/create.html'
     model = Additional
     form_class = AdditionalForm
@@ -81,7 +83,7 @@ class AdditionalCreateView(CreateView):
         return redirect('kitchen:additional_list')
 
 
-class AdditionalDetailUpdateView(UpdateView):
+class AdditionalDetailUpdateView(PermissionMixin, UpdateView):
     template_name = 'additional/detail_update.html'
     model = Additional
     form_class = AdditionalForm
@@ -93,7 +95,6 @@ class AdditionalDetailUpdateView(UpdateView):
     def form_valid(self, form):
         additional = self.get_object()
         additional.name = form.data['name']
-        print(form.data)
         additional.sampling_order = form.data['sampling_order']
         additional.base_price = form.data['base_price']
         try:
