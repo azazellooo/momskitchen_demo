@@ -4,9 +4,10 @@ from KitchenWeb.models import Category
 from KitchenWeb.forms import SearchForm, CategoryForm
 from django.utils.http import urlencode
 from django.db.models import Q
+from KitchenWeb.mixin import PermissionMixin
 
 
-class CategoryListView(ListView):
+class CategoryListView(PermissionMixin, ListView):
     template_name = 'category/list.html'
     paginate_by = 5
     model = Category
@@ -42,7 +43,7 @@ class CategoryListView(ListView):
         return context
 
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(PermissionMixin, CreateView):
     model = Category
     template_name = 'category/create.html'
     form_class = CategoryForm
@@ -51,7 +52,7 @@ class CategoryCreateView(CreateView):
         return reverse('kitchen:category_list')
 
 
-class CategoryDetailUpdateView(UpdateView):
+class CategoryDetailUpdateView(PermissionMixin, UpdateView):
     template_name = 'category/update_detail.html'
     model = Category
     form_class = CategoryForm
