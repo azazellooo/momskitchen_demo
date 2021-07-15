@@ -16,7 +16,7 @@ class CategoryFacroty(factory.Factory):
 class TelegramUserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = TelegramUser
-    telegram_id = 941151624
+    telegram_id = random.randint(900000000, 941151633)
     is_bot = False
     first_name = 'Test'
     last_name = 'TelegramUser'
@@ -26,7 +26,6 @@ class TelegramUserFactory(factory.django.DjangoModelFactory):
 class OrganizationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Organization
-    pk = 1
     name = "Test Organization"
     payment = "('actual', 'фактический расчет')"
     address = "Bishkek"
@@ -41,7 +40,7 @@ class EmployeeFactory(factory.django.DjangoModelFactory):
 
     tg_user = factory.SubFactory(TelegramUserFactory)
     organization_id = factory.SubFactory(OrganizationFactory)
-    username = 'test user'
+    username = factory.Faker('name')
     is_active = True
     is_admin = True
     # bal_em = factory.RelatedFactoryList(BalanceChangeFactory, size=3)
