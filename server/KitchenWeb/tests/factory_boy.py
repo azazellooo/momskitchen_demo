@@ -4,7 +4,7 @@ import random
 
 from accounts.models import Organization, Employe, UserToken, BalanceChange
 from KitchenWeb.models import Supplement
-from kitchen5bot.models import TelegramUser
+from kitchen5bot.models import TelegramUser, TelegramChat, TelegramState
 
 
 class CategoryFacroty(factory.Factory):
@@ -22,6 +22,19 @@ class TelegramUserFactory(factory.django.DjangoModelFactory):
     first_name = 'Test'
     last_name = 'TelegramUser'
     username = 'test_tg_user'
+
+
+class TelegramChatFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TelegramChat
+
+
+class TelegramStateFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TelegramState
+
+    telegram_user = factory.SubFactory(TelegramUserFactory)
+    telegram_chat = factory.SubFactory(TelegramChatFactory)
 
 
 class OrganizationFactory(factory.django.DjangoModelFactory):
