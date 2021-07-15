@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -72,19 +73,24 @@ class OrganizationBalancePageView(PermissionMixin, UpdateView):
 
     def form_valid(self, form):
         employee = Employe.objects.get(pk=form.data.get('employee'))
+        comment = form.data.get('comment')
         sum_balance = int(form.data.get('sum_balance'))
 
         b = BalanceChange.objects.create(employe=employee,
-                                     comment=form.data.get('comment'),
+                                     comment=comment,
                                      type=form.data.get('type'),
                                      sum_balance=form.data.get('sum_balance'))
         if form.data.get('type') == 'accrual':
             b.balance_after_transaction = employee.total_balance + sum_balance
             employee.total_balance += sum_balance
             employee.save()
+            messages.add_message(self.request, messages.SUCCESS,
+                                 f'На счет сотрудника {employee.username} было начислено {sum_balance} сомов. Комментарий: {comment}')
         else:
             b.balance_after_transaction = employee.total_balance - sum_balance
             employee.total_balance -= int(form.data.get('sum_balance'))
             employee.save()
+            messages.add_message(self.request, messages.SUCCESS,
+                                 f'Со счета сотрудника {employee.username} было снято {sum_balance} сомов. Комментарий: {comment}')
         b.save()
         return redirect('kitchen:organization-balance', pk=self.kwargs.get('pk'))

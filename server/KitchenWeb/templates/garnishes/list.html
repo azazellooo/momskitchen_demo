@@ -4,10 +4,21 @@
             {% include "partial/search_form.html" %}
     {% endif %}
 
+    <h2 class="text-center mt-4">Гарниры</h2>
+
     {% for garnish in garnishes %}
     <div class="box">
     <ul class="list-group">
-        id: {{ garnish.id }}. Название: <a href="{% url 'kitchen:garnish-detail-update' garnish.id %}">{{ garnish.name }}</a>
+        {% if admin %}
+       <p>Название: <a href="{% url 'kitchen:garnish-detail-update' garnish.id %}">{{ garnish.name }}</a>
+        <p>Очередность: {{ garnish.order }}</p>
+            <p>Базовая цена: {{ garnish.base_price }}</p>
+       </p>
+        {% else %}
+        <p>Название: {{ garnish.name }}</p>
+            <p>Очередность: {{ garnish.order }}</p>
+            <p>Базовая цена: {{ garnish.base_price }}</p>
+        {% endif %}
     </ul>
     </div>
 

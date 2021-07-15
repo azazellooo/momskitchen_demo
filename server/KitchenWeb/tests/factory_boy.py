@@ -14,6 +14,11 @@ class CategoryFacroty(factory.Factory):
     order = str(random.randint(0, 10))
 
 
+class TelegramChatFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TelegramChat
+
+
 class TelegramUserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = TelegramUser
@@ -22,6 +27,14 @@ class TelegramUserFactory(factory.django.DjangoModelFactory):
     first_name = 'Test'
     last_name = 'TelegramUser'
     username = 'test_tg_user'
+
+
+class TelegramStateFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TelegramState
+
+    telegram_user = factory.SubFactory(TelegramUserFactory)
+    telegram_chat = factory.SubFactory(TelegramChatFactory)
 
 
 class OrganizationFactory(factory.django.DjangoModelFactory):
