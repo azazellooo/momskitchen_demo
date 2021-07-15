@@ -1,3 +1,4 @@
+from django.shortcuts import render
 
 from accounts.models import UserToken, Employe
 from datetime import datetime, timedelta
@@ -26,6 +27,14 @@ def get_user(token):
     val_tok = UserToken.objects.get(key=token)
     user = val_tok.user
     return user
+
+
+def one_time_transition(request):
+    return render(request, 'accounts/one_time_transition_error.html')
+
+
+def code_red_token(request):
+    return render(request, 'accounts/code_red_token.html')
 
 
 
