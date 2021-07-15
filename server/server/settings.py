@@ -18,6 +18,7 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -49,7 +50,8 @@ INSTALLED_APPS = [
     'accounts',
     'KitchenWeb',
     'api',
-    'psycopg2'
+    'psycopg2',
+    'global_user',
 
 ]
 
@@ -91,7 +93,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('DB_NAME'),
+        'NAME': config('DB_NAME', ''),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
         'USER': config('DB_USER'),
@@ -148,3 +150,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+
+
+TEMPLATES[0]['OPTIONS']['context_processors'].append("global_user.templatetags.context_processors.check_admin")
