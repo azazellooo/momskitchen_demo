@@ -6,9 +6,9 @@ from KitchenWeb.models import Supplement
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from KitchenWeb.forms import SearchForm, SupplementForm
 from django.utils.http import urlencode
+from KitchenWeb.mixin import PermissionMixin
 
-
-class SupplementListView(ListView):
+class SupplementListView(PermissionMixin, ListView):
     template_name = 'supplements/list.html'
     paginate_by = 5
     model = Supplement
@@ -44,7 +44,7 @@ class SupplementListView(ListView):
         return context
 
 
-class SupplementCreateView(CreateView):
+class SupplementCreateView(PermissionMixin, CreateView):
     template_name = 'supplements/create.html'
     model = Supplement
     form_class = SupplementForm
@@ -53,7 +53,7 @@ class SupplementCreateView(CreateView):
         return reverse('kitchen:detail_update_supplement', kwargs={'pk': self.object.pk})
 
 
-class SupplementDetailUpdateView(UpdateView):
+class SupplementDetailUpdateView(PermissionMixin, UpdateView):
     model = Supplement
     template_name = 'supplements/detail_update.html'
     form_class = SupplementForm

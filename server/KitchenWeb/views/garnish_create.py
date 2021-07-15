@@ -5,12 +5,13 @@ import json
 
 from KitchenWeb.forms import GarnishForm
 from KitchenWeb.models import Garnish
+from KitchenWeb.mixin import PermissionMixin
 
 
 
 TYPES = [0.3, 0.5, 0.7, 1.3, 1.5, 1.7, 2]
 
-class GarnishCreateView(CreateView):
+class GarnishCreateView(PermissionMixin, CreateView):
     model = Garnish
     form_class = GarnishForm
     template_name = 'garnishes/create.html'
