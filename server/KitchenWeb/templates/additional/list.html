@@ -4,17 +4,38 @@
             {% include "partial/search_form.html" %}
     {% endif %}
 
-    {% for additional in additionals %}
-    <div class="box">
-    <ul class="list-group">
-         id: {{ additional.id }}. Название: <a  href="{% url 'kitchen:additional_detail_update' additional.id %}">{{ additional.name }}</a>
-    </ul>
-    </div>
 
-{% empty %}
-    <h2 class="text-center">Нет ещё такого дополнения </h2>
-{% endfor %}
-<br>
+        <h2 class="text-center mt-4">Дополнения к позициям</h2>
+        <div class="row">
+        {% for additional in additionals %}
+            <div class="col-lg-3 mb-4 mt-4">
+                <div class="card h-100">
+                  <div class="card-body">
+                      {% if admin %}
+                        <p>Название: <a  href="{% url 'kitchen:additional_detail_update' additional.id %}">{{ additional.name }}</a></p>
+                      {% else %}
+                        <p>Название:>{{ additional.name }}</p>
+                      {% endif %}
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Очередность: {{ additional.order }}</li>
+                    <li class="list-group-item">Базовая цена: {{ additional.base_price }}</li>
+                      <li class="list-group-item">Базовая цена: {{ additional.extra_price }}</li>
+                  </ul>
+                </div>
+            </div>
+        {% empty %}
+            <h2 class="text-center">Дополнений еще нет! </h2>
+        {% endfor %}
+        </div>
+
+
+
+
+
+
+
+
     {% include 'partial/paginate.html' %}
 
 {% endblock %}
