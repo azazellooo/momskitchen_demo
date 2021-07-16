@@ -32,7 +32,7 @@ class Supplement(BaseModel):
         verbose_name = 'Надбавка'
         verbose_name_plural = 'Надбавки'
 
-    def str(self):
+    def __str__(self):
         return f'надбавка: {self.name}'
 
 class Dish(models.Model):
@@ -52,13 +52,11 @@ class Dish(models.Model):
         return self.name
 
 
-
 class Garnish(BaseModel):
     name = models.CharField(max_length=250, blank=False, null=False, verbose_name='Гарнир')
     order = models.IntegerField(null=False, blank=False, verbose_name='Очередность', validators=(MinValueValidator(1),))
     base_price = models.IntegerField(blank=False, null=False, verbose_name='Базовая цена')
     extra_price = models.JSONField(blank=True, null=True, verbose_name='Дополнительная цена')
-
 
     class Meta:
         db_table = 'garnishes'
@@ -85,7 +83,7 @@ class Additional(BaseModel):
 
 
 class Offering(BaseModel):
-    position = models.OneToOneField('KitchenWeb.Dish', blank=False, null=False, verbose_name='Позиция', on_delete=models.CASCADE, related_name='offering_position')
+    position = models.ForeignKey('KitchenWeb.Dish', blank=False, null=False, verbose_name='Позиция', on_delete=models.CASCADE, related_name='offering_position')
     garnish = models.ForeignKey('KitchenWeb.Garnish', blank=True, null=True, verbose_name='Гарнир', on_delete=models.SET_NULL, related_name='offering_garnish')
     supplement = models.ForeignKey('KitchenWeb.Supplement', blank=True, null=True, verbose_name='Надбавка', on_delete=models.SET_NULL, related_name='offering_supplement')
     additional = models.ForeignKey('KitchenWeb.Additional', blank=True, null=True, verbose_name='Дополнения', on_delete=models.SET_NULL, related_name='offering_additional')
