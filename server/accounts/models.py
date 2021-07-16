@@ -84,7 +84,6 @@ def send_notification(sender, instance, created, **kwargs):
             current_balance = employee.total_balance + int(transaction.sum_balance)
             message = bot.sendMessage(chat_user_id,
                             f'на ваш баланс было начислено {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}')
-            print(message)
             transaction.notification_text = message.get_text()
         else:
             current_balance = employee.total_balance - int(transaction.sum_balance)
