@@ -1,8 +1,11 @@
 {% extends 'base.html'%}
 {% block content %}
-    {% if organizations %}
+    <div class="mt-4">
+        {% if organizations %}
             {% include "partial/search_form.html" %}
-    {% endif %}
+        {% endif %}
+    </div>
+
 
     {% for organization in organizations %}
         <div class="col-sm-6 mt-4">
@@ -19,7 +22,7 @@
   </div>
 
 {% empty %}
-    <h2 class="text-center">Нет ещё такой Организации </h2>
+    <h2 class="text-center">Такой организации у нас нет!</h2>
 {% endfor %}
 <br>
     {% include 'partial/paginate.html' %}
