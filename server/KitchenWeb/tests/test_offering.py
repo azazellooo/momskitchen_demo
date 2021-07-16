@@ -1,3 +1,4 @@
+import datetime
 import json
 import time
 from time import sleep
@@ -10,7 +11,8 @@ from django.test import TestCase, RequestFactory, LiveServerTestCase, Client
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium.webdriver import Chrome
-from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, DishFactory, \
+    GarnishFactory, SupplementFactory, AdditionalFactory, OfferingFactory
 from KitchenWeb.models import Offering
 from KitchenWeb.views.offering import OfferingCreateView
 from accounts.models import Organization
@@ -70,3 +72,43 @@ class OfferingListViewTests(TestCase):
     #     search_field_inner = 'd'
     #     search_response = self.client.get('/kitchen/offering/list', {'search_value': search_field_inner})
     #     [self.assertIn(search_field_inner, offering.position) for offering in search_response.context['offerings']]
+
+
+class OfferingDetailUpdateViewTests(TestCase):
+
+    def setUp(self):
+        self.organization = OrganizationFactory()
+        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.token = UserTokenFactory(user=self.employee)
+        self.client.get(reverse('profile', kwargs={'token': self.token.key}))
+        self.position = DishFactory()
+        garnish = GarnishFactory()
+        supplement = SupplementFactory()
+        additional = AdditionalFactory()
+        self.offering = OfferingFactory(position=self.position, garnish=garnish, supplement=supplement,
+                                        additional=additional)
+        self.response = self.client.get(reverse('kitchen:offering-detail', kwargs={'pk': self.offering.pk}))
+
+    def test_status_200(self):
+        self.assertEqual(200, self.response.status_code)
+
+    def test_update_offering(self):
+        data_to_update = {
+            'position': DishFactory(name='another test dish').pk,
+            'garnish': GarnishFactory(name='another test garnish').pk,
+            'supplement': SupplementFactory(name='another test supplement').pk,
+            'additional': AdditionalFactory(name='another test additional').pk,
+            'qty_portion': 6,
+            'date': '2021-07-15'
+        }
+
+        response = self.client.post(reverse('kitchen:offering-detail', kwargs={'pk': self.offering.pk}), data=data_to_update)
+        self.assertEqual(302, response.status_code)
+        self.assertRedirects(response, reverse('kitchen:offering_list'))
+        self.offering.refresh_from_db()
+        self.assertEqual('another test dish', self.offering.position.name)
+        self.assertEqual('another test garnish', self.offering.garnish.name)
+        self.assertEqual('another test supplement', self.offering.supplement.name)
+        self.assertEqual('another test additional', self.offering.additional.name)
+        self.assertEqual(6, self.offering.qty_portion)
+        self.assertEqual(datetime.date(2021, 7, 15), self.offering.date)
