@@ -101,6 +101,8 @@ class Offering(BaseModel):
         return f'{self.position}-{self.date}'
 
 
+
+
 class Basket(models.Model):
     user = models.ForeignKey('accounts.Employe', blank=False, null=False, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='basket_user')
     offering = models.ForeignKey('KitchenWeb.Offering', blank=False, null=False, verbose_name='Предложение', on_delete=models.CASCADE, related_name='basket_offering')
@@ -113,5 +115,21 @@ class Basket(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.offering} : {self.is_confirmed}'
+
+
+class Order(models.Model):
+    user = models.ForeignKey('accounts.Employe', blank=False, null=False, verbose_name='Пользователь',
+                             on_delete=models.CASCADE, related_name='order_user')
+    offering = models.ForeignKey('KitchenWeb.Offering', blank=False, null=False, verbose_name='Предложение',
+                                 on_delete=models.CASCADE, related_name='order_offering')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'order'
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
+    def __str__(self):
+        return f'{self.user} - {self.offering} : {self.created_at}'
 
 
