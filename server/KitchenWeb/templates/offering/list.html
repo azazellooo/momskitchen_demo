@@ -7,7 +7,7 @@
     {% for offering in offerings %}
     <div class="box">
     <ul class="list-group">
-        id: {{ offering.id }} Название: {{ offering.position.name }}
+        <p>id: {{ offering.id }} Название: <a href="{% url 'kitchen:offering-detail' offering.id %}">{{ offering.position.name }}</a> на {{ offering.date }}</p>
     </ul>
     </div>
 
