@@ -84,6 +84,10 @@ class AdditionalForm(forms.ModelForm):
         fields = ('name', 'sampling_order', 'base_price', 'extra_price')
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
 class OfferingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -93,7 +97,10 @@ class OfferingForm(forms.ModelForm):
 
     class Meta:
         model = Offering
-        fields = ('position', 'garnish', 'additional', 'supplement', 'date', 'qty_portion')
+        fields = ('position', 'garnish', 'additional', 'supplement', 'qty_portion', 'date')
+        widgets = {
+            'date': DateInput(),
+        }
 
 
 class BalanceChangeForm(forms.ModelForm):

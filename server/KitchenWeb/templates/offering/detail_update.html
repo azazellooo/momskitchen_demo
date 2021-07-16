@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Create garnish{% endblock %}
+{% block content %}
+    <div>
+        <h1>предложение по позициям на дату {{ offering.date }}</h1>
+        <form id="myForm" action="{% url 'kitchen:offering-detail' offering.id %}" method="post">
+            {% include "partial/kitchen_form.html"  %}
+            <button type="button" id="cancel" class="btn btn-info ">отмена </button>
+            <input type="button" id="confirm_copying" value="копировать" class='btn btn-dark'>
+            <button type="button" id="copy_offering" class="btn btn-info ">копировать предложение на другую дату </button>
+			<p><input type="submit" id="submit_btn" value="обновить" class='btn btn-dark mt-3'></p>
+        </form>
+    </div>
+    <script>
+    $(document).ready(function(){
+        $('#cancel').hide()
+        $('#id_date').hide()
+        $("[for='id_date']").hide()
+        $("#confirm_copying").hide()
+    })
+
+    $("#copy_offering").click(function (){
+        $('#id_date').show()
+        $("[for='id_date']").show()
+        $("#copy_offering").hide()
+        $("#confirm_copying").show()
+        $('#cancel').show()
+    })
+
+    $("#confirm_copying").click(function(){
+        console.log($(this).closest('form'))
+        $(this).closest("form").attr("action", "{% url 'kitchen:offering_create' %}").submit()
+    })
+
+    $('#cancel').click(function (){
+        $('#cancel').hide()
+        $('#id_date').hide()
+        $("[for='id_date']").hide()
+        $("#confirm_copying").hide()
+        $("#copy_offering").show()
+    })
+
+    </script>
+{% endblock %}
+
