@@ -1,20 +1,35 @@
 {% extends 'base.html'%}
 {% block content %}
-    {% if dishes %}
+    <div class="mt-4">
+        {% if dishes %}
             {% include "partial/search_form.html" %}
-    {% endif %}
-
-    {% for dish in dishes %}
-    <div class="box">
-    <ul class="list-group">
-         id: {{ dish.id }}. Название: {{ dish.name }}
-    </ul>
+        {% endif %}
     </div>
 
-{% empty %}
-    <h2 class="text-center">Нет ещё такого Блюда </h2>
-{% endfor %}
-<br>
+        {% if dishes %}
+            <h3 class="m-3 text-center">Позиции</h3>
+        {% endif %}
+
+    <div class="row">
+        {% for dish in dishes %}
+            <div class="col-lg-3 mb-4 mt-4">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ dish.name }}</h5>
+                  </div>
+                    <img class="card-img-top" src="/uploads/{{ dish.image }}" width="140" height="140" alt="Card image cap"
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Описание: {{ dish.description}}</li>
+                    <li class="list-group-item">Категория: {{ dish.category }}</li>
+                    <li class="list-group-item">Цена: {{ dish.price}}</li>
+                  </ul>
+                </div>
+            </div>
+        {% empty %}
+            <h2 class="text-center">Такого блюда еще нет! </h2>
+        {% endfor %}
+        </div>
+
     {% include 'partial/paginate.html' %}
 
 {% endblock %}
