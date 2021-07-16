@@ -1,31 +1,33 @@
-    <div class="pagination " >
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?{% if query %}{{ query }}&{% endif %}page=1">&laquo; В начал &raquo; </a> &nbsp;
-                <a href="?{% if query %}{{ query }}&{% endif %}page={{ page_obj.previous_page_number }}"> &nbsp;&laquo;
-                    Назад &raquo;</a>
-            {% else %}
-
-                <span class="page-disabled">&nbsp;&laquo;
-                    В назад &raquo; </span>
-                <span class="page-disabled">&nbsp;&laquo;
-                    Назад &raquo;</span>
-            {% endif %}
-            <form class="current-page" method="get">
-                <label for="page">
-                    {% if search_value %}<input type="hidden" name="search" value="{{ search_value }}">{% endif %}
-                    Страница <input type="text" name="page" id="page" value="{{ page_obj.number }}">
-                    из {{ page_obj.paginator.num_pages }}.
-                </label>
-            </form>
-            {% if page_obj.has_next %}
-                <a href="?{% if query %}{{ query }}&{% endif %}page={{ page_obj.next_page_number }}">
-                    &laquo; Далее &raquo; &nbsp;</a>
-                <a href="?{% if query %}{{ query }}&{% endif %}page={{ paginator.num_pages }}">
-                    &laquo; конец &raquo; &nbsp;</a>
-            {% else %}
-                <span class="page-disabled">&laquo; Далее &raquo; &nbsp;</span>
-                <span class="page-disabled">&laquo; конец &raquo; &nbsp;</span>
-            {% endif %}
-        </span>
-    </div>
+<div class="d-flex justify-content-center ">
+<ul class="pagination justify-content-center pagination-sm">
+        {% if page_obj.has_previous %}
+            <li class="page-item d-flex" >
+            <a class="page-link" style="color: grey" href="?{% if query %}{{ query }}&{% endif %}page=1" tabindex="-1">&laquo; В начало</a>
+            <a class="page-link" style="color: grey" href="?{% if query %}{{ query }}&{% endif %}page={{ page_obj.previous_page_number }}">Назад</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled d-flex">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">В начало</a>
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Назад</a>
+            <li>
+        {% endif %}
+    <li>
+        <form method="get">
+            {% if search_value %}<input type="hidden" name="search" value="{{ search_value }}">{% endif %}
+            Страница <input type="text" name="page" id="page" value="{{ page_obj.number }}">
+            из {{ page_obj.paginator.num_pages }}.
+        </form>
+    </li>
+        {% if page_obj.has_next %}
+            <li class="page-item d-flex">
+            <a class="page-link" style="color: grey" href="?{% if query %}{{ query }}&{% endif %}page={{ page_obj.next_page_number }}">Далее</a>
+            <a class="page-link" style="color: grey" href="?{% if query %}{{ query }}&{% endif %}page={{ paginator.num_pages }}">В конец &raquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled d-flex">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Далее</a>
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">В конец &raquo;</a>
+            </li>
+        {% endif %}
+</ul>
+</div>
