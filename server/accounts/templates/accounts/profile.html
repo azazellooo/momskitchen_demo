@@ -1,19 +1,29 @@
 {% extends 'base.html' %}
-{% block menu %}
-    <li><a href="">Редактировать профиль</a></li>
-    <li><a href="">История заказов</a></li>
-    <li><a href="">История операций</a></li>
-{% endblock %}
+{% block profile %}
+    <a class="nav-link" href="{% url 'user_update' %}">Редактировать профиль<span class="sr-only"></span></a>
+    <a href="{% url 'employee-transactions' user.id %}">История транзакций</a>
+{% endblock profile %}
 
 
 {% block content %}
-    <h1>Профиль пользователя</h1>
+    <h1 class="text-center">Профиль пользователя</h1>
 
-    <p>Ваш username: {{ user.username }}</p>
-    <p>Ваша организация: {{ user.organization_id.name }}</p>
-    <p>Ваш текущий статус: {{ user.is_active }}</p>
-    <p>Ваш текущий баланс: </p>
-    <p>Ваш активный заказ: </p>
-
+    <div class="card text-center">
+      <div class="card-header">
+        Привет, {{ user.username }}!
+      </div>
+      <div class="card-body">
+        <p>Ваша организация: {{ user.organization_id.name }}</p>
+        {% if user.is_active %}
+            <p>Ваш текущий статус: Активен</p>
+        {% else %}
+            <p>Ваш текущий статус: Неактивен</p>
+        {% endif %}
+        <p>Ваш текущий баланс: {{ user.total_balance }} сом </p>
+      </div>
+      <div class="card-footer text-muted">
+        <p>Ваш активный заказ: </p>
+      </div>
+    </div>
 
 {% endblock %}

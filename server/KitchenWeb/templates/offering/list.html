@@ -1,20 +1,45 @@
 {% extends 'base.html'%}
-{% block content %}
-    {% if offerings %}
-            {% include "partial/search_form.html" %}
-    {% endif %}
 
-    {% for offering in offerings %}
-    <div class="box">
-    <ul class="list-group">
-        id: {{ offering.id }} Название: {{ offering.position.name }}
-    </ul>
+{% block content %}
+    <div class="mt-4">
+        {% if offerings %}
+            {% include "partial/search_form.html" %}
+        {% endif %}
     </div>
 
-{% empty %}
-    <h2 class="text-center">Нет ещё такого предложения </h2>
-{% endfor %}
+        {% if offerings %}
+            <h3 class="m-3 text-center">Предложения</h3>
+        {% endif %}
+
+
+        <div class="row">
+            {% for offering in offerings %}
+            <div class="col-lg-3 mb-4 mt-4">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">Предложение #{{ offering.id }}</h5>
+                    <p class="card-text">Позиция: {{ offering.position.name }}</p>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Гарнир: {{ offering.garnish.name }}</li>
+                    <li class="list-group-item">Дополнение: {{ offering.additional.name }}</li>
+                    <li class="list-group-item">Надбавка: {{ offering.supplement.name }}</li>
+                      <li class="list-group-item">Количество порций {{ offering.qty_portion }}</li>
+                      <div class="card-footer">
+                        <small class="text-muted">Дата: {{ offering.date }}</small>
+                      </div>
+                  </ul>
+                </div>
+            </div>
+        {% empty %}
+            <h2 class="text-center">Нет ещё такого предложения </h2>
+        {% endfor %}
+        </div>
 <br>
-    {% include 'partial/paginate.html' %}
+
+    {% if is_paginated %}
+        {% include 'partial/paginate.html' %}
+    {% endif %}
+
 
 {% endblock %}

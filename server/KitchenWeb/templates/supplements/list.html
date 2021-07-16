@@ -5,28 +5,39 @@
 
 {% block content %}
     {% if supplements %}
+        <div class="mt-4">
             {% include "partial/search_form.html" %}
+        </div>
     {% endif %}
 
     {% if supplements %}
-        <h3 class="m-3">Надбавки</h3>
+        <h3 class="m-3 text-center">Надбавки</h3>
     {% endif %}
 
-    {% for supplement in supplements %}
-    <div class="box">
-    <ul class="list-group">
-        {% if admin %}
-            <li class="list-group-item list-group-item-success"><a href="{% url "kitchen:detail_update_supplement" supplement.id %}"> Название: {{ supplement.name }} - {{ supplement.price }}</a></li>
-        {% else %}
-            <li class="list-group-item list-group-item-success">Название: {{ supplement.name }} - {{ supplement.price }} сом </li>
-        {% endif %}
-    </ul>
-    </div>
+
+        <div class="row">
+        {% for supplement in supplements %}
+            <div class="col-lg-3 mb-4 mt-4">
+                <div class="card h-100">
+                  <div class="card-body">
+                      {% if admin %}
+                          <p>Название: <a href="{% url "kitchen:detail_update_supplement" supplement.id %}"> {{ supplement.name }}</a></p>
+                      {% else %}
+                        <p>Название:>{{ supplement.name }}</p>
+                      {% endif %}
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Базовая цена: {{ supplement.base_price }}</li>
+                  </ul>
+                </div>
+            </div>
+        </div>
 
 {% empty %}
-    <h2 class="text-center">Надбавок нет. </h2>
+    <h2 class="text-center">Надбавок нет.</h2>
 {% endfor %}
 <br>
     {% include 'partial/paginate.html' %}
+
 
 {% endblock %}
