@@ -35,7 +35,8 @@ from KitchenWeb.views.additional import (
 )
 from KitchenWeb.views.offering import (
     OfferingCreateView,
-    OfferingListView
+    OfferingListView,
+    OfferingDetailUpdateView
 )
 
 app_name = 'kitchen'
@@ -63,7 +64,8 @@ kitchen_urls = [
     path('additional/create/', AdditionalCreateView.as_view(), name='additional_create'),
     path('additional/<int:pk>/', AdditionalDetailUpdateView.as_view(), name='additional_detail_update'),
     path('offering/create/', OfferingCreateView.as_view(), name='offering_create'),
-    path('offering/list/', OfferingListView.as_view(), name='offering_list')
+    path('offering/list/', OfferingListView.as_view(), name='offering_list'),
+    path('offering/<int:pk>/', OfferingDetailUpdateView.as_view(), name='offering-detail'),
 
 ]
 
