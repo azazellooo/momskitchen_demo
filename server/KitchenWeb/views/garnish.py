@@ -11,10 +11,11 @@ from KitchenWeb.mixin import PermissionMixin
 TYPES = [0.3, 0.5, 0.7, 1.3, 1.5, 1.7, 2]
 
 
-
 class GarnishListView(PermissionMixin, ListView):
     template_name = 'garnishes/list.html'
     model = Garnish
+    paginate_by = 5
+    paginate_orphans = 1
     context_object_name = 'garnishes'
 
     def get(self, request, **kwargs):
