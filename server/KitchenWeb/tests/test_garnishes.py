@@ -41,7 +41,7 @@ class GarnishListViewTests(TestCase):
         [self.assertIn(search_field_inner, dish.name) for dish in search_response.context['garnishes']]
 
     def test_is_paginated_by_5(self):
-        self.assertLessEqual(len(self.response.context['garnishes']), 5)
+        self.assertGreaterEqual(5, len(self.response.context['garnishes']))
 
 
 class GarnishCreateViewTests(TestCase):

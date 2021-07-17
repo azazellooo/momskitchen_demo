@@ -64,6 +64,9 @@ class OfferingListViewTests(TestCase):
     def test_status_code_200(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_is_paginated_by_5(self):
+        self.assertGreaterEqual(5, len(self.response.context['offerings']))
+
     # def test_no_offerings_response(self):
     #     if len(self.response.context['offerings']) <= 0:
     #         self.assertContains(self.response, 'Нет ещё такого предложения ')
