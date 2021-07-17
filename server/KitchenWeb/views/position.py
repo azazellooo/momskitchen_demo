@@ -13,6 +13,8 @@ from KitchenWeb.mixin import PermissionMixin
 class PositionListView(PermissionMixin, ListView):
     template_name = 'position/list.html'
     model = Dish
+    paginate_by = 5
+    paginate_orphans = 1
     context_object_name = 'dishes'
 
     def get(self, request, **kwargs):
@@ -76,7 +78,7 @@ class PositionCreateView(PermissionMixin, CreateView):
         except MultiValueDictKeyError:
             position.save()
         position.save()
-        return redirect('kitchen:organization-list')
+        return redirect('kitchen:list_position')
 
     def get_success_url(self):
         return reverse('index')

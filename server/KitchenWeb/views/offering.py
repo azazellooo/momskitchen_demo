@@ -24,6 +24,8 @@ class OfferingListView(PermissionMixin, ListView):
     model = Offering
     template_name = 'offering/list.html'
     context_object_name = 'offerings'
+    paginate_by = 5
+    paginate_orphans = 1
 
     def get(self, request, **kwargs):
         self.form = SearchForm(request.GET)

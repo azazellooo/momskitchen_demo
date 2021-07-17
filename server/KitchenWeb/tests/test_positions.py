@@ -1,6 +1,7 @@
 from django.test import TestCase, RequestFactory, Client
 from django.urls import reverse
-from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, DishFactory, \
+    CategoryFactory
 
 
 class PositionListViewTests(TestCase):
@@ -13,6 +14,7 @@ class PositionListViewTests(TestCase):
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.response = self.client.get(reverse('kitchen:list_position'))
+
 
     def test_status_code_200(self):
         self.assertEqual(self.response.status_code, 200)
@@ -28,4 +30,4 @@ class PositionListViewTests(TestCase):
         [self.assertIn(search_field_inner, dish.name) for dish in search_response.context['dishes']]
 
     def test_is_paginated_by_5(self):
-        self.assertLessEqual(len(self.response.context['dishes']), 5)
+        self.assertGreaterEqual(5, len(self.response.context['dishes']))
