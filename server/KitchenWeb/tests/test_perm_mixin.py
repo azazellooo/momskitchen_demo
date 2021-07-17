@@ -1,5 +1,5 @@
 from django.urls import reverse
-from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, SuplementFactory
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, SupplementFactory
 from django.test import TestCase, RequestFactory, LiveServerTestCase, Client
 import json
 from KitchenWeb.views.additional import AdditionalCreateView
@@ -139,7 +139,7 @@ class SupplementUpdateViewTest(TestCase):
         self.organization = OrganizationFactory()
         self.employee = EmployeeFactory(organization_id=self.organization, is_admin=True)
         self.token = UserTokenFactory(user=self.employee)
-        self.supplements = SuplementFactory()
+        self.supplements = SupplementFactory()
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.response = self.client.get(reverse('kitchen:detail_update_supplement', kwargs={'pk': self.supplements.pk}))
 

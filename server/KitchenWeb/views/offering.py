@@ -3,7 +3,7 @@ from django.utils.http import urlencode
 from django.db.models import Q
 from django.shortcuts import redirect, reverse
 from django.utils.datastructures import MultiValueDictKeyError
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, UpdateView
 import json
 
 from KitchenWeb.forms import OfferingForm, SearchForm
@@ -52,3 +52,13 @@ class OfferingListView(PermissionMixin, ListView):
             context['query'] = urlencode({'search_value': self.search_data})
 
         return context
+
+
+class OfferingDetailUpdateView(UpdateView):
+    template_name = 'offering/detail_update.html'
+    model = Offering
+    form_class = OfferingForm
+    context_object_name = 'offering'
+
+    def get_success_url(self):
+        return reverse('kitchen:offering_list')

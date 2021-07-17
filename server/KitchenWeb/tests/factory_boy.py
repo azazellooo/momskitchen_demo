@@ -1,5 +1,5 @@
 import factory
-from KitchenWeb.models import Category
+from KitchenWeb.models import Category, Offering, Dish, Garnish, Additional
 import random
 
 from accounts.models import Organization, Employe, UserToken, BalanceChange
@@ -7,11 +7,11 @@ from KitchenWeb.models import Supplement
 from kitchen5bot.models import TelegramUser, TelegramChat, TelegramState
 
 
-class CategoryFacroty(factory.Factory):
+class CategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Category
-    category_name = factory.Faker('name')
-    order = str(random.randint(0, 10))
+    category_name = 'test category'
+    order = 3
 
 
 class TelegramUserFactory(factory.django.DjangoModelFactory):
@@ -77,7 +77,7 @@ class UserTokenFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(EmployeeFactory)
 
 
-class SuplementFactory(factory.django.DjangoModelFactory):
+class SupplementFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Supplement
 
@@ -85,4 +85,38 @@ class SuplementFactory(factory.django.DjangoModelFactory):
     price = random.randint(100, 400)
 
 
+class DishFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Dish
+    name = 'test position'
+    description = 'test description'
+    category = factory.SubFactory(CategoryFactory)
+    base_price = 123
 
+
+class GarnishFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Garnish
+    name = 'test garnish'
+    order = 2
+    base_price = 13
+
+
+class AdditionalFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Additional
+    name = 'test additional'
+    sampling_order = 2
+    base_price = 123
+
+
+class OfferingFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Offering
+
+    position = factory.SubFactory(DishFactory)
+    garnish = factory.SubFactory(GarnishFactory)
+    supplement = factory.SubFactory(SupplementFactory)
+    additional = factory.SubFactory(AdditionalFactory)
+    qty_portion = 5
+    date = '2021-07-20'
