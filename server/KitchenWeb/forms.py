@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import TextInput, EmailInput
 
 from KitchenWeb.models import Supplement, Dish, Category, Garnish, Additional, Offering
@@ -101,6 +102,13 @@ class OfferingForm(forms.ModelForm):
         widgets = {
             'date': DateInput(),
         }
+
+    def clean_position(self):
+        position = self.cleaned_data.get('position')
+        date = self.data.get('date')
+        if Offering.objects.filter(position=position, date=date).exists():
+            raise ValidationError(f"предложение на дату {date} с такой позицией уже есть( ")
+        return position
 
 
 class BalanceChangeForm(forms.ModelForm):
