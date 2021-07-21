@@ -14,7 +14,7 @@ from KitchenWeb.views.kitchen import (
 )
 from KitchenWeb.views.position import (
     PositionCreateView,
-    PositionListView,
+    PositionListView, PositionDetailUpdateView,
 )
 from KitchenWeb.views.garnish import (
     GarnishListView,
@@ -54,6 +54,7 @@ kitchen_urls = [
     path('supplement/<int:pk>/detail_update/', SupplementDetailUpdateView.as_view(), name='detail_update_supplement'),
     path('position/create/', PositionCreateView.as_view(), name='create_position'),
     path('position/list/', PositionListView.as_view(), name='list_position'),
+    path('position/<int:pk>/', PositionDetailUpdateView.as_view(), name='detail_update_position'),
     path('garnish/list/', GarnishListView.as_view(), name='list_garnish'),
     path('garnish/create/', GarnishCreateView.as_view(), name='create_garnish'),
     path('garnish/<int:pk>/', GarnishDetailUpdateView.as_view(), name='garnish-detail-update'),
@@ -71,5 +72,5 @@ kitchen_urls = [
 
 urlpatterns = [
     path("organizations/", include(organization_urls)),
-    path('kitchen/', include(kitchen_urls))
+    path('kitchen/', include(kitchen_urls)),
 ]
