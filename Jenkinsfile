@@ -7,15 +7,16 @@ pipeline {
 
        stage ("Install Application Dependencies") {
             sh '''
-                source bin/activate
-                pip install -r <relative path to requirements file>
+                source venv/bin/activate
+                pip install -r requirements.txt
                 deactivate
                '''
        }
        stage ("Collect Static files") {
           sh '''
               source bin/activate
-              python <relative path to manage.py> collectstatic --noinput
+              cd server
+              python manage.py collectstatic --noinput
               deactivate
              '''
        }
