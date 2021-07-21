@@ -33,7 +33,7 @@ class Supplement(BaseModel):
         verbose_name_plural = 'Надбавки'
 
     def __str__(self):
-        return f'надбавка: {self.name}'
+        return f'{self.name}'
 
 class Dish(models.Model):
     name = models.CharField(max_length=250, blank=False, null=False, verbose_name='Позиция')
@@ -84,9 +84,9 @@ class Additional(BaseModel):
 
 class Offering(BaseModel):
     position = models.ForeignKey('KitchenWeb.Dish', blank=False, null=False, verbose_name='Позиция', on_delete=models.CASCADE, related_name='offering_position')
-    garnish = models.ForeignKey('KitchenWeb.Garnish', blank=True, null=True, verbose_name='Гарнир', on_delete=models.SET_NULL, related_name='offering_garnish')
-    supplement = models.ForeignKey('KitchenWeb.Supplement', blank=True, null=True, verbose_name='Надбавка', on_delete=models.SET_NULL, related_name='offering_supplement')
-    additional = models.ForeignKey('KitchenWeb.Additional', blank=True, null=True, verbose_name='Дополнения', on_delete=models.SET_NULL, related_name='offering_additional')
+    garnish = models.ManyToManyField('KitchenWeb.Garnish', blank=True, null=True, verbose_name='Гарнир', related_name='offering_garnish')
+    supplement = models.ManyToManyField('KitchenWeb.Supplement', blank=True, null=True, verbose_name='Надбавка', related_name='offering_supplement')
+    additional = models.ManyToManyField('KitchenWeb.Additional', blank=True, null=True, verbose_name='Дополнения',  related_name='offering_additional')
     qty_portion = models.IntegerField(blank=False, null=False, default=0)
     date = models.DateField(blank=False, null=False, verbose_name='Дата')
 
@@ -97,8 +97,6 @@ class Offering(BaseModel):
 
     def __str__(self):
         return f'{self.position}-{self.date}'
-
-
 
 
 class Basket(models.Model):
