@@ -1,0 +1,62 @@
+[
+{
+  "model": "KitchenWeb.dish",
+  "pk": 7,
+  "fields": {
+    "name": "рис",
+    "description": "жаренная",
+    "category": 7,
+    "image": "uploads/oweGQB.jpg",
+    "base_price": 124,
+    "extra_price": "{\"0.5\": {\"comment\": \"\\u0420\\u0438\\u0441\", \"pricing\": \"50\"}, \"0.7\": {\"comment\": \"\\u0420\\u0438\\u0441\", \"pricing\": \"70\"}}"
+  }
+},
+{
+  "model": "KitchenWeb.dish",
+  "pk": 8,
+  "fields": {
+    "name": "рис",
+    "description": "вареная",
+    "category": 7,
+    "image": "",
+    "base_price": 50,
+    "extra_price": null
+  }
+},
+{
+  "model": "KitchenWeb.dish",
+  "pk": 9,
+  "fields": {
+    "name": "рис",
+    "description": "вареная",
+    "category": 7,
+    "image": "",
+    "base_price": 50,
+    "extra_price": "{\"0.5\": {\"comment\": \"1 \\u043f\\u043e\\u0440\\u0446\\u0438\\u044f\", \"pricing\": \"20\"}}"
+  }
+},
+{
+  "model": "KitchenWeb.dish",
+  "pk": 10,
+  "fields": {
+    "name": "рисовая каша",
+    "description": "из 100% молока",
+    "category": 7,
+    "image": "uploads/p_O.jpg",
+    "base_price": 124,
+    "extra_price": "{\"0.5\": {\"comment\": \"1 \\u043f\\u043e\\u0440\\u0446\\u0438\\u044f\", \"pricing\": \"60\"}}"
+  }
+},
+{
+  "model": "KitchenWeb.dish",
+  "pk": 11,
+  "fields": {
+    "name": "dsfas",
+    "description": "asdfasdfs",
+    "category": 7,
+    "image": "",
+    "base_price": 12312,
+    "extra_price": "{\"0.5\": {\"comment\": \"Codsf\", \"pricing\": \"2032\"}}"
+  }
+}
+]
