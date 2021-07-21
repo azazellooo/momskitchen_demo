@@ -1,7 +1,7 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.datastructures import MultiValueDictKeyError
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView, DetailView
 from KitchenWeb.forms import PositionForm, SearchForm
 from KitchenWeb.models import Dish, Category
 from django.db.models import Q
@@ -71,7 +71,8 @@ class PositionCreateView(PermissionMixin, CreateView):
                 to_json = {}
                 for key, value in form.data.items():
                     if key.isnumeric():
-                        to_json[value] = {"comment": (form.data.getlist(f'comment{counter}'))[0], "pricing": (form.data.getlist(f'pricing{counter}'))[0]}
+                        to_json[value] = {"comment": (form.data.getlist(f'comment{counter}'))[0],
+                                          "pricing": (form.data.getlist(f'pricing{counter}'))[0]}
                         counter -= 1
                 json_var = json.dumps(to_json)
                 position.extra_price = json_var
@@ -82,3 +83,48 @@ class PositionCreateView(PermissionMixin, CreateView):
 
     def get_success_url(self):
         return reverse('index')
+
+
+class PositionDetailUpdateView(UpdateView):
+    template_name = 'position/detail_update.html'
+    model = Dish
+    form_class = PositionForm
+    context_object_name = 'position'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Dish, pk=self.kwargs.get('pk'))
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        position = self.get_object()
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['type'] = TYPES
+        if position.extra_price:
+            context['extra_price'] = json.loads(position.extra_price)
+        if position.image:
+            context['image'] = self.get_object().image
+        return context
+
+    def form_valid(self, form):
+        print(form.data)
+        print('----------------')
+        print(form.cleaned_data)
+        position = self.get_object()
+        position.name = form.data['name']
+        position.description = form.data['description']
+        position.category = Category.objects.get(id=int(form.data['category']))
+        position.base_price = int(form.data['base_price'])
+        position.image = form.cleaned_data['image']
+        try:
+            to_json = {}
+            for key, value in form.data.items():
+                if "select" in key:
+                    counter = int(key.replace('select', ""))
+                    to_json[value] = {"comment": (form.data.get(f'comment{counter}')),
+                                      "pricing": (form.data.get(f'pricing{counter}'))}
+            json_var = json.dumps(to_json)
+            position.extra_price = json_var
+        except MultiValueDictKeyError:
+            position.save()
+        position.save()
+
+        return redirect('kitchen:list_position')
