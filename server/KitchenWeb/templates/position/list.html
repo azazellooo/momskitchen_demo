@@ -15,7 +15,8 @@
             <div class="col-lg-3 mb-4 mt-4">
                 <div class="card h-100">
                   <div class="card-body">
-                    <h5 class="card-title">{{ dish.name }}</h5>
+                    <h5 class="card-title"><a href="{% url 'kitchen:detail_update_position' dish.pk %}">
+                        {{ dish.name }}</a></h5>
                   </div>
                     <img class="card-img-top" src="/uploads/{{ dish.image }}" width="140" height="140" alt="Card image cap"
                   <ul class="list-group list-group-flush">
