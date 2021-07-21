@@ -5,6 +5,9 @@
 
 {% for field in form %}
    <p><label for="{{ field.id_for_label }}">{{ field.label }}</label></p>
+    {% if field.id_for_label == 'id_image' %}
+        <img src="{{ image.url }}" alt="">
+    {% endif %}
    {% for error in field.errors %}
        <p class="form-error">{{ error }}</p>
    {% endfor %}

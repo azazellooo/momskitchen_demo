@@ -92,6 +92,7 @@ class DishFactory(factory.django.DjangoModelFactory):
     description = 'test description'
     category = factory.SubFactory(CategoryFactory)
     base_price = 123
+    extra_price = '{"0.5": {"comment": "Comment", "pricing": "25"}}'
 
 
 class GarnishFactory(factory.django.DjangoModelFactory):
