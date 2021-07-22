@@ -20,7 +20,7 @@ pipeline {
               deactivate
              '''
        }
-       stage('build') {
+       stage(build) {
           steps {
              echo 'Notify GitLab'
              updateGitlabCommitStatus name: 'build', state: 'pending'
