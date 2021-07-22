@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'python:3.5.1' } }
+    agent any
     stages {
        stage ("Get Latest Code") {
            steps {
@@ -26,12 +26,12 @@ pipeline {
                  '''
            }
        }
-       stage(build) {
+       stage("build") {
           steps {
              echo 'Notify GitLab'
           }
        }
-       stage(test) {
+       stage("test") {
            steps {
                echo 'Notify GitLab'
            }
