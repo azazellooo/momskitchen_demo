@@ -2,23 +2,29 @@ pipeline {
     agent { docker { image 'python:3.5.1' } }
     stages {
        stage ("Get Latest Code") {
-            checkout scm
+           steps {
+                checkout scm
+           }
        }
 
        stage ("Install Application Dependencies") {
-            sh '''
+            steps {
+                sh '''
                 source venv/bin/activate
                 pip install -r requirements.txt
                 deactivate
                '''
+            }
        }
        stage ("Collect Static files") {
-          sh '''
-              source bin/activate
-              cd server
-              python manage.py collectstatic --noinput
-              deactivate
-             '''
+           steps {
+              sh '''
+                  source bin/activate
+                  cd server
+                  python manage.py collectstatic --noinput
+                  deactivate
+                 '''
+           }
        }
        stage(build) {
           steps {
@@ -28,7 +34,6 @@ pipeline {
        stage(test) {
            steps {
                echo 'Notify GitLab'
-
            }
        }
     }
