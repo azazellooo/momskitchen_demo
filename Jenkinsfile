@@ -33,7 +33,14 @@ pipeline {
        }
        stage("test") {
            steps {
+                sh '''
                echo 'Notify GitLab'
+               . venv/bin/activate
+               cd server
+               python manage.py makemigrations
+               python manage.py migrate
+               python manage.py test
+               '''
            }
        }
     }
