@@ -10,7 +10,7 @@ pipeline {
        stage ("Install Application Dependencies") {
             steps {
                 sh '''
-                .env/bin/activate
+                . venv/bin/activate
                 pip install -r requirements.txt
                 deactivate
                '''
@@ -19,7 +19,7 @@ pipeline {
        stage ("Collect Static files") {
            steps {
               sh '''
-                  .env/bin/activate
+                  . venv/bin/activate
                   cd server
                   python manage.py collectstatic --noinput
                   deactivate
