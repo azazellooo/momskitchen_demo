@@ -16,21 +16,6 @@ pipeline {
                '''
             }
        }
-       stage ("Collect Static files") {
-           steps {
-              sh '''
-                  . venv/bin/activate
-                  cd server
-                  python manage.py collectstatic --noinput
-                  deactivate
-                 '''
-           }
-       }
-       stage("build") {
-          steps {
-             echo 'Notify GitLab'
-          }
-       }
        stage("test") {
            steps {
                 sh '''
@@ -41,6 +26,16 @@ pipeline {
                python manage.py migrate
                python manage.py test
                '''
+           }
+       }
+        stage ("Collect Static files") {
+           steps {
+              sh '''
+                  . venv/bin/activate
+                  cd server
+                  python manage.py collectstatic --noinput
+                  deactivate
+                 '''
            }
        }
     }
