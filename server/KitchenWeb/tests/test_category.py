@@ -44,49 +44,51 @@ class CategoryListViewTest(TestCase):
         self.assertLessEqual(len(self.response.context['categories']), 5)
 
 
-# class CategoryCreateViewTest(TestCase):
-#
-#     def setUp(self):
-#         # self.client.get(reverse('profile', kwargs={'token': self.token.key}))
-#         self.category = Category.objects.create(**self.data)
-#
-#         # request.session['token'] = str(self.token.key)
-#
-#     data = {
-#         "category_name": "Test Category",
-#         "order": 6
-#     }
-#     organization = OrganizationFactory()
-#     telegram_user = TelegramUserFactory()
-#     employee = EmployeeFactory(organization_id=organization, tg_user=telegram_user)
-#     token = UserTokenFactory(user=employee)
-#     request = RequestFactory().post(reverse("kitchen:category_create"), data=data)
-#     middleware = SessionMiddleware()
-#     middleware.process_request(request)
-#     request.session.save()
-#     request.session['token'] = token.key
-#     response = CategoryCreateView.as_view()(request)
-#
-#     def test_proper_template(self):
-#         self.assertTemplateUsed("category/create.html")
-#
-#     def test_get_request_returns_200(self):
-#         response = self.client.get(reverse("kitchen:category_list"))
-#         self.assertEqual(response.status_code, 200)
-#
-#     def test_proper_path(self):
-#         self.assertEqual('/kitchen/categories/create/', self.request.path)
-#
-#     def test_create(self):
-#         self.assertTrue(Category.objects.filter(category_name='Test Category').exists())
-#         self.assertTrue(Category.objects.filter(order=6).exists())
-#
-#     def test_post(self):
-#         self.assertEqual(302, self.response.status_code)
-#
-#     def test_field_values(self):
-#         self.assertEqual(self.category.category_name, 'Test Category')
-#         self.assertEqual(self.category.order, 6)
+class CategoryCreateViewTest(TestCase):
+
+    def setUp(self):
+        self.data = {
+            "category_name": "Test Category",
+            "order": 6
+        }
+        self.organization = OrganizationFactory()
+        self.telegram_user = TelegramUserFactory()
+        self.employee = EmployeeFactory(organization_id=self.organization,  tg_user=self.telegram_user)
+        self.token = UserTokenFactory(user=self.employee)
+        self.client.get(reverse('profile', kwargs={'token': self.token.key}))
+        self.request = RequestFactory().post(reverse("kitchen:category_create"), data=self.data)
+        self.middleware = SessionMiddleware()
+        self.middleware.process_request(self.request)
+        self.request.session.save()
+        self.request.session['token'] = self.token.key
+        self.response = CategoryCreateView.as_view()(self.request)
+        self.factory = RequestFactory()
+        self.category = Category.objects.create(**self.data)
+
+    def test_proper_template(self):
+        self.assertTemplateUsed("category/create.html")
+
+    def test_get_request_returns_200(self):
+        response = self.client.get(reverse("kitchen:category_create"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_proper_path(self):
+        self.assertEqual('/kitchen/categories/create/', self.request.path)
+
+    def test_create(self):
+        self.assertTrue(Category.objects.filter(category_name='Test Category').exists())
+        self.assertTrue(Category.objects.filter(order=6).exists())
+
+    def test_post(self):
+        self.assertEqual(302, self.response.status_code)
+
+    def test_field_values(self):
+        self.assertEqual("Test Category", self.category.category_name)
+        self.assertEqual(6, self.category.order,)
+
+
+
+
 
 
 # class OrganizationDetailUpdateViewTests(StaticLiveServerTestCase):
