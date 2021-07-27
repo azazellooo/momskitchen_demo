@@ -1,4 +1,6 @@
+from django.forms import model_to_dict
 from django.utils.http import urlencode
+from django.db import models
 
 from django.db.models import Q
 from django.shortcuts import redirect, reverse
@@ -6,9 +8,13 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import CreateView, ListView, UpdateView
 import json
 
+from django.views.generic.detail import SingleObjectTemplateResponseMixin
+from django.views.generic.edit import ModelFormMixin
+
 from KitchenWeb.forms import OfferingForm, SearchForm
-from KitchenWeb.models import Offering
+from KitchenWeb.models import Offering, Basket, Garnish
 from KitchenWeb.mixin import PermissionMixin
+
 
 class OfferingCreateView(PermissionMixin, CreateView):
     model = Offering
@@ -47,13 +53,54 @@ class OfferingListView(PermissionMixin, ListView):
         return None
 
     def get_context_data(self, **kwargs):
+        needed_fields = ('id', 'name', 'description', 'category', 'base_price', 'offering_position', 'extra_price')
+        dict_filter = lambda x, y: dict([(i, x[i]) for i in x if i in set(y)])
+        positions = []
+        garnishes = []
+        additionals = []
         context = super().get_context_data(**kwargs)
+        for o in context.get('object_list'):
+            if o.position.extra_price:
+                o.position.extra_price = json.loads(o.position.extra_price)
+            for garnish in list(o.garnish.all()):
+                garnish_dict = dict_filter(model_to_dict(garnish), needed_fields)
+                garnish_dict['offering'] = o.id
+                garnishes.append(garnish_dict)
+                if isinstance(garnish.extra_price, str):
+                    garnish.extra_price = json.loads(garnish.extra_price)
+                    garnish.save()
+            for additional in o.additional.all():
+                additional_dict = dict_filter(model_to_dict(additional), needed_fields)
+                additional_dict['offering'] = o.id
+                additionals.append(additional_dict)
+                if isinstance(additional.extra_price, str):
+                    additional.extra_price = json.loads(additional.extra_price)
+                    additional.save()
+                o.save()
         context['search_form'] = self.form
-
+        context['to_js_offerings'] = {"offerings": list(context.get('offerings').values())}
+        for o in context.get('offerings'):
+            position = dict_filter(model_to_dict(o.position), needed_fields)
+            position['offering'] = o.id
+            positions.append(position)
+        context['to_js_positions'] = {'positions': positions}
+        context['to_js_garnishes'] = {'garnishes': garnishes}
+        context['to_js_additionals'] = {'additionals': additionals}
+        # context['to_json_positions'] = {'positions': [dict_filter(model_to_dict(o.position), needed) for o in list(context.get('offerings'))]}
         if self.search_data:
             context['query'] = urlencode({'search_value': self.search_data})
-
+        print(context.get('to_js_garnishes'))
         return context
+
+    # def build_list(self, object_list,needed_fields, field: models.Model):
+    #     dict_filter = lambda x, y: dict([(i, x[i]) for i in x if i in set(y)])
+    #     field_list = []
+    #     for o in object_list:
+    #         print(field)
+    #         expected_dict = dict_filter(model_to_dict(o.field), needed_fields)
+    #         expected_dict['offering'] = o.id
+    #         field_list.append(expected_dict)
+    #     return field_list
 
 
 class OfferingDetailUpdateView(UpdateView):
@@ -64,3 +111,6 @@ class OfferingDetailUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('kitchen:offering_list')
+
+
+

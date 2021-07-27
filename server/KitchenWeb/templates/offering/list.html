@@ -1,20 +1,273 @@
 {% extends 'base.html'%}
+{% block title %}{% endblock title %}
 {% block content %}
+    {{ to_js_offerings|json_script:'offerings' }}
+    {{ to_js_positions|json_script:'to_js_positions' }}
+    {{ to_js_garnishes|json_script:'to_js_garnishes' }}
+    {{ to_js_additionals|json_script:'to_js_additionals' }}
     {% if offerings %}
             {% include "partial/search_form.html" %}
     {% endif %}
-
+<div class="row">
     {% for offering in offerings %}
-    <div class="box">
-    <ul class="list-group">
-        <p>id: {{ offering.id }} Название: <a href="{% url 'kitchen:offering-detail' offering.id %}">{{ offering.position.name }}</a> на {{ offering.date }}</p>
-    </ul>
+<div class="col col-lg-4 mb-4 mt-2 ml-2">
+    <div class="card w-auto h-100" >
+        {% if offering.position.image %}:
+        <img src="/uploads/{{ offering.position.image }}" class="card-img-top" alt="...">
+        {% else %}
+            <img src="/uploads/uploads/no-image-icon-0.jpg" class="card-img-top" alt="...">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title"><a href="{% url 'kitchen:offering-detail' offering.id %}">{{ offering.position.name }}</a> на {{ offering.date }}</h5>
+            <p class="card-text">{{ offering.position.description }} {{ offering.id }}</p>
+            <table class="table">
+            <tbody>
+            <tr>
+            <th scope="row">
+            {% if offering.position.extra_price %}
+                <label for="position{{ offering.id }}">размер порции: </label>
+                <p id="{{ offering.id }}"><select name="position" id="position{{ offering.id }}">
+                    {% for key, value in offering.position.extra_price.items %}
+                        <option value="{{ key }}">{{ key }}</option>
+                    {% endfor %}
+                </select></p>
+            {% else %}
+                <p>только базовая цена</p>
+            {% endif %}
+            </th>
+
+            <td>...</td>
+                {% if not offering.position.extra_price %}<td>{{ offering.position.base_price }}c</td>{% else %}<td><p id="position{{ offering.id }}Price">сумма</p></td>{% endif %}
+            </tr>
+
+            <script>
+                $(document).ready(function(){
+                    {#let a = $( "select[name^='garnish_port']")#}
+                    {#console.log(a)#}
+                const POSITIONS = JSON.parse(document.getElementById('to_js_positions').textContent);
+                const GARNISHES = JSON.parse(document.getElementById('to_js_garnishes').textContent);
+                const ADDITIONALS = JSON.parse(document.getElementById('to_js_additionals').textContent)
+                let selectedPositionPortion = $('#position{{ offering.id }}').val();
+                let position = POSITIONS['positions'].find(position => position.offering === {{ offering.id }});
+                if (position.extra_price) {
+                    let sum = position.extra_price[selectedPositionPortion].pricing
+                    $('#position{{ offering.id }}Price').text(`${sum}c`)
+                }
+
+                let selectedGarnish = $('#garnish{{ offering.id }}');
+                let garnish_selects = $('#garnishRow{{ offering.id }}').find('select');
+                if (selectedGarnish.length > 0) {
+                    let garnish_class = selectedGarnish.find("option:selected").attr('class');
+                    let matching_garnish_portion = $('#garnishRow{{ offering.id }}')[0].getElementsByClassName(garnish_class)[1]
+                    for (let select of garnish_selects) {
+                        select.hidden = true
+                    }
+                    selectedGarnish[0].hidden = false
+                    matching_garnish_portion.hidden = false
+                    let garnish = GARNISHES['garnishes'].find(garnish => garnish.offering === {{ offering.id }})
+                    let garnishSum = $('#garnishSum{{ offering.id }}')
+                    if (garnish.extra_price){
+                        let sum = garnish.extra_price[$(matching_garnish_portion).val()].pricing
+                        garnishSum.text(sum)
+                    }
+                }
+
+
+                let additional_selects = $('#additionalRow{{ offering.id }}').find('select');
+                let selectedAdditional = $('#additional{{ offering.id }}');
+                if (selectedAdditional.length > 0){
+                    let additional_class = selectedAdditional.find("option:selected").attr('class');
+                    let matching_additional_portion = $('#additionalRow{{ offering.id }}')[0].getElementsByClassName(additional_class)[1]
+                    for (let select of additional_selects) {
+                        select.hidden = true
+                    }
+                    selectedAdditional[0].hidden = false
+                    matching_additional_portion.hidden = false
+                    let additional = ADDITIONALS['additionals'].find(additional => additional.offering === {{ offering.id }})
+                    let additionalSum = $('#additionalSum{{ offering.id }}')
+                    if (additional.extra_price){
+                        let sum = additional.extra_price[$(matching_additional_portion).val()].pricing
+                        additionalSum.text(sum)
+                    }
+                    else {
+                        console.log(dditional.base_price)
+                        additionalSum.text(additional.base_price)
+                    }
+                }
+
+                $('#position{{ offering.id }}').change(function () {
+                     let optionSelected = $(this).find("option:selected");
+                     let valueSelected  = optionSelected.val();
+                     let id = this.parentElement.id
+                     let position = POSITIONS['positions'].find(position => position.offering === {{ offering.id }});
+                     let sum = position.extra_price[valueSelected].pricing
+                     $('#position{{ offering.id }}Price').text(`${sum}c`)
+
+                    });
+                $('#garnish{{ offering.id }}').change(function (){
+                    let optionSelected = $(this).find("option:selected");
+                    let valueSelected  = optionSelected.val();
+                    let garnish = GARNISHES['garnishes'].filter(function (v, i ){
+                        return (v["name"] == valueSelected && v["offering"] == {{ offering.id }});
+                    })
+                    console.log(garnish)
+                    let garnishSum = $('#garnishSum{{ offering.id }}')
+                    if (garnish[0].extra_price){
+                        let classSelected = optionSelected.attr("class");
+                        let matching_select = $('#garnishRow{{ offering.id }}')[0].getElementsByClassName(classSelected)[1]
+                        for (let select of garnish_selects){
+                            select.hidden = true
+                        }
+                        matching_select.hidden = false
+                        garnishSum.text(garnish[0].extra_price[$(matching_select).val()].pricing)
+                    }
+                    else {
+                        for (let select of garnish_selects){
+                            select.hidden = true
+                        }
+                        garnishSum.text(garnish[0].base_price)
+                    }
+                    garnish_selects[0].hidden = false
+                });
+
+
+
+
+                let garnish_portion_selects = document.querySelectorAll('[name="garnish_portion"]');
+                    {#console.log(garnish_portion_selects)#}
+                for (let i = 0; i < garnish_portion_selects.length; ++i){
+                {#$('#garnish_portion{{ offering.id }}').change(function (){#}
+                {#$( "select[id^='garnish_port']").change(function (){#}
+                    garnish_portion_selects[i].addEventListener('change', function (e){
+                        console.log(this)
+                        let selectedPortion = $(this).find("option:selected").val()
+                        let garnishSum = $('#garnishSum{{ offering.id }}')
+                        let selectedGarnish = this.parentElement.parentElement.getElementsByClassName(this.className)[0]
+                        let garnish = GARNISHES['garnishes'].filter(function (v,i){
+                            return (v['name'] == selectedGarnish.innerText && v['offering'] == {{ offering.id }})
+                        })
+                        console.log(garnish)
+                        garnishSum.text(garnish[0].extra_price[selectedPortion].pricing)
+                    })
+                }
+
+                let additional_portion_selects = document.querySelectorAll('[name="additional_portion"]');
+                for (let a of additional_portion_selects){
+                    a.addEventListener('change', function (e){
+                        let selectedPortion = $(this).find("option:selected").val()
+                        let additionalSum = $('#additionalSum{{ offering.id }}')
+                        let selectedAdditional = this.parentElement.parentElement.getElementsByClassName(this.className)[0]
+                        let additional = ADDITIONALS['additionals'].filter(function (v,i){
+                            return (v['name'] == selectedAdditional.innerText && v['offering'] == {{ offering.id }})
+                        })
+                        console.log(additional)
+                        additionalSum.text(additional[0].extra_price[selectedPortion].pricing)
+                    })
+                }
+
+                $('#additional{{ offering.id }}').change(function (){
+
+                    let optionSelected = $(this).find("option:selected");
+                    let valueSelected  = optionSelected.val();
+                    let additional = ADDITIONALS['additionals'].filter(function (v, i){
+                        return ((v['name'] == valueSelected && v['offering'] == {{ offering.id }}))
+                    })
+                    let additionalSum = $('#additionalSum{{ offering.id }}')
+                    console.log(typeof additional[0].base_price)
+                    if (additional[0].extra_price) {
+                        let classSelected = optionSelected.attr("class");
+                        let matching_select = $('#additionalRow{{ offering.id }}')[0].getElementsByClassName(classSelected)[1]
+                        for (let select of additional_selects) {
+                            select.hidden = true
+                        }
+                        matching_select.hidden = false
+                        additionalSum.text(additional[0].extra_price[$(matching_select).val()].pricing)
+                    }
+                    else {
+                        for (let select of additional_selects) {
+                            select.hidden = true
+                        }
+                        additionalSum.text(additional[0].base_price)
+                    }
+                    additional_selects[0].hidden = false
+                })
+
+                })
+
+            </script>
+            {% if offering.garnish.all %}
+            <tr id="garnishRow{{ offering.id }}">
+            <th scope="row">
+                <p><select class="mb-2" name="garnish" id="garnish{{ offering.id }}">
+                {% for garnish in offering.garnish.all %}
+                    <option class="garnishClass{{ garnish.id }}" value="{{ garnish }}" >{{ garnish }}</option>
+                {% endfor %}
+                </select></p>
+
+            <td>
+                {% for garnish in offering.garnish.all %}
+                    {% if garnish.extra_price %}
+                        <select class="garnishClass{{ garnish.id }}" name="garnish_portion" id="garnish_portion{{ offering.id }}">
+                        {% for key, value in garnish.extra_price.items %}
+                            <option value="{{ key }}">{{ key }}</option>
+                        {% endfor %}
+                        </select>
+                    {% endif %}
+                {% endfor %}
+
+            <td><p id="garnishSum{{ offering.id }}">...</p></td>
+            </th>
+            </td>
+            </tr>{% endif %}
+
+
+            <tr id="additionalRow{{ offering.id }}">
+            <th scope="row">
+            {% if offering.additional.all %}
+                <p><select class="mb-2" name="additional" id="additional{{ offering.id }}">
+                {% for additional in offering.additional.all %}
+                    <option class="additionalClass{{ additional.id }}" value="{{ additional }}">{{ additional }}</option>
+                {% endfor %}
+                </select></p>
+            {% endif %}
+            </th>
+            <td>
+                {% for additional in offering.additional.all %}
+                    {% if additional.extra_price %}
+                        <select class="additionalClass{{ additional.id }}" name="additional_portion" id="additional_portion{{ offering.id }}">
+                        {% for key, value in additional.extra_price.items %}
+                            <option value="{{ key }}">{{ key }}</option>
+                        {% endfor %}
+                        </select>
+                    {% endif %}
+                {% endfor %}
+            </td>
+                <td><p id="additionalSum{{ offering.id }}">сумма</p></td>
+            </tr>
+
+            {% if offering.supplement.all %}
+        {% for supplement in offering.supplement.all %}
+            <tr>
+                <th scope="row">
+                    <p>{{ supplement }}</p>
+                </th>
+                <td>...</td>
+            <td>+{{ supplement.price }}с</td>
+            </tr>
+        {% endfor %}
+            {% endif %}
+            </tbody>
+            </table>
+            <p class="mt-3"><a href="#" class="btn btn-warning">купить</a></p>
+        </div>
     </div>
+</div>
 
 {% empty %}
     <h2 class="text-center">Нет ещё такого предложения </h2>
 {% endfor %}
 <br>
+</div>
     {% include 'partial/paginate.html' %}
 
 {% endblock %}
