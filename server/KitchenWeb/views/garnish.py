@@ -80,6 +80,7 @@ class GarnishDetailUpdateView(PermissionMixin, UpdateView):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['type'] = TYPES
         if garnish.extra_price:
-            context['extra_price'] = json.loads(garnish.extra_price)
+            if isinstance(garnish.extra_price, str):
+                context['extra_price'] = json.loads(garnish.extra_price)
         return context
 

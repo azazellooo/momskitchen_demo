@@ -116,5 +116,6 @@ class AdditionalDetailUpdateView(PermissionMixin, UpdateView):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['type'] = TYPES
         if additional.extra_price:
-            context['extra_price'] = json.loads(additional.extra_price)
+            if isinstance(additional.extra_price, str):
+                context['extra_price'] = json.loads(additional.extra_price)
         return context
