@@ -29,6 +29,9 @@ DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
+TOKEN = '1920485677:AAHivPLMmhSxzUejTdvmIG1QV6YFFeDB4nY'
+LISTEN_WEBHOOK = 'https://761d98ccac72.ngrok.io'
+WEBHOOK_PORT = 8000
 
 # Application definition
 

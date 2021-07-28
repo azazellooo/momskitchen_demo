@@ -58,7 +58,7 @@ class Employe(models.Model):
         verbose_name_plural = 'Пользователи'
 
     def __str__(self):
-        return self.username
+        return self.tg_user
 
 
 class BalanceChange(models.Model):

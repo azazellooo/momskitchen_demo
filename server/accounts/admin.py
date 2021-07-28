@@ -14,7 +14,7 @@ class EmployeAdmin(admin.ModelAdmin):
     list_display = ['id', 'tg_user', 'organization_id', 'username', 'is_active', 'total_balance', 'is_admin']
     list_filter = ['organization_id']
     search_fields = ['organization_id', 'username']
-    fields = ['id', 'tg_user', 'organization_id', 'username', 'is_active', 'total_balance', 'is_admin']
+    fields = ['id', 'tg_user', 'tg_id', 'tg_firstname', 'tg_lastname', 'organization_id', 'username', 'is_active', 'total_balance', 'is_admin']
     readonly_fields = ['id']
 
 
