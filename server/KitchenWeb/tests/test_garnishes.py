@@ -5,7 +5,7 @@ from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
 from KitchenWeb.models import Garnish
-from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, TelegramUserFactory
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
 from KitchenWeb.views import GarnishCreateView
 
 
@@ -47,8 +47,7 @@ class GarnishCreateViewTests(TestCase):
             "extra_price": json.loads(x)
         }
         self.organization = OrganizationFactory()
-        self.telegram_user = TelegramUserFactory()
-        self.employee = EmployeeFactory(organization_id=self.organization, tg_user=self.telegram_user)
+        self.employee = EmployeeFactory(organization_id=self.organization)
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.request = RequestFactory().post(reverse("kitchen:create_garnish"), data=self.data)

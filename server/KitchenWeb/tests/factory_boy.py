@@ -14,28 +14,28 @@ class CategoryFactory(factory.django.DjangoModelFactory):
     order = 3
 
 
-class TelegramUserFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = TelegramUser
-    telegram_id = random.randint(900000000, 941151633)
-    is_bot = False
-    first_name = 'Test'
-    last_name = 'TelegramUser'
-    username = 'test_tg_user'
+# class TelegramUserFactory(factory.django.DjangoModelFactory):
+#     class Meta:
+#         model = TelegramUser
+#     telegram_id = random.randint(900000000, 941151633)
+#     is_bot = False
+#     first_name = 'Test'
+#     last_name = 'TelegramUser'
+#     username = 'test_tg_user'
 
 
-class TelegramChatFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = TelegramChat
-
-
-class TelegramStateFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = TelegramState
-
-    telegram_user = factory.SubFactory(TelegramUserFactory)
-    telegram_chat = factory.SubFactory(TelegramChatFactory)
-
+# class TelegramChatFactory(factory.django.DjangoModelFactory):
+#     class Meta:
+#         model = TelegramChat
+#
+#
+# class TelegramStateFactory(factory.django.DjangoModelFactory):
+#     class Meta:
+#         model = TelegramState
+#
+#     telegram_user = factory.SubFactory(TelegramUserFactory)
+#     telegram_chat = factory.SubFactory(TelegramChatFactory)
+#
 
 class OrganizationFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -52,7 +52,8 @@ class EmployeeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Employe
 
-    tg_user = factory.SubFactory(TelegramUserFactory)
+    tg_user = "test username"
+    tg_id = '3456789'
     organization_id = factory.SubFactory(OrganizationFactory)
     username = factory.Faker('name')
     is_active = True

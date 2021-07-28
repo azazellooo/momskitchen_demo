@@ -4,7 +4,7 @@ from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from KitchenWeb.models import Dish
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, DishFactory, \
-    CategoryFactory, TelegramUserFactory
+    CategoryFactory
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from KitchenWeb.views import PositionCreateView
@@ -51,8 +51,7 @@ class PositionCreateViewTest(TestCase):
             "extra_price": json.loads(x)
         }
         self.organization = OrganizationFactory()
-        self.telegram_user = TelegramUserFactory()
-        self.employee = EmployeeFactory(organization_id=self.organization, tg_user=self.telegram_user)
+        self.employee = EmployeeFactory(organization_id=self.organization)
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.request = RequestFactory().post(reverse("kitchen:create_position"), data=self.data)
