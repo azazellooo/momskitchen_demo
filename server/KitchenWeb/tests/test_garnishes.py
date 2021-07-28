@@ -6,7 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from KitchenWeb.views.category import CategoryCreateView
 from accounts.models import Employe, UserToken, Organization
 from kitchen5bot.models import TelegramUser
-from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, TelegramUserFactory
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase, RequestFactory, Client
 from django.urls import reverse
@@ -55,7 +55,8 @@ class GarnishCreateViewTests(TestCase):
             "extra_price": json.loads(x)
         }
         self.organization = OrganizationFactory()
-        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.telegram_user = TelegramUserFactory()
+        self.employee = EmployeeFactory(organization_id=self.organization, tg_user=self.telegram_user)
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.request = RequestFactory().post(reverse("kitchen:create_garnish"), data=self.data)
