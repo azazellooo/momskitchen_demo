@@ -7,7 +7,7 @@ from .bot import state_manager
 from .models import TelegramState
 from .bot import TelegramBot
 from accounts import models
-from .parse_and_validations import deep_link_parce, is_organization, is_user, deep_len_validator
+from KitchenWeb.parse_and_validations import deep_link_parce, is_organization, is_user, deep_len_validator
 
 DEEP_LINK = '/start '
 STOP = '/stop'
