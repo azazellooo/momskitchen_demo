@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from kitchen5bot.bot import bot
 # from kitchen5bot.processors import accrual
 
-BASE_URL = 'http://t.me/kitchen5bot/'
+BASE_URL = 'http://t.me/MommyKitchenbot/'
 
 choice_types = [('accrual', 'Начисление'), ('write-off', 'Списание')]
 
@@ -40,8 +40,10 @@ class Organization(models.Model):
 
 
 class Employe(models.Model):
-    tg_user = models.OneToOneField('kitchen5bot.TelegramUser',
-                                   on_delete=models.CASCADE, verbose_name='Пользователь телеграма')
+    tg_user = models.CharField(max_length=128, null=False, blank=False, verbose_name='Юзернейм телеграм юзера')
+    tg_id = models.CharField(max_length=128, null=False, blank=False, verbose_name='ID телеграм юзера')
+    tg_firstname = models.CharField(max_length=128, null=True, blank=True, verbose_name='Имя телеграм юзера')
+    tg_lastname = models.CharField(max_length=128, null=True, blank=True, verbose_name='Фамилия телеграм юзера')
     organization_id = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE,
                                         null=True, related_name='employe_org', blank=True, verbose_name='Внешний ключ на организацию')
     username = models.CharField(max_length=200, null=True, blank=True,
@@ -74,22 +76,22 @@ class BalanceChange(models.Model):
         verbose_name_plural = 'Изменение Балансов'
 
 
-@receiver(post_save, sender=BalanceChange)
-def send_notification(sender, instance, created, **kwargs):
-    transaction = instance
-    employee = transaction.employe
-    chat_user_id = employee.tg_user.telegram_id
-    if created:
-        if transaction.type == 'accrual':
-            current_balance = employee.total_balance + int(transaction.sum_balance)
-            message = bot.sendMessage(chat_user_id,
-                            f'на ваш баланс было начислено {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}')
-            transaction.notification_text = message.get_text()
-        else:
-            current_balance = employee.total_balance - int(transaction.sum_balance)
-            message = bot.sendMessage(chat_user_id,
-                            f'С Вашего баланса было списано {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}')
-            transaction.notification_text = message.get_text()
+# @receiver(post_save, sender=BalanceChange)
+# def send_notification(sender, instance, created, **kwargs):
+#     transaction = instance
+#     employee = transaction.employe
+#     chat_user_id = employee.tg_user.telegram_id
+#     if created:
+#         if transaction.type == 'accrual':
+#             current_balance = employee.total_balance + int(transaction.sum_balance)
+#             message = bot.sendMessage(chat_user_id,
+#                             f'на ваш баланс было начислено {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}')
+#             transaction.notification_text = message.get_text()
+#         else:
+#             current_balance = employee.total_balance - int(transaction.sum_balance)
+#             message = bot.sendMessage(chat_user_id,
+#                             f'С Вашего баланса было списано {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}')
+#             transaction.notification_text = message.get_text()
 
 
 class UserToken(models.Model):

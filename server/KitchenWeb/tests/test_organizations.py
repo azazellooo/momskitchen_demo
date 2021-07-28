@@ -1,7 +1,7 @@
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
-from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, TelegramUserFactory
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
 from KitchenWeb.views import OrganizationCreateView
 from accounts.models import Organization, UserToken
 
@@ -12,8 +12,7 @@ class OrganizationsListViewTests(TestCase):
 
     def setUp(self):
         self.organization = OrganizationFactory()
-        self.telegram_user = TelegramUserFactory()
-        self.employee = EmployeeFactory(organization_id=self.organization, tg_user=self.telegram_user)
+        self.employee = EmployeeFactory(organization_id=self.organization)
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.response = self.client.get(reverse('kitchen:organization-list'))
@@ -47,8 +46,7 @@ class OrganizationCreateViewTests(TestCase):
             "is_active": True
         }
         self.organization = OrganizationFactory()
-        self.telegram_user = TelegramUserFactory()
-        self.employee = EmployeeFactory(organization_id=self.organization, tg_user=self.telegram_user)
+        self.employee = EmployeeFactory(organization_id=self.organization)
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.request = RequestFactory().post(reverse("kitchen:organization-create"), data=self.data)
@@ -140,8 +138,7 @@ class OrganizationBalancePageViewTests(TestCase):
 
     def setUp(self):
         self.organization = OrganizationFactory()
-        self.tg_user = TelegramUserFactory(telegram_id=941151624)
-        self.employee = EmployeeFactory(organization_id=self.organization, tg_user=self.tg_user)
+        self.employee = EmployeeFactory(organization_id=self.organization)
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
         self.path = reverse('kitchen:organization-balance', kwargs={'pk': self.organization.pk})
