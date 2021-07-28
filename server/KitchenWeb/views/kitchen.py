@@ -1,7 +1,5 @@
 from django.db.models import Q
-from django.shortcuts import render
 from django.urls import reverse
-
 from KitchenWeb.models import Supplement
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from KitchenWeb.forms import SearchForm, SupplementForm

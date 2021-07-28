@@ -1,15 +1,11 @@
-from django.http import Http404
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, TemplateView, UpdateView, ListView
 from django.urls import reverse
 from django.views.generic.list import MultipleObjectMixin
 
 from accounts.forms import EmployeForm
 from accounts.models import Employe, UserToken, BalanceChange
-from django.contrib.sessions.models import Session
-from datetime import datetime, timedelta
 from accounts.tasks import drop_time_token, validation_token
-from django.contrib.sessions.backends.db import SessionStore
 
 
 class UserProfileView(TemplateView):

@@ -2,7 +2,6 @@ from django.shortcuts import redirect, reverse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import CreateView
 import json
-
 from KitchenWeb.forms import GarnishForm
 from KitchenWeb.models import Garnish
 from KitchenWeb.mixin import PermissionMixin

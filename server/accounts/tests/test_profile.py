@@ -3,7 +3,7 @@ from django.urls import reverse
 
 from KitchenWeb.tests.factory_boy import TelegramUserFactory, EmployeeFactory, UserTokenFactory
 from accounts.models import UserToken
-from accounts.views import UserProfileView
+
 
 class UserProfileViewTest(TestCase):
 

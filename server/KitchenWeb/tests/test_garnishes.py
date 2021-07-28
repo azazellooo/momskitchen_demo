@@ -1,18 +1,11 @@
 import json
 
 from django.contrib.sessions.middleware import SessionMiddleware
-from webdriver_manager.chrome import ChromeDriverManager
-
-from KitchenWeb.views.category import CategoryCreateView
-from accounts.models import Employe, UserToken, Organization
-from kitchen5bot.models import TelegramUser
-from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, TelegramUserFactory
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.test import TestCase, RequestFactory, Client
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
-from django.test.utils import override_settings
-from selenium.webdriver import Chrome
+
 from KitchenWeb.models import Garnish
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, TelegramUserFactory
 from KitchenWeb.views import GarnishCreateView
 
 
@@ -37,7 +30,6 @@ class GarnishListViewTests(TestCase):
     def test_valid_response_for_search_query(self):
         search_field_inner = 'd'
         search_response = self.client.get('/kitchen/garnish/list/', {'search_value': search_field_inner})
-        print(search_response.context)
         [self.assertIn(search_field_inner, dish.name) for dish in search_response.context['garnishes']]
 
     def test_is_paginated_by_5(self):

@@ -1,10 +1,8 @@
 import json
-
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.test import TestCase, RequestFactory, Client
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
-
-from KitchenWeb.models import Dish, Category
+from KitchenWeb.models import Dish
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, DishFactory, \
     CategoryFactory, TelegramUserFactory
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -34,7 +32,6 @@ class PositionListViewTests(TestCase):
     def test_valid_response_for_search_query(self):
         search_field_inner = 'd'
         search_response = self.client.get('/kitchen/position/list/', {'search_value': search_field_inner})
-        print(search_response.context)
         [self.assertIn(search_field_inner, dish.name) for dish in search_response.context['dishes']]
 
     def test_is_paginated_by_5(self):
@@ -53,8 +50,6 @@ class PositionCreateViewTest(TestCase):
             "base_price": 32323,
             "extra_price": json.loads(x)
         }
-        print(type(self.data), self.data)
-        print(type(self.data['extra_price']), self.data['extra_price'])
         self.organization = OrganizationFactory()
         self.telegram_user = TelegramUserFactory()
         self.employee = EmployeeFactory(organization_id=self.organization, tg_user=self.telegram_user)
@@ -105,7 +100,6 @@ class PositionDetailUpdateViewTests(TestCase):
 
     def test_status_200(self):
         self.assertEqual(200, self.response.status_code)
-        print(self.response.status_code)
 
     def test_update_position(self):
         new_jsons = {"0.5": {"comment": "Comment new", "pricing": "30"}}
@@ -117,7 +111,6 @@ class PositionDetailUpdateViewTests(TestCase):
             'base_price': 214,
             'extra_price': new_json
         }
-        print(type(data_to_update), data_to_update)
         response = self.client.post(reverse('kitchen:detail_update_position', kwargs={'pk': self.position.pk}),
                                     data=data_to_update)
 

@@ -1,19 +1,9 @@
-from time import sleep
-import requests
 from django.contrib.sessions.middleware import SessionMiddleware
-
-from accounts.models import Employe, UserToken, Organization
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, TelegramUserFactory
-from kitchen5bot.models import TelegramUser
-from django.test import TestCase, RequestFactory, Client
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from KitchenWeb.views.category import CategoryCreateView
 from KitchenWeb.models import Category
-import random
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from selenium.webdriver import Chrome
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 
 
 class CategoryListViewTest(TestCase):

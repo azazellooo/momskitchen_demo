@@ -37,4 +37,4 @@ class EmployeeTransactionHistoryViewTests(TestCase):
     def test_is_paginated_by_5(self):
         self.assertLessEqual(len(self.response.context['object_list']), 5)
 
-# Create your tests here.
+

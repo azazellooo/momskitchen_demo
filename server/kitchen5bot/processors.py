@@ -80,7 +80,6 @@ def hello_level_1(bot: TelegramBot, update: Update, state: TelegramState):
             bot.sendMessage(update.get_chat().get_id(), 'К сожалению мы не смогли найти ваш аккаунт. Пройдите регистрацию перейдя по ссылке, которую даст вам Никита.')
             raise ProcessFailure
     elif state.name != 'iv':
-        print(update.get_chat().get_id())
         bot.sendMessage(update.get_chat().get_id(), f'Здарова, {state.telegram_user.username}! {update.get_chat().get_id()}')
         raise ProcessFailure
 

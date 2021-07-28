@@ -1,9 +1,6 @@
 from django.test import TestCase
-from django_tgbot import types
-
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, BalanceChangeFactory, \
     TelegramChatFactory, TelegramStateFactory, TelegramUserFactory
-
 
 
 class NotificationAfterTransactionTests(TestCase):

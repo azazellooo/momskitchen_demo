@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path
 
 from accounts.tasks import one_time_transition, code_red_token
