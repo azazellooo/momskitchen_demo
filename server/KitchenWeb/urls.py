@@ -1,20 +1,14 @@
 from django.urls import path, include
 
-from KitchenWeb.views import GarnishCreateView
-from KitchenWeb.views.organizations import (
-    OrganizationsListView,
-    OrganizationCreateView,
-    OrganizationDetailUpdateView,
-    OrganizationBalancePageView
+from KitchenWeb.views.additional import (
+    AdditionalListView,
+    AdditionalCreateView,
+    AdditionalDetailUpdateView
 )
-from KitchenWeb.views.kitchen import (
-    SupplementListView,
-    SupplementCreateView,
-    SupplementDetailUpdateView,
-)
-from KitchenWeb.views.position import (
-    PositionCreateView,
-    PositionListView, PositionDetailUpdateView,
+from KitchenWeb.views.category import (
+    CategoryListView,
+    CategoryCreateView,
+    CategoryDetailUpdateView
 )
 from KitchenWeb.views.garnish import (
     GarnishListView,
@@ -23,20 +17,25 @@ from KitchenWeb.views.garnish import (
 from KitchenWeb.views.garnish_create import (
     GarnishCreateView
 )
-from KitchenWeb.views.category import (
-    CategoryListView,
-    CategoryCreateView,
-    CategoryDetailUpdateView
-)
-from KitchenWeb.views.additional import (
-    AdditionalListView,
-    AdditionalCreateView,
-    AdditionalDetailUpdateView
+from KitchenWeb.views.kitchen import (
+    SupplementListView,
+    SupplementCreateView,
+    SupplementDetailUpdateView,
 )
 from KitchenWeb.views.offering import (
     OfferingCreateView,
     OfferingListView,
     OfferingDetailUpdateView
+)
+from KitchenWeb.views.organizations import (
+    OrganizationsListView,
+    OrganizationCreateView,
+    OrganizationDetailUpdateView,
+    OrganizationBalancePageView
+)
+from KitchenWeb.views.position import (
+    PositionCreateView,
+    PositionListView, PositionDetailUpdateView,
 )
 
 app_name = 'kitchen'

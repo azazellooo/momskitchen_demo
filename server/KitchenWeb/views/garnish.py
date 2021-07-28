@@ -1,13 +1,13 @@
-from django.shortcuts import redirect, get_object_or_404
-from django.urls import reverse
-from django.utils.datastructures import MultiValueDictKeyError
-from django.views.generic import CreateView, ListView, UpdateView
-from KitchenWeb.forms import SearchForm, GarnishForm
-from KitchenWeb.models import Garnish
-from django.db.models import Q
-from django.utils.http import urlencode
 import json
+from django.db.models import Q
+from django.shortcuts import redirect, get_object_or_404
+from django.utils.datastructures import MultiValueDictKeyError
+from django.utils.http import urlencode
+from django.views.generic import ListView, UpdateView
+from KitchenWeb.forms import SearchForm, GarnishForm
 from KitchenWeb.mixin import PermissionMixin
+from KitchenWeb.models import Garnish
+
 TYPES = [0.3, 0.5, 0.7, 1.3, 1.5, 1.7, 2]
 
 

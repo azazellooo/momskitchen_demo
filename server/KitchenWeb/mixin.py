@@ -1,5 +1,4 @@
 from django.http import HttpResponse
-from accounts.models import UserToken
 from accounts.tasks import get_user
 
 

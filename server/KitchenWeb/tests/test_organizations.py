@@ -1,21 +1,9 @@
-import random
-from time import sleep
-import requests
 from django.contrib.sessions.middleware import SessionMiddleware
-
-from accounts.models import Employe, UserToken, Organization
-from kitchen5bot.models import TelegramUser
-
-from django.test import TestCase, RequestFactory, LiveServerTestCase, Client, client
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
-from selenium.webdriver import Chrome
-
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, TelegramUserFactory
 from KitchenWeb.views import OrganizationCreateView
-from KitchenWeb.views.organizations import OrganizationBalancePageView
-from accounts.models import Organization, BalanceChange, Employe, UserToken
-from kitchen5bot.models import TelegramUser
+from accounts.models import Organization, UserToken
 
 
 class OrganizationsListViewTests(TestCase):
@@ -83,7 +71,6 @@ class OrganizationCreateViewTests(TestCase):
         self.assertEqual('/organizations/create/', self.request.path)
 
     def test_create(self):
-        print(self.organization)
         self.assertTrue(Organization.objects.filter(name=self.organization.name).exists())
 
     def test_post(self):
@@ -187,7 +174,6 @@ class OrganizationBalancePageViewTests(TestCase):
         response = self.client.post(self.path, data=data)
         self.assertRedirects(response, self.path)
         self.assertEqual(302, response.status_code)
-        print(response.status_code)
         self.employee.refresh_from_db()
         self.assertEqual(110, self.employee.total_balance)
 

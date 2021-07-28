@@ -1,14 +1,10 @@
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.test import TestCase, Client, RequestFactory
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
-
-from KitchenWeb.views.kitchen import SupplementCreateView
-from accounts.models import Employe, UserToken, Organization
-from kitchen5bot.models import TelegramUser
 from KitchenWeb.models import Supplement
-from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, CategoryFactory, \
-    SupplementFactory, TelegramUserFactory
-import random
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, TelegramUserFactory
+from KitchenWeb.views.kitchen import SupplementCreateView
+
 
 class SupplementListViewTests(TestCase):
     fixtures = ['supplements_test_data.json']

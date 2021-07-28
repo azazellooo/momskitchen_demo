@@ -1,14 +1,14 @@
 from django.contrib import messages
 from django.db.models import Q
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse
-
-from accounts.models import Organization, BalanceChange, Employe
-from django.views.generic import ListView, CreateView, UpdateView
-from KitchenWeb.forms import SearchForm, OrganizationForm, BalanceChangeForm
 from django.utils.http import urlencode
+from django.views.generic import ListView, CreateView, UpdateView
+
+from KitchenWeb.forms import SearchForm, OrganizationForm, BalanceChangeForm
 from KitchenWeb.mixin import PermissionMixin
+from accounts.models import Organization, BalanceChange, Employe
+
 
 class OrganizationsListView(PermissionMixin, ListView):
     template_name = 'organizations/list.html'

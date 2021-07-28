@@ -1,19 +1,11 @@
-from django.forms import model_to_dict
-from django.utils.http import urlencode
-from django.db import models
-
-from django.db.models import Q
-from django.shortcuts import redirect, reverse
-from django.utils.datastructures import MultiValueDictKeyError
-from django.views.generic import CreateView, ListView, UpdateView
 import json
-
-from django.views.generic.detail import SingleObjectTemplateResponseMixin
-from django.views.generic.edit import ModelFormMixin
-
+from django.forms import model_to_dict
+from django.shortcuts import reverse
+from django.utils.http import urlencode
+from django.views.generic import CreateView, ListView, UpdateView
 from KitchenWeb.forms import OfferingForm, SearchForm
-from KitchenWeb.models import Offering, Basket, Garnish
 from KitchenWeb.mixin import PermissionMixin
+from KitchenWeb.models import Offering
 
 
 class OfferingCreateView(PermissionMixin, CreateView):
@@ -89,7 +81,6 @@ class OfferingListView(PermissionMixin, ListView):
         # context['to_json_positions'] = {'positions': [dict_filter(model_to_dict(o.position), needed) for o in list(context.get('offerings'))]}
         if self.search_data:
             context['query'] = urlencode({'search_value': self.search_data})
-        print(context.get('to_js_garnishes'))
         return context
 
     # def build_list(self, object_list,needed_fields, field: models.Model):

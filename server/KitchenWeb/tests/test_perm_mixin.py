@@ -1,9 +1,6 @@
+from django.test import TestCase
 from django.urls import reverse
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, SupplementFactory
-from django.test import TestCase, RequestFactory, LiveServerTestCase, Client
-import json
-from KitchenWeb.views.additional import AdditionalCreateView
-from KitchenWeb.models import Additional
 
 
 class AdditionalListViewTests(TestCase):

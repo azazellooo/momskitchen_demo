@@ -1,13 +1,14 @@
+import json
+from django.db.models import Q
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.datastructures import MultiValueDictKeyError
-from django.views.generic import CreateView, ListView, UpdateView, DetailView
-from KitchenWeb.forms import PositionForm, SearchForm
-from KitchenWeb.models import Dish, Category
-from django.db.models import Q
 from django.utils.http import urlencode
-import json
+from django.views.generic import CreateView, ListView, UpdateView
+
+from KitchenWeb.forms import PositionForm, SearchForm
 from KitchenWeb.mixin import PermissionMixin
+from KitchenWeb.models import Dish, Category
 
 
 class PositionListView(PermissionMixin, ListView):
@@ -105,9 +106,6 @@ class PositionDetailUpdateView(UpdateView):
         return context
 
     def form_valid(self, form):
-        print(form.data)
-        print('----------------')
-        print(form.cleaned_data)
         position = self.get_object()
         position.name = form.data['name']
         position.description = form.data['description']
