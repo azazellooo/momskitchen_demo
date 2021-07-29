@@ -1,9 +1,10 @@
 import telegram
-from telegram import Update, ReplyMarkup
+from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext, MessageHandler, Filters, ConversationHandler
 from KitchenWeb.parse_and_validations.parces import deep_link_parce
 from KitchenWeb.parse_and_validations.validations import *
 from bot.telegram_bot import TelegramBot
+from messages.bot_messages import *
 
 END = ConversationHandler.END
 NEXTSTEP = range(1)
@@ -33,24 +34,28 @@ class MainCommandsHandler(TelegramBot):
         if '/start ' in text:
             org = is_organization(deep_link_parce(text))
             if org:
-                if models.Employe.objects.filter(tg_user=update.message['chat']['username'], organization_id=org).exists():
-                    self.send_message(recipient=chat_id, message='Вы уже прошли регистрацию.')
+                if models.Employe.objects.filter(
+                        tg_user=update.message['chat']['username'], organization_id=org
+                ).exists():
+                    self.send_message(recipient=chat_id, message=user_already_signed_up)
                 else:
                     models.Employe.objects.create(
                         tg_user=update.message['chat']['username'],
                         tg_id=update.message['chat']['id'],
                         organization_id=org
                     )
-                    self.send_message(recipient=chat_id, message=f'Добро пожаловать к боту! Мы успешно сохранили данные о Вас, {update.message["chat"]["username"]}, но перед тем, как пойти дальше, Вы должны указать Ваше имя следующим сообщением. Оно будет использоваться для подписи контейнеров с Вашей заказанной едой. В будущем Вы в любой момент сможете его изменить.', keyboard=reply_markup)
+                    self.send_message(recipient=chat_id, message=welcome[0]+{update.message["chat"]["username"]}+welcome[1], keyboard=reply_markup)
                     return NEXTSTEP
             else:
-                self.send_message(recipient=chat_id, message='Ссылка невалидна!')
+                self.send_message(recipient=chat_id, message=invalid_link)
         else:
-            self.send_message(recipient=chat_id, message='К сожалению мы не смогли найти ваш аккаунт. Пройдите регистрацию перейдя по ссылке, которую даст вам Никита.')
+            self.send_message(recipient=chat_id, message=user_not_found)
 
     def restart(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
-        self.send_message(recipient=chat_id, message=f'Привет, {update.message["chat"]["username"]}! Рады видеть Вас снова в KitchenBot!')
+        self.send_message(
+            recipient=chat_id, message=welcome_back[0]+{update.message["chat"]["username"]}+welcome_back[1]
+        )
 
     def stop(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
@@ -59,30 +64,30 @@ class MainCommandsHandler(TelegramBot):
             if tg_user.is_active:
                 tg_user.is_active = False
                 tg_user.save()
-                self.send_message(recipient=chat_id, message='Рассылка отключена')
+                self.send_message(recipient=chat_id, message=mailing_off)
             else:
-                self.send_message(recipient=chat_id, message='Рассылка уже отключена')
+                self.send_message(recipient=chat_id, message=mailing_already_off)
         except ObjectDoesNotExist:
-            self.send_message(recipient=chat_id, message='К сожалению мы не смогли найти ваш аккаунт. Пройдите регистрацию перейдя по ссылке, которую даст вам Никита.')
+            self.send_message(recipient=chat_id, message=user_not_found)
 
     def login(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
         try:
             user = models.Employe.objects.get(tg_user=update.message["chat"]["username"])
             if models.UserToken.objects.filter(user=user).exists():
-                self.send_message(recipient=chat_id, message='Вам уже был выделен токен.')
+                self.send_message(recipient=chat_id, message=token_already_given)
             else:
                 models.UserToken.objects.create(user=user)
                 token2 = models.UserToken.objects.get(user=user)
-                self.send_message(recipient=chat_id, message=f'Прекрасно, держи свой линк на профиль : https://9af8f9261799.ngrok.io/accounts/{token2.key}')
+                self.send_message(recipient=chat_id, message=give_token+{token2.key})
         except ObjectDoesNotExist:
-            self.send_message(recipient=chat_id, message='Вы не можете получить токен, пока не зарегестрируетесь по ссылке который должен был вам выдать Никита')
+            self.send_message(recipient=chat_id, message=cannot_give_token)
 
     def nextstep(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
         tg_user = models.Employe.objects.get(tg_user=update.message["chat"]["username"])
         tg_user.username = update.message['text']
         tg_user.save()
-        self.send_message(recipient=chat_id, message='Спасибо! Ваши данные сохранены!')
+        self.send_message(recipient=chat_id, message=data_saved)
         return END
 
