@@ -40,7 +40,7 @@ class Organization(models.Model):
 
 
 class Employe(models.Model):
-    tg_user = models.CharField(max_length=128, null=False, blank=False, verbose_name='Юзернейм телеграм юзера')
+    tg_username = models.CharField(max_length=128, null=False, blank=False, verbose_name='Юзернейм телеграм юзера')
     tg_id = models.CharField(max_length=128, null=False, blank=False, verbose_name='ID телеграм юзера')
     tg_firstname = models.CharField(max_length=128, null=True, blank=True, verbose_name='Имя телеграм юзера')
     tg_lastname = models.CharField(max_length=128, null=True, blank=True, verbose_name='Фамилия телеграм юзера')
@@ -58,7 +58,7 @@ class Employe(models.Model):
         verbose_name_plural = 'Пользователи'
 
     def __str__(self):
-        return self.tg_user
+        return self.tg_username
 
 
 class BalanceChange(models.Model):
@@ -80,7 +80,7 @@ class BalanceChange(models.Model):
 # def send_notification(sender, instance, created, **kwargs):
 #     transaction = instance
 #     employee = transaction.employe
-#     chat_user_id = employee.tg_user.telegram_id
+#     chat_user_id = employee.tg_username.telegram_id
 #     if created:
 #         if transaction.type == 'accrual':
 #             current_balance = employee.total_balance + int(transaction.sum_balance)

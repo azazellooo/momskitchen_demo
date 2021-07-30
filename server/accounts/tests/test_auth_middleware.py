@@ -15,13 +15,14 @@ class CustomAuthMiddlewareTests(StaticLiveServerTestCase):
         self.organization = Organization.objects.create(**{
             'name': 'Attractor'
         })
-        self.tg_user = TelegramUser.objects.create(**{
-            'telegram_id': '1455413201',
-            'first_name': 'Begaiym',
-            'username': 'monpassan'
-        })
+        # self.tg_user = TelegramUser.objects.create(**{
+        #     'telegram_id': '1455413201',
+        #     'first_name': 'Begaiym',
+        #     'username': 'monpassan'
+        # })
         self.web_user = Employe.objects.create(**{
-            'tg_user': self.tg_user,
+            'tg_username': 'qwe',
+            'tg_id': 123,
             'organization_id': self.organization,
             'username': 'Gosha'
         })

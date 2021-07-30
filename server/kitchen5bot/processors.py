@@ -23,12 +23,12 @@ ORGANIZATION_ID = None
 #         ORGANIZATION_ID = deep_link_parce(update.message.text)
 #         org = is_organization(ORGANIZATION_ID)
 #         if org is not None:
-#             if models.Employe.objects.filter(tg_user=state.telegram_user, organization_id=org).exists():
+#             if models.Employe.objects.filter(tg_username=state.telegram_user, organization_id=org).exists():
 #                 bot.sendMessage(update.get_chat().get_id(), f'Ты уже переходил мать его, {state.telegram_user.username}!')
 #                 raise ProcessFailure
 #             else:
 #                 models.Employe.objects.create(
-#                     tg_user=state.telegram_user,
+#                     tg_username=state.telegram_user,
 #                     organization_id=org
 #                 )
 #                 bot.sendMessage(update.get_chat().get_id(), f'Добро пожаловать к боту! Мы успешно сохранили данные о Вас, {state.telegram_user.username}, но перед тем, как пойти дальше, Вы должны указать Ваше имя следующим сообщением. Оно будет использоваться для подписи контейнеров с Вашей заказанной едой. В будущем Вы в любой момент сможете его изменить.')
@@ -39,7 +39,7 @@ ORGANIZATION_ID = None
 #             raise ProcessFailure
 #     elif update.message.text == LOGIN:
 #         try:
-#             user = models.Employe.objects.get(tg_user=state.telegram_user)
+#             user = models.Employe.objects.get(tg_username=state.telegram_user)
 #             if models.UserToken.objects.filter(user=user).exists():
 #                 bot.sendMessage(update.get_chat().get_id(), 'Вам уже был выделен токен')
 #                 raise ProcessFailure
@@ -53,7 +53,7 @@ ORGANIZATION_ID = None
 #             raise ProcessFailure
 #     elif update.message.text == STOP:
 #         try:
-#             the_user = models.Employe.objects.get(tg_user=state.telegram_user)
+#             the_user = models.Employe.objects.get(tg_username=state.telegram_user)
 #             if the_user.is_active == True:
 #                 the_user.is_active = False
 #                 the_user.save()
@@ -67,7 +67,7 @@ ORGANIZATION_ID = None
 #             raise ProcessFailure
 #     elif update.message.text == START:
 #         try:
-#             the_user = models.Employe.objects.get(tg_user=state.telegram_user)
+#             the_user = models.Employe.objects.get(tg_username=state.telegram_user)
 #             if the_user.is_active == False:
 #                 the_user.is_active = True
 #                 the_user.save()
@@ -86,7 +86,7 @@ ORGANIZATION_ID = None
 #
 # @processor(state_manager, from_states='iv')
 # def hello_level_2(bot, update, state):
-#     user = models.Employe.objects.get(tg_user=state.telegram_user)
+#     user = models.Employe.objects.get(tg_username=state.telegram_user)
 #     user.username = update.message.text
 #     user.save()
 #     bot.sendMessage(update.get_chat().get_id(), f'Сохранили тебя, {state.telegram_user.username}!')

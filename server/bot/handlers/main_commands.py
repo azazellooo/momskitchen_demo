@@ -29,65 +29,74 @@ class MainCommandsHandler(TelegramBot):
 
     def start(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
-        text = update.message['text']
+        text = update.message.text
         reply_markup = telegram.ForceReply(force_reply=True, selective=False, input_field_placeholder='Имя')
         if '/start ' in text:
             org = is_organization(deep_link_parce(text))
             if org:
                 if models.Employe.objects.filter(
-                        tg_user=update.message['chat']['username'], organization_id=org
+                        tg_id=chat_id, organization_id=org
                 ).exists():
-                    self.send_message(recipient=chat_id, message=user_already_signed_up)
+                    self.send_message(recipient=chat_id, message=USER_ALREADY_SIGNED_UP)
                 else:
                     models.Employe.objects.create(
-                        tg_user=update.message['chat']['username'],
-                        tg_id=update.message['chat']['id'],
+                        tg_username=update.message.chat.username,
+                        tg_id=chat_id,
                         organization_id=org
                     )
-                    self.send_message(recipient=chat_id, message=welcome[0]+{update.message["chat"]["username"]}+welcome[1], keyboard=reply_markup)
+                    self.send_message(recipient=chat_id, message=WELCOME[0]+update.message.chat.username+WELCOME[1], keyboard=reply_markup)
                     return NEXTSTEP
             else:
-                self.send_message(recipient=chat_id, message=invalid_link)
+                self.send_message(recipient=chat_id, message=INVALID_LINK)
         else:
-            self.send_message(recipient=chat_id, message=user_not_found)
+            self.send_message(recipient=chat_id, message=USER_NOT_FOUND)
 
     def restart(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
-        self.send_message(
-            recipient=chat_id, message=welcome_back[0]+{update.message["chat"]["username"]}+welcome_back[1]
-        )
+        try:
+            tg_user = models.Employe.objects.get(tg_id=chat_id)
+            if not tg_user.is_active:
+                tg_user.is_active = True
+                tg_user.save()
+                self.send_message(
+                    recipient=chat_id, message=WELCOME_BACK[0] + update.message.chat.username + WELCOME_BACK[1]
+                )
+            else:
+                self.send_message(recipient=chat_id, message=ALREADY_ACTIVE)
+        except ObjectDoesNotExist:
+            self.send_message(recipient=chat_id, message=USER_NOT_FOUND)
 
     def stop(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
         try:
-            tg_user = models.Employe.objects.get(tg_user=update.message["chat"]["username"])
+            tg_user = models.Employe.objects.get(tg_id=chat_id)
             if tg_user.is_active:
                 tg_user.is_active = False
                 tg_user.save()
-                self.send_message(recipient=chat_id, message=mailing_off)
+                self.send_message(recipient=chat_id, message=MAILING_OFF)
             else:
-                self.send_message(recipient=chat_id, message=mailing_already_off)
+                self.send_message(recipient=chat_id, message=MAILING_ALREADY_OFF)
         except ObjectDoesNotExist:
-            self.send_message(recipient=chat_id, message=user_not_found)
+            self.send_message(recipient=chat_id, message=USER_NOT_FOUND)
 
     def login(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
         try:
-            user = models.Employe.objects.get(tg_user=update.message["chat"]["username"])
+            user = models.Employe.objects.get(tg_id=chat_id)
             if models.UserToken.objects.filter(user=user).exists():
-                self.send_message(recipient=chat_id, message=token_already_given)
+                self.send_message(recipient=chat_id, message=TOKEN_ALREADY_GIVEN)
             else:
                 models.UserToken.objects.create(user=user)
                 token2 = models.UserToken.objects.get(user=user)
-                self.send_message(recipient=chat_id, message=give_token+{token2.key})
+                self.send_message(recipient=chat_id, message=GIVE_TOKEN+str(token2.key))
         except ObjectDoesNotExist:
-            self.send_message(recipient=chat_id, message=cannot_give_token)
+            self.send_message(recipient=chat_id, message=CANNOT_GIVE_TOKEN)
 
     def nextstep(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
-        tg_user = models.Employe.objects.get(tg_user=update.message["chat"]["username"])
-        tg_user.username = update.message['text']
+        tg_user = models.Employe.objects.get(tg_id=chat_id)
+        tg_user.username = update.message.text
         tg_user.save()
-        self.send_message(recipient=chat_id, message=data_saved)
+        self.send_message(recipient=chat_id, message=DATA_SAVED)
         return END
 

@@ -6,10 +6,10 @@ from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, B
 #
 #     def setUp(self):
 #         self.organization = OrganizationFactory()
-#         self.tg_user = TelegramUserFactory(telegram_id=941151624)
-#         self.employee = EmployeeFactory(organization_id=self.organization, tg_user=self.tg_user)
-#         self.tg_chat = TelegramChatFactory(telegram_id=self.employee.tg_user.telegram_id)
-#         self.state = TelegramStateFactory(telegram_chat=self.tg_chat, telegram_user=self.employee.tg_user)
+#         self.tg_username = TelegramUserFactory(telegram_id=941151624)
+#         self.employee = EmployeeFactory(organization_id=self.organization, tg_username=self.tg_username)
+#         self.tg_chat = TelegramChatFactory(telegram_id=self.employee.tg_username.telegram_id)
+#         self.state = TelegramStateFactory(telegram_chat=self.tg_chat, telegram_user=self.employee.tg_username)
 #         self.transaction = BalanceChangeFactory(employe=self.employee)
 #
 #     def test_proper_message(self):

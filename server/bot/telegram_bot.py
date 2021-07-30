@@ -1,9 +1,6 @@
 from telegram import Bot
-from telegram import Update
-from telegram.ext import CallbackContext, ConversationHandler
 from telegram.ext import Updater
 from telegram.utils.request import Request
-
 from server.settings import TOKEN, LISTEN_WEBHOOK, WEBHOOK_PORT
 
 
