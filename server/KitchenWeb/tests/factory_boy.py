@@ -1,7 +1,6 @@
 import factory
 from KitchenWeb.models import Category, Offering, Dish, Garnish, Additional
 import random
-
 from accounts.models import Organization, Employe, UserToken, BalanceChange
 from KitchenWeb.models import Supplement
 from kitchen5bot.models import TelegramUser, TelegramChat, TelegramState
@@ -52,7 +51,7 @@ class EmployeeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Employe
 
-    tg_user = "test username"
+    tg_username = "testusername"
     tg_id = '3456789'
     organization_id = factory.SubFactory(OrganizationFactory)
     username = factory.Faker('name')
