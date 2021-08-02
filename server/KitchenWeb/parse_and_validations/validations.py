@@ -10,7 +10,7 @@ def is_organization(second_key):
 
 def is_user(user_id):
     try:
-        return models.Employe.objects.get(tg_user=user_id)
+        return models.Employee.objects.get(tg_user=user_id)
     except ObjectDoesNotExist:
         return None
 

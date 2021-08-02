@@ -34,12 +34,12 @@ class MainCommandsHandler(TelegramBot):
         if '/start ' in text:
             org = is_organization(deep_link_parce(text))
             if org:
-                if models.Employe.objects.filter(
+                if models.Employee.objects.filter(
                         tg_id=chat_id, organization_id=org
                 ).exists():
                     self.send_message(recipient=chat_id, message=USER_ALREADY_SIGNED_UP)
                 else:
-                    models.Employe.objects.create(
+                    models.Employee.objects.create(
                         tg_username=update.message.chat.username,
                         tg_id=chat_id,
                         organization_id=org
@@ -54,7 +54,7 @@ class MainCommandsHandler(TelegramBot):
     def restart(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
         try:
-            tg_user = models.Employe.objects.get(tg_id=chat_id)
+            tg_user = models.Employee.objects.get(tg_id=chat_id)
             if not tg_user.is_active:
                 tg_user.is_active = True
                 tg_user.save()
@@ -69,7 +69,7 @@ class MainCommandsHandler(TelegramBot):
     def stop(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
         try:
-            tg_user = models.Employe.objects.get(tg_id=chat_id)
+            tg_user = models.Employee.objects.get(tg_id=chat_id)
             if tg_user.is_active:
                 tg_user.is_active = False
                 tg_user.save()
@@ -82,7 +82,7 @@ class MainCommandsHandler(TelegramBot):
     def login(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
         try:
-            user = models.Employe.objects.get(tg_id=chat_id)
+            user = models.Employee.objects.get(tg_id=chat_id)
             if models.UserToken.objects.filter(user=user).exists():
                 self.send_message(recipient=chat_id, message=TOKEN_ALREADY_GIVEN)
             else:
@@ -94,7 +94,7 @@ class MainCommandsHandler(TelegramBot):
 
     def nextstep(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
-        tg_user = models.Employe.objects.get(tg_id=chat_id)
+        tg_user = models.Employee.objects.get(tg_id=chat_id)
         tg_user.username = update.message.text
         tg_user.save()
         self.send_message(recipient=chat_id, message=DATA_SAVED)

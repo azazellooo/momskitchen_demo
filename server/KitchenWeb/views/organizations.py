@@ -7,7 +7,7 @@ from django.views.generic import ListView, CreateView, UpdateView
 
 from KitchenWeb.forms import SearchForm, OrganizationForm, BalanceChangeForm
 from KitchenWeb.mixin import PermissionMixin
-from accounts.models import Organization, BalanceChange, Employe
+from accounts.models import Organization, BalanceChange, Employee
 
 
 class OrganizationsListView(PermissionMixin, ListView):
@@ -72,11 +72,11 @@ class OrganizationBalancePageView(PermissionMixin, UpdateView):
     form_class = BalanceChangeForm
 
     def form_valid(self, form):
-        employee = Employe.objects.get(pk=form.data.get('employee'))
+        employee = Employee.objects.get(pk=form.data.get('employee'))
         comment = form.data.get('comment')
         sum_balance = int(form.data.get('sum_balance'))
 
-        b = BalanceChange.objects.create(employe=employee,
+        b = BalanceChange.objects.create(employee=employee,
                                      comment=comment,
                                      type=form.data.get('type'),
                                      sum_balance=form.data.get('sum_balance'))

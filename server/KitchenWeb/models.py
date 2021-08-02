@@ -100,7 +100,7 @@ class Offering(BaseModel):
 
 
 class Basket(models.Model):
-    user = models.ForeignKey('accounts.Employe', blank=False, null=False, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='basket_user')
+    user = models.ForeignKey('accounts.Employee', blank=False, null=False, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='basket_user')
     offering = models.ForeignKey('KitchenWeb.Offering', blank=False, null=False, verbose_name='Предложение', on_delete=models.CASCADE, related_name='basket_offering')
     is_confirmed = models.BooleanField(default=False, blank=False, null=False)
 
@@ -114,7 +114,7 @@ class Basket(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey('accounts.Employe', blank=False, null=False, verbose_name='Пользователь',
+    user = models.ForeignKey('accounts.Employee', blank=False, null=False, verbose_name='Пользователь',
                              on_delete=models.CASCADE, related_name='order_user')
     offering = models.ForeignKey('KitchenWeb.Offering', blank=False, null=False, verbose_name='Предложение',
                                  on_delete=models.CASCADE, related_name='order_offering')

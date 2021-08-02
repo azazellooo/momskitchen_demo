@@ -3,8 +3,8 @@ from django.views.generic import DetailView, TemplateView, UpdateView, ListView
 from django.urls import reverse
 from django.views.generic.list import MultipleObjectMixin
 
-from accounts.forms import EmployeForm
-from accounts.models import Employe, UserToken, BalanceChange
+from accounts.forms import EmployeeForm
+from accounts.models import Employee, UserToken, BalanceChange
 from accounts.tasks import drop_time_token, validation_token
 
 
@@ -31,7 +31,7 @@ class UserProfileView(TemplateView):
         else:
             drop_time_token(request.session['token'], request.session.session_key)
             user_token = get_object_or_404(UserToken, key=request.session['token'])
-        self.user = get_object_or_404(Employe, user_token=user_token)
+        self.user = get_object_or_404(Employee, user_token=user_token)
         return super().get(request, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -42,17 +42,17 @@ class UserProfileView(TemplateView):
 
 class UserUpdateView(UpdateView):
     template_name = 'accounts/update.html'
-    form_class = EmployeForm
+    form_class = EmployeeForm
     context_object_name = 'user'
 
     def get_object(self):
         drop_time_token(self.request.session['token'], self.request.session.session_key)
         self.user_token = get_object_or_404(UserToken, key=self.request.session['token'])
-        self.user = get_object_or_404(Employe, user_token=self.user_token)
+        self.user = get_object_or_404(Employee, user_token=self.user_token)
         return self.user
 
     def get_queryset(self):
-        queryset = Employe.objects.filter(id=self.user.id)
+        queryset = Employee.objects.filter(id=self.user.id)
         return queryset
 
     def get_success_url(self):
@@ -61,12 +61,12 @@ class UserUpdateView(UpdateView):
 
 class EmployeeTransactionHistoryView(DetailView, MultipleObjectMixin):
     template_name = 'accounts/transaction_history.html'
-    model = Employe
+    model = Employee
     paginate_by = 5
     paginate_orphans = 1
     context_object_name = 'employee'
 
     def get_context_data(self, **kwargs):
-        transactions = BalanceChange.objects.filter(employe=self.get_object()).order_by('-created_at')
+        transactions = BalanceChange.objects.filter(employee=self.get_object()).order_by('-created_at')
         context = super(EmployeeTransactionHistoryView, self).get_context_data(object_list=transactions, **kwargs)
         return context

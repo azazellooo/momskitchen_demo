@@ -1,15 +1,16 @@
 from django.shortcuts import render
 
-from accounts.models import UserToken, Employe
+from accounts.models import UserToken, Employee
 from datetime import datetime, timedelta
 from django.contrib.sessions.backends.db import SessionStore
 import pytz
 from django.utils import timezone
 
+
 def drop_time_token(token, key_session1):
     utc = pytz.UTC
     token_user = UserToken.objects.get(key=token)
-    finish_time = token_user.created_at.replace(tzinfo=utc) + timedelta(minutes=1)
+    finish_time = token_user.created_at.replace(tzinfo=utc) + timedelta(minutes=60)
     now = timezone.now()
     if now >= finish_time:
         s = SessionStore(session_key=key_session1)
