@@ -39,7 +39,7 @@ class Organization(models.Model):
         return self.name
 
 
-class Employe(models.Model):
+class Employee(models.Model):
     tg_username = models.CharField(max_length=128, null=False, blank=False, verbose_name='Юзернейм телеграм юзера')
     tg_id = models.CharField(max_length=128, null=False, blank=False, verbose_name='ID телеграм юзера')
     tg_firstname = models.CharField(max_length=128, null=True, blank=True, verbose_name='Имя телеграм юзера')
@@ -63,7 +63,7 @@ class Employe(models.Model):
 
 class BalanceChange(models.Model):
     type = models.CharField(max_length=200, choices=choice_types, blank=False, null=False, verbose_name='Тип')
-    employe = models.ForeignKey('accounts.Employe', on_delete=models.CASCADE, related_name='bal_em', verbose_name='Пользователь')
+    employee = models.ForeignKey('accounts.Employee', on_delete=models.CASCADE, related_name='bal_em', verbose_name='Пользователь')
     sum_balance = models.IntegerField(default=0, blank=False, null=False, verbose_name='Сумма', validators=[MinValueValidator(1)])
     comment = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Комментарий')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -96,7 +96,7 @@ class BalanceChange(models.Model):
 
 class UserToken(models.Model):
     key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
-    user = models.OneToOneField('accounts.Employe', on_delete=models.CASCADE, related_name='user_token')
+    user = models.OneToOneField('accounts.Employee', on_delete=models.CASCADE, related_name='user_token')
     created_at = models.DateTimeField(auto_now_add=True)
     activated = models.BooleanField(default=False)
 
