@@ -1,7 +1,7 @@
 from bot.handlers.main_commands import MainCommandsHandler
 from bot.tests.base_telegrambot import BaseBot
 from messages.bot_messages import *
-from accounts.models import Employe, UserToken
+from accounts.models import Employee, UserToken
 from KitchenWeb.tests.factory_boy import EmployeeFactory, UserTokenFactory
 
 class TestMainCommandsHandler(BaseBot):
@@ -63,7 +63,7 @@ class TestMainCommandsHandler(BaseBot):
         self.assertTrue(telegram.bot.send_message.called)
         args, message = telegram.bot.send_message.call_args
         self.assertEqual(message.get('text'), DATA_SAVED)
-        self.assertTrue(Employe.objects.filter(tg_username=self.my_user.tg_username, username='lola').exists())
+        self.assertTrue(Employee.objects.filter(tg_username=self.my_user.tg_username, username='lola').exists())
 
     def test_command_stop_not_real_user(self):
         update, context = self.send_bot_message('2345676789', '/stop')
@@ -77,7 +77,7 @@ class TestMainCommandsHandler(BaseBot):
         update, context = self.send_bot_message(self.my_user.tg_id, '/stop')
         telegram = self.get_telegram_instance()
         telegram.stop(update, context)
-        self.assertTrue(Employe.objects.filter(tg_username=self.my_user.tg_username, is_active=False).exists())
+        self.assertTrue(Employee.objects.filter(tg_username=self.my_user.tg_username, is_active=False).exists())
         self.assertTrue(telegram.bot.send_message.called)
         args, message = telegram.bot.send_message.call_args
         self.assertEqual(message.get('text'), MAILING_OFF)
@@ -87,7 +87,7 @@ class TestMainCommandsHandler(BaseBot):
         update, context = self.send_bot_message(my_user.tg_id, '/stop')
         telegram = self.get_telegram_instance()
         telegram.stop(update, context)
-        self.assertTrue(Employe.objects.filter(tg_username=my_user.tg_username, is_active=False).exists())
+        self.assertTrue(Employee.objects.filter(tg_username=my_user.tg_username, is_active=False).exists())
         self.assertTrue(telegram.bot.send_message.called)
         args, message = telegram.bot.send_message.call_args
         self.assertEqual(message.get('text'), MAILING_ALREADY_OFF)
@@ -105,7 +105,7 @@ class TestMainCommandsHandler(BaseBot):
         update, context = self.send_bot_message(my_user.tg_id, '/restart')
         telegram = self.get_telegram_instance()
         telegram.restart(update, context)
-        self.assertTrue(Employe.objects.filter(tg_username=my_user.tg_username, is_active=True).exists())
+        self.assertTrue(Employee.objects.filter(tg_username=my_user.tg_username, is_active=True).exists())
         self.assertTrue(telegram.bot.send_message.called)
         args, message = telegram.bot.send_message.call_args
         self.assertEqual(message.get('text'), WELCOME_BACK[0]+my_user.tg_username+WELCOME_BACK[1])
@@ -115,7 +115,7 @@ class TestMainCommandsHandler(BaseBot):
         update, context = self.send_bot_message(my_user.tg_id, '/restart')
         telegram = self.get_telegram_instance()
         telegram.restart(update, context)
-        self.assertTrue(Employe.objects.filter(tg_username=my_user.tg_username, is_active=True).exists())
+        self.assertTrue(Employee.objects.filter(tg_username=my_user.tg_username, is_active=True).exists())
         self.assertTrue(telegram.bot.send_message.called)
         args, message = telegram.bot.send_message.call_args
         self.assertEqual(message.get('text'), ALREADY_ACTIVE)
