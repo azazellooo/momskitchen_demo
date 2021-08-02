@@ -1,9 +1,15 @@
 from django import forms
 
-from accounts.models import Employe
+from accounts.models import Employee
 
 
-class EmployeForm(forms.ModelForm):
+class EmployeeForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(EmployeeForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control', 'style': 'width: 300px;'})
+
     class Meta:
-        model = Employe
+        model = Employee
         fields = ['username', 'is_active']
