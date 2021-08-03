@@ -1,0 +1,26 @@
+{% if not fields_only %}
+        <form action="{{ action_url }}" method="{{ form_method }}" enctype="{{ enctype }}" class="form-inline justify-content-center">
+            <div class="form-group">
+                {% csrf_token %}
+            {% endif %}
+                {% for error in form.non_field_errors %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+                {% for field in form %}
+                    <div class="form-group">
+                    <p><label for="{{ field.id_for_label }}">{{ field.label }}</label></p>
+
+                   {% for error in field.errors %}
+                       <p class="form-error">{{ error }}</p>
+                   {% endfor %}
+                   <p {% if field.errors %} class="form-field-error"{% endif %}>{{ field }}</p>
+                    <br>
+                    </div>
+                {% endfor %}
+            {% if not fields_only %}
+                <br/>
+             </div>
+            </form>
+
+
+{% endif %}
