@@ -1,6 +1,5 @@
 from django.contrib import admin
 from accounts.models import Organization, UserToken, BalanceChange, Employe
-from kitchen5bot.models import TelegramUser
 
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'secondary_key', 'generate_link']
@@ -39,9 +38,7 @@ class BalanceChangeAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'created_at']
 
 
-
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Employe, EmployeAdmin)
-admin.site.register(TelegramUser, UserTgAdmin)
 admin.site.register(UserToken, UserTokenAdmin)
 admin.site.register(BalanceChange, BalanceChangeAdmin)
