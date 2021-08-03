@@ -30,14 +30,14 @@ pip install -r requirements.txt
 ```
 
 Чтобы запустить бота выполните:
-- настройте webhook (https)
+- запустите ngrok 
+- скопируйте https ссылку
+- вставьте ссылку в server/settings.py в LISTEN_WEBHOOK
 
 ```bash
-./manage.py tgbotwebhook
+./manage.py startbot
 ```
-- введите название бота (без @)
-- далее вам предоставят 2 опции - выберите 1й
-- введите url проекта чтобы настроить webhook
+
 
 
 Для доступа в панель администратора перейдите по ссылке {url_проекта}/admin
