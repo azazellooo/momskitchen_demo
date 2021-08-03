@@ -1,8 +1,7 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import Client, RequestFactory
 import requests
-from accounts.models import Organization, Employee
-from kitchen5bot.models import TelegramUser
+from accounts.models import Organization
 from accounts.views import *
 
 
@@ -20,7 +19,7 @@ class CustomAuthMiddlewareTests(StaticLiveServerTestCase):
         #     'first_name': 'Begaiym',
         #     'username': 'monpassan'
         # })
-        self.web_user = Employee.objects.create(**{
+        self.web_user = Employe.objects.create(**{
             'tg_username': 'qwe',
             'tg_id': 123,
             'organization_id': self.organization,

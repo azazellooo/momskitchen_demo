@@ -5,8 +5,7 @@
 # import requests
 # from django.contrib.sessions.middleware import SessionMiddleware
 #
-# from accounts.models import Employee, UserToken, Organization
-# from kitchen5bot.models import TelegramUser
+# from accounts.models import Employe, UserToken, Organization
 # from django.test import TestCase, RequestFactory, LiveServerTestCase, Client
 # from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 # from django.urls import reverse

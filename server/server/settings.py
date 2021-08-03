@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'behave_django',
 
     # custom apps,
-    'kitchen5bot',
     'accounts',
     'KitchenWeb',
     'api',
