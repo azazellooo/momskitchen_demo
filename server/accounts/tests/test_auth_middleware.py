@@ -1,8 +1,7 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import Client, RequestFactory
 import requests
-from accounts.models import Organization, Employee
-from kitchen5bot.models import TelegramUser
+from accounts.models import Organization
 from accounts.views import *
 
 

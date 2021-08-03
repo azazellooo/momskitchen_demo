@@ -3,7 +3,7 @@ from KitchenWeb.models import Category, Offering, Dish, Garnish, Additional
 import random
 from accounts.models import Organization, Employee, UserToken, BalanceChange
 from KitchenWeb.models import Supplement
-from kitchen5bot.models import TelegramUser, TelegramChat, TelegramState
+
 
 
 class CategoryFactory(factory.django.DjangoModelFactory):

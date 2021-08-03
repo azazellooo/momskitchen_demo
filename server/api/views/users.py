@@ -2,14 +2,14 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import Employe, UserToken
+from accounts.models import Employee, UserToken
 from api.serializers.users import UsersSerializer
 
 
 class UsersApiView(APIView):
     def get_object(self, request, **kwargs):
         self.user = get_object_or_404(UserToken, key=kwargs['token'])
-        return get_object_or_404(Employe, user_token=self.user)
+        return get_object_or_404(Employee, user_token=self.user)
 
     def get(self, request, **kwargs):
         user = self.get_object(request, **kwargs)
