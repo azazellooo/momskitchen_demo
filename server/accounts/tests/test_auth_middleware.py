@@ -19,7 +19,7 @@ class CustomAuthMiddlewareTests(StaticLiveServerTestCase):
         #     'first_name': 'Begaiym',
         #     'username': 'monpassan'
         # })
-        self.web_user = Employe.objects.create(**{
+        self.web_user = Employee.objects.create(**{
             'tg_username': 'qwe',
             'tg_id': 123,
             'organization_id': self.organization,

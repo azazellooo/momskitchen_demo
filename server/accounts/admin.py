@@ -1,5 +1,5 @@
 from django.contrib import admin
-from accounts.models import Organization, UserToken, BalanceChange, Employe
+from accounts.models import Organization, UserToken, BalanceChange, Employee
 
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'secondary_key', 'generate_link']
@@ -9,7 +9,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'secondary_key']
 
 
-class EmployeAdmin(admin.ModelAdmin):
+class EmployeeAdmin(admin.ModelAdmin):
     list_display = ['id', 'tg_username', 'organization_id', 'username', 'is_active', 'total_balance', 'is_admin']
     list_filter = ['organization_id']
     search_fields = ['organization_id', 'username']
@@ -31,14 +31,14 @@ class UserTokenAdmin(admin.ModelAdmin):
 
 
 class BalanceChangeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'type', 'employe', 'sum_balance', 'created_at', 'balance_after_transaction']
-    list_filter = ['type', 'employe']
-    search_fields = ['type', 'employe']
-    fields = ['id', 'type', 'employe', 'sum_balance', 'comment', 'created_at']
+    list_display = ['id', 'type', 'employee', 'sum_balance', 'created_at', 'balance_after_transaction']
+    list_filter = ['type', 'employee']
+    search_fields = ['type', 'employee']
+    fields = ['id', 'type', 'employee', 'sum_balance', 'comment', 'created_at']
     readonly_fields = ['id', 'created_at']
 
 
 admin.site.register(Organization, OrganizationAdmin)
-admin.site.register(Employe, EmployeAdmin)
+admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(UserToken, UserTokenAdmin)
 admin.site.register(BalanceChange, BalanceChangeAdmin)
