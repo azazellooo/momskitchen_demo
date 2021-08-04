@@ -9,6 +9,12 @@ BASE_URL = 'http://t.me/MommyKitchenbot/'
 
 choice_types = [('accrual', 'Начисление'), ('write-off', 'Списание')]
 
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
 
 class Organization(models.Model):
     PAYMENT_TYPES = [('actual', 'фактический расчет'), ('cumulative', 'накопительный расчет')]
@@ -72,6 +78,15 @@ class BalanceChange(models.Model):
         verbose_name = 'Изменение Баланса'
         verbose_name_plural = 'Изменение Балансов'
 
+class Review(BaseModel):
+    user_company = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE, related_name='review_company', verbose_name='Компания пользователя')
+    user_name = models.ForeignKey('accounts.Employee', on_delete=models.CASCADE, related_name='review_name', verbose_name='имя пользователя')
+    text_review = models.TextField(max_length=500, blank=False, null=False, verbose_name='текст отзыва')
+
+    class Meta:
+        db_table = 'Reviews'
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
 
 # @receiver(post_save, sender=BalanceChange)
 # def send_notification(sender, instance, created, **kwargs):
