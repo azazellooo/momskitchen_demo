@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import TextInput, EmailInput
 
-from KitchenWeb.models import Supplement, Dish, Category, Garnish, Additional, Offering
+from KitchenWeb.models import Supplement, Dish, Category, Garnish, Additional, Offering, Command
 from accounts.models import Organization, BalanceChange
 
 
@@ -126,3 +126,38 @@ class BalanceChangeForm(forms.ModelForm):
 
 
 
+class OrderCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Command
+        fields = ('organization', 'text')
+
+
+class OrderReminderForm(forms.ModelForm):
+
+    class Meta:
+        model = Command
+        fields = ('organization', 'text')
+
+
+
+class OrderCloseForm(forms.ModelForm):
+
+    class Meta:
+        model = Command
+        fields = ('organization',)
+
+
+class DeliveryArrivalForm(forms.ModelForm):
+
+    class Meta:
+        model = Command
+        fields = ('organization', 'text')
+
+
+class NotificationForm(forms.ModelForm):
+    text = forms.CharField(max_length=250, required=True)
+
+    class Meta:
+        model = Command
+        fields = ('organization', 'text')
