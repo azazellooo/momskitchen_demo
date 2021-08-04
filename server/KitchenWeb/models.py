@@ -129,3 +129,14 @@ class Order(models.Model):
         return f'{self.user} - {self.offering} : {self.created_at}'
 
 
+class Command(models.Model):
+    organization = models.ForeignKey('accounts.Organization', blank=False, null=False, related_name='commands', on_delete=models.PROTECT, verbose_name='Организации')
+    text = models.TextField(max_length=500, blank=True, null=True, verbose_name='Текст')
+
+    class Meta:
+        db_table = 'commands'
+        verbose_name = 'Команда'
+        verbose_name_plural = 'Команды'
+
+    def __str__(self):
+        return f'{self.title}-{self.text}'

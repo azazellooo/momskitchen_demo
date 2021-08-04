@@ -38,6 +38,8 @@ from KitchenWeb.views.position import (
     PositionListView, PositionDetailUpdateView,
 )
 
+from KitchenWeb.views.commands import CommandSendView
+
 app_name = 'kitchen'
 
 organization_urls = [
@@ -69,7 +71,13 @@ kitchen_urls = [
 
 ]
 
+commands_urls = [
+    path('', CommandSendView.as_view(), name='commands')
+]
+
+
 urlpatterns = [
     path("organizations/", include(organization_urls)),
     path('kitchen/', include(kitchen_urls)),
+    path('commands/', include(commands_urls)),
 ]
