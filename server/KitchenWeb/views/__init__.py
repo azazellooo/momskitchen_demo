@@ -10,3 +10,7 @@ from KitchenWeb.views.position import PositionCreateView
 from KitchenWeb.views.garnish_create import GarnishCreateView
 
 from KitchenWeb.views.category import CategoryListView
+
+from KitchenWeb.views.commands import CommandSendView
+
+
