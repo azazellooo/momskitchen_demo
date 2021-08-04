@@ -67,7 +67,6 @@ kitchen_urls = [
     path('offering/create/', OfferingCreateView.as_view(), name='offering_create'),
     path('offering/list/', OfferingListView.as_view(), name='offering_list'),
     path('offering/<int:pk>/', OfferingDetailUpdateView.as_view(), name='offering-detail'),
-    path('orders/list/', OrderListView.as_view(), name='order_list'),
     path('offering/<str:date>/<uuid:token>/', OfferingListViewForDate.as_view(), name='offering-list-for-date')
 
 ]
