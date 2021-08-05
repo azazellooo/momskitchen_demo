@@ -44,6 +44,7 @@ class ReviewAdmin(admin.ModelAdmin):
     fields = ['id', 'user_name', 'text_review']
     readonly_fields = ['id', ]
 
+
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(UserToken, UserTokenAdmin)

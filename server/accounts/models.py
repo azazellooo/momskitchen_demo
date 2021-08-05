@@ -87,6 +87,7 @@ class Review(BaseModel):
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
 
+
 # @receiver(post_save, sender=BalanceChange)
 # def send_notification(sender, instance, created, **kwargs):
 #     transaction = instance
