@@ -2,9 +2,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, TemplateView, UpdateView, ListView
 from django.urls import reverse
 from django.views.generic.list import MultipleObjectMixin
-
+from KitchenWeb.mixin import PermissionMixin
 from accounts.forms import EmployeeForm
-from accounts.models import Employee, UserToken, BalanceChange
+from accounts.models import Employee, UserToken, BalanceChange, Review
 from accounts.tasks import drop_time_token, validation_token
 
 
@@ -70,3 +70,14 @@ class EmployeeTransactionHistoryView(DetailView, MultipleObjectMixin):
         transactions = BalanceChange.objects.filter(employee=self.get_object()).order_by('-created_at')
         context = super(EmployeeTransactionHistoryView, self).get_context_data(object_list=transactions, **kwargs)
         return context
+
+class ReviewListView(PermissionMixin, ListView):
+    template_name = 'review/list.html'
+    model = Review
+    ordering = ['-created_at']
+    paginate_by = 5
+    paginate_orphans = 1
+    context_object_name = 'reviews'
+
+
+
