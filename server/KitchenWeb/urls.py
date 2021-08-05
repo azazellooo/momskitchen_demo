@@ -65,7 +65,7 @@ kitchen_urls = [
     path('additional/<int:pk>/', AdditionalDetailUpdateView.as_view(), name='additional_detail_update'),
     path('offering/create/', OfferingCreateView.as_view(), name='offering_create'),
     path('offering/list/', OfferingListView.as_view(), name='offering_list'),
-    path('offering/<int:pk>/', OfferingDetailUpdateView.as_view(), name='offering-detail'),
+    path('offering/<int:pk>/', OfferingDetailUpdateView.as_view(), name='offering-detail')
 
 ]
 
