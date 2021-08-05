@@ -38,11 +38,11 @@ class BalanceChangeAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'created_at']
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user_name', 'text_review']
+    list_display = ['id', 'user_name', 'text_review', 'created_at', 'updated_at']
     list_filter = ['user_name',]
     search_fields = ['user_name',]
-    fields = ['id', 'user_name', 'text_review']
-    readonly_fields = ['id', ]
+    fields = ['id', 'user_name', 'text_review', 'created_at', 'updated_at']
+    readonly_fields = ['id', 'created_at', 'updated_at']
 
 
 admin.site.register(Organization, OrganizationAdmin)
