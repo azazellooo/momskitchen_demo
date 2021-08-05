@@ -1,5 +1,5 @@
 from django.contrib import admin
-from accounts.models import Organization, UserToken, BalanceChange, Employee
+from accounts.models import Organization, UserToken, BalanceChange, Employee, Review
 
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'secondary_key', 'generate_link']
@@ -37,8 +37,15 @@ class BalanceChangeAdmin(admin.ModelAdmin):
     fields = ['id', 'type', 'employee', 'sum_balance', 'comment', 'created_at']
     readonly_fields = ['id', 'created_at']
 
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user_name', 'text_review']
+    list_filter = ['user_name',]
+    search_fields = ['user_name',]
+    fields = ['id', 'user_name', 'text_review']
+    readonly_fields = ['id', ]
 
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(UserToken, UserTokenAdmin)
+admin.site.register(Review, ReviewAdmin)
 admin.site.register(BalanceChange, BalanceChangeAdmin)

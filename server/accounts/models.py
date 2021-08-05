@@ -79,7 +79,6 @@ class BalanceChange(models.Model):
         verbose_name_plural = 'Изменение Балансов'
 
 class Review(BaseModel):
-    user_company = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE, related_name='review_company', verbose_name='Компания пользователя')
     user_name = models.ForeignKey('accounts.Employee', on_delete=models.CASCADE, related_name='review_name', verbose_name='имя пользователя')
     text_review = models.TextField(max_length=500, blank=False, null=False, verbose_name='текст отзыва')
 
@@ -116,4 +115,6 @@ class UserToken(models.Model):
         db_table = 'UserTokens'
         verbose_name = 'Токен пользователя'
         verbose_name_plural = 'Токены Пользователей'
+
+
 
