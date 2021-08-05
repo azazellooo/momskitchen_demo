@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, TemplateView, UpdateView, ListView
 from django.urls import reverse
@@ -29,10 +30,16 @@ class UserProfileView(TemplateView):
             else:
                 return redirect('invalid_token')
         else:
-            drop_time_token(request.session['token'], request.session.session_key)
-            user_token = get_object_or_404(UserToken, key=request.session['token'])
-        self.user = get_object_or_404(Employee, user_token=user_token)
+            try:
+                drop_time_token(request.session['token'], request.session.session_key)
+                user_token = get_object_or_404(UserToken, key=request.session['token'])
+                self.user = get_object_or_404(Employee, user_token=user_token)
+            except KeyError:
+                return HttpResponse('Unauthorized', status=401)
+
         return super().get(request, **kwargs)
+
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
