@@ -1,7 +1,7 @@
 from bot.handlers.main_commands import MainCommandsHandler
 from bot.tests.base_telegrambot import BaseBot
 from messages.bot_messages import *
-from accounts.models import Employee, UserToken
+from accounts.models import Employee, UserToken, Review
 from KitchenWeb.tests.factory_boy import EmployeeFactory, UserTokenFactory
 
 class TestMainCommandsHandler(BaseBot):
@@ -23,6 +23,7 @@ class TestMainCommandsHandler(BaseBot):
         return update, context
 
     def test_command_start_not_deep_link(self):
+        self.my_user = EmployeeFactory()
         update, context = self.send_bot_message(self.my_user.tg_id, '/start')
         telegram = self.get_telegram_instance()
         telegram.start(update, context)
@@ -31,6 +32,7 @@ class TestMainCommandsHandler(BaseBot):
         self.assertEqual(message.get('text'), USER_NOT_FOUND)
 
     def test_command_start_invalid_link(self):
+        self.my_user = EmployeeFactory()
         update, context = self.send_bot_message(self.my_user.tg_id, self.my_invalid_link)
         telegram = self.get_telegram_instance()
         telegram.start(update, context)
@@ -39,6 +41,7 @@ class TestMainCommandsHandler(BaseBot):
         self.assertEqual(message.get('text'), INVALID_LINK)
 
     def test_command_start_user_already_signed_up(self):
+        self.my_user = EmployeeFactory()
         EmployeeFactory(tg_username='qwe', tg_id=self.my_user.tg_id, organization_id=self.my_organization)
         update, context = self.send_bot_message(self.my_user.tg_id, self.my_deep_link)
         telegram = self.get_telegram_instance()
@@ -48,6 +51,7 @@ class TestMainCommandsHandler(BaseBot):
         self.assertEqual(message.get('text'), USER_ALREADY_SIGNED_UP)
 
     def test_command_start_real_user(self):
+        self.my_user = EmployeeFactory()
         update, context = self.send_bot_message(self.my_user.tg_id, self.my_deep_link)
         telegram = self.get_telegram_instance()
         telegram.start(update, context)
@@ -57,6 +61,7 @@ class TestMainCommandsHandler(BaseBot):
         self.assertTrue(telegram.bot.send_message.call_args.reply_markup is not None)
 
     def test_command_start_nextstep(self):
+        self.my_user = EmployeeFactory()
         update, context = self.send_bot_message(self.my_user.tg_id, 'lola')
         telegram = self.get_telegram_instance()
         telegram.nextstep(update, context)
@@ -74,6 +79,7 @@ class TestMainCommandsHandler(BaseBot):
         self.assertEqual(message.get('text'), USER_NOT_FOUND)
 
     def test_command_stop_real_user_active(self):
+        self.my_user = EmployeeFactory()
         update, context = self.send_bot_message(self.my_user.tg_id, '/stop')
         telegram = self.get_telegram_instance()
         telegram.stop(update, context)
@@ -129,14 +135,16 @@ class TestMainCommandsHandler(BaseBot):
         self.assertEqual(message.get('text'), CANNOT_GIVE_TOKEN)
 
     def test_command_login_real_user_without_token(self):
+        self.my_user = EmployeeFactory()
         update, context = self.send_bot_message(self.my_user.tg_id, '/login')
         telegram = self.get_telegram_instance()
         telegram.login(update, context)
         self.assertTrue(telegram.bot.send_message.called)
         args, message = telegram.bot.send_message.call_args
-        self.assertEqual(message.get('text'), GIVE_TOKEN+str((UserToken.objects.get(user=self.my_user)).key))
+        self.assertEqual(message.get('text'), GIVE_TOKEN+str((UserToken.objects.get(user=self.my_user)).key)+'/')
 
     def test_command_login_real_user_with_token(self):
+        self.my_user = EmployeeFactory()
         UserTokenFactory(user=self.my_user)
         update, context = self.send_bot_message(self.my_user.tg_id, '/login')
         telegram = self.get_telegram_instance()
@@ -146,6 +154,35 @@ class TestMainCommandsHandler(BaseBot):
         self.assertEqual(message.get('text'), TOKEN_ALREADY_GIVEN)
         self.assertTrue(UserToken.objects.filter(user=self.my_user).exists())
 
+
+    def test_command_review_admin_success(self):
+        self.my_user = EmployeeFactory()
+        update, context = self.send_bot_message(self.my_user.tg_id, '/review')
+        telegram = self.get_telegram_instance()
+        telegram.review(update, context)
+        self.assertTrue(telegram.bot.send_message.called)
+        args, message = telegram.bot.send_message.call_args
+        print(telegram.bot.send_message.call_args)
+        self.assertEqual(message.get('text'), REVIEW_ADMIN_SUCCESS)
+
+
+    def test_command_review_success(self):
+        my_user = EmployeeFactory(tg_username='qwe', tg_id='123', is_admin=False, organization_id=self.my_organization)
+        update, context = self.send_bot_message(my_user.tg_id, '/review')
+        telegram = self.get_telegram_instance()
+        telegram.review(update, context)
+        self.assertTrue(telegram.bot.send_message.called)
+        args, message = telegram.bot.send_message.call_args
+        self.assertTrue(Review.objects.filter(user_name=my_user).exists())
+        self.assertEqual(message.get('text'), REVIEW_SUCCESS)
+
+    def test_command_review_not_real_user(self):
+        update, context = self.send_bot_message('111', '/review')
+        telegram = self.get_telegram_instance()
+        telegram.review(update, context)
+        self.assertTrue(telegram.bot.send_message.called)
+        args, message = telegram.bot.send_message.call_args
+        self.assertEqual(message.get('text'), USER_NOT_FOUND)
 
 
 
