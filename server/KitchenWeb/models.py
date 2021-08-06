@@ -130,7 +130,7 @@ class Order(models.Model):
 
 
 class Command(models.Model):
-    organization = models.ForeignKey('accounts.Organization', blank=False, null=False, related_name='commands', on_delete=models.PROTECT, verbose_name='Организации')
+    organization = models.ManyToManyField('accounts.Organization', blank=False, null=False, related_name='commands', verbose_name='Организации')
     text = models.TextField(max_length=500, blank=True, null=True, verbose_name='Текст')
 
     class Meta:
