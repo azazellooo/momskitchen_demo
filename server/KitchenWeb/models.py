@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
@@ -89,6 +89,8 @@ class Offering(BaseModel):
     additional = models.ManyToManyField('KitchenWeb.Additional', blank=True, null=True, verbose_name='Дополнения',  related_name='offering_additional')
     qty_portion = models.IntegerField(blank=False, null=False, default=0)
     date = models.DateField(blank=False, null=False, verbose_name='Дата')
+    special_offering = models.BooleanField(default=False, blank=False, null=False)
+    discount = models.IntegerField(default=False, blank=False, null=False, validators=(MinValueValidator(1), MaxValueValidator(30)))
 
     class Meta:
         db_table = 'offerings'
