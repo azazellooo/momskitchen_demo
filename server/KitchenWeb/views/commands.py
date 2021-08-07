@@ -59,8 +59,8 @@ class CommandSendView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         post_data = dict(request.POST)
-        if list(request.POST)[1] == 'notification_form-organization':
+        if 'notification_form-organization' in list(post_data):
             self.notify(post_data.get('notification_form-organization'), post_data.get('notification_form-text')[0])
-        if list(request.POST)[1] == 'create_form-organization':
+        if 'create_form-organization' in list(post_data):
             self.announce_new_offering(post_data.get('create_form-organization'), post_data.get('create_form-text'))
         return redirect(reverse("kitchen:commands"))
