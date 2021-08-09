@@ -4,6 +4,8 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 
 from telegram import ParseMode
+from telegram.constants import PARSEMODE_MARKDOWN, PARSEMODE_HTML
+from telegram.error import BadRequest
 
 from KitchenWeb.forms import OrderCreateForm, OrderCloseForm, OrderReminderForm, NotificationForm, DeliveryArrivalForm
 from accounts.models import Organization, UserToken, Employee
@@ -51,11 +53,15 @@ class CommandSendView(TemplateView):
         messages.add_message(self.request, messages.SUCCESS, f'отправлено уведомление о новом предложении организациям: {org_names}')
 
     def notify(self, organizations, message):
-        for org in organizations:
-            for employee in Organization.objects.get(id=org).employe_org.filter(is_active=True, is_admin=False):
-                bot.send_message(recipient=employee.tg_id, message=message)
         org_names = [Organization.objects.get(id=o).name for o in organizations]
-        messages.add_message(self.request, messages.SUCCESS, f'отправлено уведомление {message} организациям: {org_names}')
+        for org in organizations:
+            for employee in Organization.objects.get(id=org).employe_org.filter(is_active=True):
+                try:
+                    bot.send_message(recipient=employee.tg_id, message=message, parse_mode=PARSEMODE_MARKDOWN)
+                    messages.add_message(self.request, messages.SUCCESS,
+                                         f'отправлено уведомление {message} организациям: {org_names}')
+                except BadRequest:
+                    messages.add_message(self.request, messages.ERROR, 'сообщение не отправлено')
 
     def post(self, request, *args, **kwargs):
         post_data = dict(request.POST)
