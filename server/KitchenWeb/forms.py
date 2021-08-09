@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import TextInput, EmailInput
+from markdownx.fields import MarkdownxFormField
 
 from KitchenWeb.models import Supplement, Dish, Category, Garnish, Additional, Offering, Command
 from accounts.models import Organization, BalanceChange
@@ -156,7 +157,7 @@ class DeliveryArrivalForm(forms.ModelForm):
 
 
 class NotificationForm(forms.ModelForm):
-    text = forms.CharField(max_length=250, required=True)
+    text = MarkdownxFormField()
 
     class Meta:
         model = Command
