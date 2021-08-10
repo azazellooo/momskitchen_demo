@@ -42,6 +42,8 @@ from KitchenWeb.views.basket import (
     cart_create, confirm_cart, search_off_in_cart_and_delete, delete_view_cart
 )
 
+from KitchenWeb.views.commands import CommandSendView
+
 app_name = 'kitchen'
 
 organization_urls = [
@@ -78,7 +80,13 @@ kitchen_urls = [
 
 ]
 
+commands_urls = [
+    path('', CommandSendView.as_view(), name='commands')
+]
+
+
 urlpatterns = [
     path("organizations/", include(organization_urls)),
     path('kitchen/', include(kitchen_urls)),
+    path('commands/', include(commands_urls)),
 ]

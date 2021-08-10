@@ -139,3 +139,14 @@ class Order(models.Model):
         return f'{self.user} - {self.offering}'
 
 
+class Command(models.Model):
+    organization = models.ManyToManyField('accounts.Organization', blank=False, null=False, related_name='commands', verbose_name='Организации')
+    text = models.TextField(max_length=500, blank=True, null=True, verbose_name='Текст')
+
+    class Meta:
+        db_table = 'commands'
+        verbose_name = 'Команда'
+        verbose_name_plural = 'Команды'
+
+    def __str__(self):
+        return f'{self.title}-{self.text}'

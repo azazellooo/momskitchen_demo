@@ -13,8 +13,10 @@ class UserProfileView(TemplateView):
     template_name = 'accounts/profile.html'
 
     def get(self, request, **kwargs):
+        slug = kwargs.get('slug')
         if kwargs:
             val_tok = validation_token(kwargs['token'])
+            slug = kwargs.get('slug')
             if val_tok == True:
                 status = UserToken.objects.get(key=kwargs['token'])
                 if status.activated == False:
@@ -24,8 +26,14 @@ class UserProfileView(TemplateView):
                     request.session['token'] = str(token)
                     user_token.activated = True
                     user_token.save()
+                    if slug == 'to-offerings':
+                        request.session['token'] = str(kwargs.get('token'))
+                        return redirect('kitchen:offering_list')
                     return redirect('profile_distoken')
                 else:
+                    if slug == 'to-offerings':
+                        request.session['token'] = str(kwargs.get('token'))
+                        return redirect('kitchen:offering_list')
                     return redirect('disposability_error')
             else:
                 return redirect('invalid_token')

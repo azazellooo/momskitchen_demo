@@ -3,7 +3,7 @@ from accounts.tasks import one_time_transition, code_red_token
 from accounts.views import UserProfileView, UserUpdateView, EmployeeTransactionHistoryView, ReviewListView
 
 urlpatterns = [
-    path('<uuid:token>/', UserProfileView.as_view(), name='profile'),
+    path('<uuid:token>/<slug:slug>', UserProfileView.as_view(), name='profile'),
     path('', UserProfileView.as_view(), name='profile_distoken'),
     path('update/', UserUpdateView.as_view(), name='user_update'),
     path('<int:pk>/transactions/', EmployeeTransactionHistoryView.as_view(), name='employee-transactions'),

@@ -13,6 +13,8 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.contrib.messages import constants as messages
+
 import server
 from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,8 +32,9 @@ DEBUG = config('DEBUG')
 ALLOWED_HOSTS = ['*']
 
 TOKEN = '1920485677:AAHivPLMmhSxzUejTdvmIG1QV6YFFeDB4nY'
-LISTEN_WEBHOOK = 'https://761d98ccac72.ngrok.io'
-WEBHOOK_PORT = 8000
+# LISTEN_WEBHOOK = 'https://761d98ccac72.ngrok.io'
+LISTEN_WEBHOOK = "https://d23a719c76f9.ngrok.io"
+WEBHOOK_PORT = 8080
 
 # Application definition
 
@@ -47,7 +50,7 @@ INSTALLED_APPS = [
     'django_tgbot',
     'rest_framework',
     'behave_django',
-
+    'markdownx',
     # custom apps,
     'accounts',
     'KitchenWeb',
@@ -154,6 +157,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+    messages.SUCCESS: 'success',
+}
 
 
 
