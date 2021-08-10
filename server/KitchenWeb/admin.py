@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Supplement, Dish, Garnish, Additional, Offering
+from .models import Category, Supplement, Dish, Garnish, Additional, Offering, Cart, Order, OrderOffernig
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -17,6 +17,7 @@ class SupplementAdmin(admin.ModelAdmin):
     fields = ['id', 'name', 'price']
     readonly_fields = ['id', ]
 
+
 class DishAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'description', 'category', 'image', 'base_price', 'extra_price']
     list_filter = ['name']
@@ -32,6 +33,7 @@ class GarnishAdmin(admin.ModelAdmin):
     fields = ['id', 'name', 'order', 'base_price', 'extra_price']
     readonly_fields = ['id', ]
 
+
 class AdditionalAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'sampling_order', 'base_price', 'extra_price']
     list_filter = ['name']
@@ -44,8 +46,37 @@ class OfferingAdmin(admin.ModelAdmin):
     list_display = ['id', 'position', 'qty_portion', 'date']
     list_filter = ['date']
     search_fields = ['position']
-    fields = ['id', 'position', 'garnish', 'supplement', 'additional', 'qty_portion', 'date']
+    fields = ['id', 'position', 'qty_portion', 'date']
     readonly_fields = ['id', ]
+
+# class OfferingGarnishAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'offering_id', 'garnish_id']
+#     list_filter = ['offering_id']
+#     search_fields = ['offering_id']
+#     fields = ['id', 'offering_id', 'garnish_id']
+#     readonly_fields = ['id']
+
+
+class BasketAdmin(admin.ModelAdmin):
+    list_display = ['id', 'offering', 'user']
+    fields = ['id', 'offering', 'user', 'qty', 'price', 'portions']
+    search_fields = ['user']
+    readonly_fields = ['id']
+
+
+class OrderOffernigAdmin(admin.ModelAdmin):
+    list_display = ['id', 'offering', 'order']
+    fields = ['id', 'offering', 'order', 'qty', 'price', 'portions']
+    search_fields = ['user']
+    readonly_fields = ['id']
+
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'created_at']
+    fields = ['id', 'user', 'created_at']
+    search_fields = ['user']
+    readonly_fields = ['id', 'created_at']
+
 
 
 admin.site.register(Dish, DishAdmin)
@@ -54,4 +85,7 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Garnish, GarnishAdmin)
 admin.site.register(Additional, AdditionalAdmin)
 admin.site.register(Offering, OfferingAdmin)
-
+admin.site.register(Cart, BasketAdmin)
+admin.site.register(Order, OrderAdmin)
+admin.site.register(OrderOffernig, OrderOffernigAdmin)
+# admin.site.register(offerings_garnish)
