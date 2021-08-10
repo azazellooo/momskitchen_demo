@@ -158,3 +158,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 TEMPLATES[0]['OPTIONS']['context_processors'].append("global_user.templatetags.context_processors.check_admin")
+TEMPLATES[0]['OPTIONS']['context_processors'].append("global_user.templatetags.context_processors.offering_in_cart")
