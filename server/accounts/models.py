@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinLengthValidator, MinValueValidator
 import uuid
-
+from bot.telegram_bot import TelegramBot
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -71,15 +71,31 @@ class BalanceChange(models.Model):
     comment = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Комментарий')
     created_at = models.DateTimeField(auto_now_add=True)
     balance_after_transaction = models.IntegerField(blank=True, null=True)
-    notification_text = models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
         db_table = 'BalanceChange'
         verbose_name = 'Изменение Баланса'
         verbose_name_plural = 'Изменение Балансов'
 
+
+@receiver(post_save, sender=BalanceChange)
+def send_notification(sender, instance, created, **kwargs):
+    transaction = instance
+    employee = transaction.employee
+    chat_user_id = employee.tg_id
+    bot = TelegramBot()
+    if created:
+        if transaction.type == 'accrual':
+            current_balance = employee.total_balance + int(transaction.sum_balance)
+            message = f'на ваш баланс было начислено {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}'
+            bot.send_message(recipient=chat_user_id,message=message)
+        else:
+            current_balance = employee.total_balance - int(transaction.sum_balance)
+            message = f'С Вашего баланса было списано {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}'
+            bot.send_message(recipient=chat_user_id, message=message)
+
+
 class Review(BaseModel):
-    user_company = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE, related_name='review_company', verbose_name='Компания пользователя')
     user_name = models.ForeignKey('accounts.Employee', on_delete=models.CASCADE, related_name='review_name', verbose_name='имя пользователя')
     text_review = models.TextField(max_length=500, blank=False, null=False, verbose_name='текст отзыва')
 
@@ -88,22 +104,6 @@ class Review(BaseModel):
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
 
-# @receiver(post_save, sender=BalanceChange)
-# def send_notification(sender, instance, created, **kwargs):
-#     transaction = instance
-#     employee = transaction.employe
-#     chat_user_id = employee.tg_username.telegram_id
-#     if created:
-#         if transaction.type == 'accrual':
-#             current_balance = employee.total_balance + int(transaction.sum_balance)
-#             message = bot.sendMessage(chat_user_id,
-#                             f'на ваш баланс было начислено {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}')
-#             transaction.notification_text = message.get_text()
-#         else:
-#             current_balance = employee.total_balance - int(transaction.sum_balance)
-#             message = bot.sendMessage(chat_user_id,
-#                             f'С Вашего баланса было списано {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}')
-#             transaction.notification_text = message.get_text()
 
 
 class UserToken(models.Model):
@@ -116,4 +116,6 @@ class UserToken(models.Model):
         db_table = 'UserTokens'
         verbose_name = 'Токен пользователя'
         verbose_name_plural = 'Токены Пользователей'
+
+
 

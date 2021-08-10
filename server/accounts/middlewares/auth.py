@@ -34,7 +34,7 @@ class CustomAuthMiddleware(MiddlewareMixin):
                 token = self.get_user_token(session_token)
                 if token:
                     utc = pytz.UTC
-                    finish_time = token.created_at.replace(tzinfo=utc) + datetime.timedelta(minutes=60)
+                    finish_time = token.created_at.replace(tzinfo=utc) + datetime.timedelta(hours=36)
                     now = timezone.now()
                     if now >= finish_time:
                         session_data = SessionStore(session_key=request.session.session_key)

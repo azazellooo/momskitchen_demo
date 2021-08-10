@@ -22,8 +22,16 @@ class TestMainCommandsHandler(BaseBot):
         )
         return update, context
 
-    def test_command_start_not_deep_link(self):
+    def test_command_start_not_deep_link_real_user(self):
         update, context = self.send_bot_message(self.my_user.tg_id, '/start')
+        telegram = self.get_telegram_instance()
+        telegram.start(update, context)
+        self.assertTrue(telegram.bot.send_message.called)
+        args, message = telegram.bot.send_message.call_args
+        self.assertEqual(message.get('text'), BOT_ALREADY_STARTED)
+
+    def test_command_start_not_deep_link_not_user(self):
+        update, context = self.send_bot_message('45678', '/start')
         telegram = self.get_telegram_instance()
         telegram.start(update, context)
         self.assertTrue(telegram.bot.send_message.called)

@@ -1,10 +1,11 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, TemplateView, UpdateView, ListView
 from django.urls import reverse
 from django.views.generic.list import MultipleObjectMixin
-
+from KitchenWeb.mixin import PermissionMixin
 from accounts.forms import EmployeeForm
-from accounts.models import Employee, UserToken, BalanceChange
+from accounts.models import Employee, UserToken, BalanceChange, Review
 from accounts.tasks import drop_time_token, validation_token
 
 
@@ -37,10 +38,16 @@ class UserProfileView(TemplateView):
             else:
                 return redirect('invalid_token')
         else:
-            drop_time_token(request.session['token'], request.session.session_key)
-            user_token = get_object_or_404(UserToken, key=request.session['token'])
-        self.user = get_object_or_404(Employee, user_token=user_token)
+            try:
+                drop_time_token(request.session['token'], request.session.session_key)
+                user_token = get_object_or_404(UserToken, key=request.session['token'])
+                self.user = get_object_or_404(Employee, user_token=user_token)
+            except KeyError:
+                return HttpResponse('Unauthorized', status=401)
+
         return super().get(request, **kwargs)
+
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -78,3 +85,15 @@ class EmployeeTransactionHistoryView(DetailView, MultipleObjectMixin):
         transactions = BalanceChange.objects.filter(employee=self.get_object()).order_by('-created_at')
         context = super(EmployeeTransactionHistoryView, self).get_context_data(object_list=transactions, **kwargs)
         return context
+
+class ReviewListView(PermissionMixin, ListView):
+    template_name = 'review/list.html'
+    model = Review
+    ordering = ['-created_at']
+    paginate_by = 5
+    paginate_orphans = 1
+    context_object_name = 'reviews'
+
+
+
+

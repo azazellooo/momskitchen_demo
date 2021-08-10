@@ -37,7 +37,10 @@ from KitchenWeb.views.position import (
     PositionCreateView,
     PositionListView, PositionDetailUpdateView,
 )
-from KitchenWeb.views.menu import OfferingListViewForDate
+
+from KitchenWeb.views.basket import (
+    cart_create, confirm_cart, search_off_in_cart_and_delete, delete_view_cart
+)
 
 from KitchenWeb.views.commands import CommandSendView
 
@@ -47,7 +50,7 @@ organization_urls = [
     path("", OrganizationsListView.as_view(), name="organization-list"),
     path('create/', OrganizationCreateView.as_view(), name='organization-create'),
     path('<int:pk>/', OrganizationDetailUpdateView.as_view(), name='organization-detail-update'),
-    path('balance/<int:pk>/', OrganizationBalancePageView.as_view(), name='organization-balance')
+    path('balance/<int:pk>/', OrganizationBalancePageView.as_view(), name='organization-balance'),
 ]
 
 kitchen_urls = [
@@ -69,7 +72,11 @@ kitchen_urls = [
     path('offering/create/', OfferingCreateView.as_view(), name='offering_create'),
     path('offering/list/', OfferingListView.as_view(), name='offering_list'),
     path('offering/<int:pk>/', OfferingDetailUpdateView.as_view(), name='offering-detail'),
-    path('offering/<str:date>/<uuid:token>/', OfferingListViewForDate.as_view(), name='offering-list-for-date')
+    path('add/in/cart/', cart_create, name='create_cart'),
+    path('remove/from/cart', search_off_in_cart_and_delete, name='delete_cart'),
+    path('confirm/cart/', confirm_cart, name='confirm_cart'),
+    path('remove/back/from/cart/<int:pk>/', delete_view_cart, name='back_delete_cart'),
+    path('offering/<int:pk>/', OfferingDetailUpdateView.as_view(), name='offering-detail')
 
 ]
 
