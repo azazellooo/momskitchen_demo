@@ -1,8 +1,9 @@
 import telegram
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext, MessageHandler, Filters, ConversationHandler
-from KitchenWeb.parse_and_validations.parces import deep_link_parce
+from KitchenWeb.parse_and_validations.parces import deep_link_parce, review_text_parse
 from KitchenWeb.parse_and_validations.validations import *
+from accounts.models import Review
 from bot.telegram_bot import TelegramBot
 from messages.bot_messages import *
 
@@ -26,6 +27,7 @@ class MainCommandsHandler(TelegramBot):
         self.dispatcher.add_handler(CommandHandler('restart', self.restart))
         self.dispatcher.add_handler(CommandHandler('stop', self.stop))
         self.dispatcher.add_handler(CommandHandler('login', self.login))
+        self.dispatcher.add_handler(CommandHandler('review', self.review))
 
     def start(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
@@ -94,7 +96,7 @@ class MainCommandsHandler(TelegramBot):
             else:
                 models.UserToken.objects.create(user=user)
                 token2 = models.UserToken.objects.get(user=user)
-                self.send_message(recipient=chat_id, message=GIVE_TOKEN+str(token2.key))
+                self.send_message(recipient=chat_id, message=GIVE_TOKEN+str(token2.key)+'/')
         except ObjectDoesNotExist:
             self.send_message(recipient=chat_id, message=CANNOT_GIVE_TOKEN)
 
@@ -106,3 +108,16 @@ class MainCommandsHandler(TelegramBot):
         self.send_message(recipient=chat_id, message=DATA_SAVED)
         return END
 
+
+    def review(self, update: Update, context:CallbackContext):
+        chat_id = update.message.chat.id
+        if models.Employee.objects.filter(tg_id=chat_id).exists():
+            text = review_text_parse(update.message.text)
+            employee = models.Employee.objects.get(tg_id=chat_id)
+            review = Review.objects.create(user_name=employee, text_review=text)
+            self.send_message(recipient=chat_id, message=REVIEW_SUCCESS)
+            for admin in models.Employee.objects.filter(is_admin=True):
+                self.send_message(recipient=chat_id, message=text)
+                self.send_message(recipient=admin.tg_id, message=REVIEW_ADMIN_SUCCESS + text)
+        else:
+            self.send_message(recipient=chat_id, message=USER_NOT_FOUND)

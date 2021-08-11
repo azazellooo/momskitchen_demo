@@ -12,10 +12,10 @@ class BaseBot(TransactionTestCase):
 
     my_handler = None
 
+
     def setUp(self):
         self.my_organization = OrganizationFactory()
         self.my_deep_link = '/start ' + str(self.my_organization.secondary_key)
-        self.my_user = EmployeeFactory()
 
     @staticmethod
     def get_update(username, message, user_id, chat_id, chat_type):
