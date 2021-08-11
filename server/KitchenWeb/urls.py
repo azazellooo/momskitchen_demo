@@ -78,7 +78,6 @@ kitchen_urls = [
     path('confirm/cart/', confirm_cart, name='confirm_cart'),
     path('remove/back/from/cart/<int:pk>/', delete_view_cart, name='back_delete_cart'),
     path('offering/<int:pk>/', OfferingDetailUpdateView.as_view(), name='offering-detail'),
-    path('orders/list/', OrderListView.as_view(), name='order_list'),
     path('menu/<str:date>/', OfferingListViewForDate.as_view(), name='menu_for_date')
 
 ]
