@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+{% block title %}Текущие заказы{% endblock title %}
+{% block content %}
+<br>
+<h1>Отзывы</h1>
+<br>
+{% for review in reviews %}
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">От {{ review.created_at|date:'Y-m-d H:i' }}</h5>
+                <h5 class="card-title">Организация: {{ review.user_name.organization_id }}</h5>
+                    <p class="card-text">Пользователь: {{review.user_name.username}}</p>
+                    <p class="card-text">Отзыв: {{ review.text_review }} </p>
+            </div>
+        </div>
+    </div>
+<br>
+{% empty %}
+<br>
+    <h2 class="text-center">Отзывов еще нет :(</h2>
+{% endfor %}
+{% endblock %}

@@ -11,7 +11,6 @@ class EmployeeTransactionHistoryViewTests(TestCase):
         self.employee = EmployeeFactory()
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
-        self.transactions = [BalanceChangeFactory(employee=self.employee, sum_balance=i, comment=f'comment {i}') for i in range(5)]
         self.response = self.client.get(reverse('employee-transactions', kwargs={'pk': self.employee.pk}))
         self.session = self.client.session
         self.session['token'] = self.token.key

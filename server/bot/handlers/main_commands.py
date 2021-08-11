@@ -51,7 +51,13 @@ class MainCommandsHandler(TelegramBot):
             else:
                 self.send_message(recipient=chat_id, message=INVALID_LINK)
         else:
-            self.send_message(recipient=chat_id, message=USER_NOT_FOUND)
+            if models.Employee.objects.filter(
+                    tg_id=chat_id
+            ).exists():
+                self.send_message(recipient=chat_id, message=BOT_ALREADY_STARTED)
+            else:
+                self.send_message(recipient=chat_id, message=USER_NOT_FOUND)
+
 
     def restart(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
