@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{% load static %}
 {% block title %}{% endblock title %}
 {% block content %}
     {{ to_js_offerings|json_script:'offerings' }}
@@ -8,6 +9,16 @@
     {% if offerings %}
             {% include "partial/search_form.html" %}
     {% endif %}
+{% if dates %}
+        <ul class="paginator-links">
+        {% for sub_date in dates %}
+            <li>
+                <a class="paginator" href='{% url "kitchen:menu_for_date" sub_date %}'>{{ sub_date }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+<h1> Формирование заказа на {{ date|date:"d/m" }} </h1>
 <div class="row">
     {% for offering in offerings %}
 <div class="col col-lg-6 col-sm-12 col-md-6 mb-4 mt-2 ">
@@ -18,7 +29,7 @@
             <img src="/uploads/uploads/no-image-icon-0.jpg" class="card-img-top" alt="...">
         {% endif %}
         <div class="card-body">
-            <h5 class="card-title"><a id="position_name{{ offering.id }}" href="{% url 'kitchen:offering-detail' offering.id %}">{{ offering.position.name }}</a> на {{ offering.date }}</h5>
+            <h5 class="card-title"><a id="position_name{{ offering.id }}" href="{% url 'kitchen:offering-detail' offering.id %}">{{ offering.position.name }}</a> на {{ offering.date|date:"d/m" }}</h5>
             <p class="card-text">{{ offering.position.description }} {{ offering.id }}</p>
             <table class="table">
             <tbody>
