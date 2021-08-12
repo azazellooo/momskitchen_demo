@@ -98,7 +98,7 @@ class OfferingForm(forms.ModelForm):
 
     class Meta:
         model = Offering
-        fields = ('position', 'garnish', 'additional', 'supplement', 'qty_portion', 'date')
+        fields = ('position', 'garnish', 'additional', 'supplement', 'qty_portion', 'date', 'special_offering', 'discount')
         widgets = {
             'date': DateInput(),
         }

@@ -15,15 +15,17 @@
         {% if offering.position.image %}:
         <img src="/uploads/{{ offering.position.image }}" class="card-img-top" alt="...">
         {% else %}
-            <img src="/uploads/uploads/no-image-icon-0.jpg" class="card-img-top" alt="...">
+            <img src="/uploads/uploads/okroshka_s_kolbasoi-400436.jpeg" class="card-img-top" alt="...">
         {% endif %}
         <div class="card-body">
             <h5 class="card-title"><a href="{% url 'kitchen:offering-detail' offering.id %}">{{ offering.position.name }}</a> на {{ offering.date }}</h5>
-            <p class="card-text">{{ offering.position.description }} {{ offering.id }}</p>
+            <p class="card-text">{{ offering.position.description }} </p>
+            <p>Размер скидки : {{ offering.discount }}</p>
             <table class="table">
             <tbody>
             <tr>
             <th scope="row">
+
             {{ offering.position.name }}
                 <div id="{{ offering.id }}positionDiv" ><label for="position{{ offering.id }}">размер порции: </label>
                 <p id="{{ offering.id }}"><select name="position" id="position{{ offering.id }}">
