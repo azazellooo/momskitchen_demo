@@ -41,11 +41,12 @@ class AdditionalAdmin(admin.ModelAdmin):
 
 
 class OfferingAdmin(admin.ModelAdmin):
-    list_display = ['id', 'position', 'qty_portion', 'date']
+    list_display = ['id', 'position', 'qty_portion', 'date', 'special_offering', 'discount']
     list_filter = ['date']
     search_fields = ['position']
-    fields = ['id', 'position', 'garnish', 'supplement', 'additional', 'qty_portion', 'date']
+    fields = ['id', 'position', 'garnish', 'supplement', 'additional', 'qty_portion', 'date', 'special_offering', 'discount']
     readonly_fields = ['id', ]
+
 
 
 admin.site.register(Dish, DishAdmin)
