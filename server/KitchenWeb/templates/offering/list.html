@@ -18,7 +18,9 @@
         {% endfor %}
         </ul>
     {% endif %}
+{% if offerings %}
 <h1> Формирование заказа на {{ date|date:"d/m" }} </h1>
+{% endif %}
 <div class="row">
     {% for offering in offerings %}
 <div class="col col-lg-6 col-sm-12 col-md-6 mb-4 mt-2 ">
@@ -383,7 +385,6 @@
 {% endfor %}
 <br>
 </div>
-    {% include 'partial/paginate.html' %}
 
      <script>
         function getCookie(name) {
