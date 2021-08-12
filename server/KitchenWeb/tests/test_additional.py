@@ -1,11 +1,21 @@
 import json
+import time
+from time import sleep
+import requests
 from django.contrib.sessions.middleware import SessionMiddleware
-from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
-from django.test import TestCase, RequestFactory
-from django.urls import reverse
-from KitchenWeb.models import Additional
-from KitchenWeb.views.additional import AdditionalCreateView
+from webdriver_manager.chrome import ChromeDriverManager
 
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, AdditionalFactory
+from django.test import TestCase, RequestFactory, LiveServerTestCase, Client
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.urls import reverse
+from selenium.webdriver import Chrome
+from accounts.models import Employee, UserToken, Organization
+from KitchenWeb.models import Additional
+from KitchenWeb.views import OrganizationCreateView
+from KitchenWeb.views.additional import AdditionalCreateView, AdditionalDetailUpdateView
+from accounts.models import Organization
+from mixer.backend.django import mixer
 
 
 class AdditionalListViewTests(TestCase):
@@ -40,7 +50,7 @@ class AdditionalCreateViewTest(TestCase):
         x = '{"0.5": {"comment": "Comment", "pricing": "25"}}'
         self.data = {
             "name": "rice",
-            "sampling_order": "12",
+            "sampling_order": 12,
             "base_price": 1400,
             "extra_price": json.loads(x)
         }
@@ -55,7 +65,7 @@ class AdditionalCreateViewTest(TestCase):
         self.request.session['token'] = str(self.token.key)
         self.response = AdditionalCreateView.as_view()(self.request)
         self.factory = RequestFactory()
-        self.garnish = Additional.objects.create(**self.data)
+        self.additional = Additional.objects.create(**self.data)
 
     def test_proper_template(self):
         self.assertTemplateUsed("additional/create.html")
@@ -71,87 +81,41 @@ class AdditionalCreateViewTest(TestCase):
         self.assertTrue(Additional.objects.filter(name='rice').exists())
 
     def test_field_values(self):
-        self.assertEqual('rice', self.garnish.name)
-        self.assertEqual('12', self.garnish.sampling_order)
-        self.assertEqual(1400, self.garnish.base_price)
-        self.assertEqual(json.loads('{"0.5": {"comment": "Comment", "pricing": "25"}}'), self.garnish.extra_price)
+        self.assertEqual('rice', self.additional.name)
+        self.assertEqual(12, self.additional.sampling_order)
+        self.assertEqual(1400, self.additional.base_price)
+        self.assertEqual(json.loads('{"0.5": {"comment": "Comment", "pricing": "25"}}'), self.additional.extra_price)
 
-# class AdditionalDetailUpdateViewTests(StaticLiveServerTestCase):
-#     def setUp(self):
-#         json_field = "{\"0.3\": {\"comment\": \"Comment3\", \"pricing\": \"20\"}, \"0.5\": {\"comment\": \"Comment22222\", \"pricing\": \"20\"}}"
-#         self.additional = Additional.objects.create(**{
-#             "name": "test additional",
-#             "sampling_order": "1",
-#             "base_price": 100,
-#             "extra_price": json_field
-#         })
-#         self.driver = Chrome(ChromeDriverManager().install())
-#         self.driver.maximize_window()
-#         self.organization = OrganizationFactory()
-#         self.employee = EmployeeFactory(organization_id=self.organization)
-#         self.token = UserTokenFactory(user=self.employee)
-#         self.driver.get(f'{self.live_server_url}/accounts/{self.token.key}/')
-#
-#     def tearDown(self):
-#         self.additional.delete()
-#         self.driver.close()
-#
-#     def test_use_proper_html(self):
-#         response = self.driver.get(f'{self.live_server_url}/kitchen/additional/{self.additional.pk}/')
-#         self.assertTemplateUsed(response, 'additional/detail_update.html')
-#
-#     def test_disabled_enabled_fields(self):
-#         self.driver.get(url=f'{self.live_server_url}/kitchen/additional/{self.additional.pk}/')
-#         inputs = self.driver.find_elements_by_tag_name('input')
-#         selects = self.driver.find_elements_by_tag_name('select')
-#         buttons = self.driver.find_elements_by_class_name('plus-min-btn')
-#         checking_elems = [y for x in [inputs, selects, buttons] for y in x]
-#         edit_btn = self.driver.find_element_by_id('edit_btn')
-#         cancel_btn = self.driver.find_element_by_id('cancel_btn')
-#         self.assertTrue(edit_btn.is_displayed())
-#         self.assertFalse(cancel_btn.is_displayed())
-#         for i in checking_elems:
-#             self.assertFalse(i.is_enabled())
-#         edit_btn.click()
-#         self.assertTrue(cancel_btn.is_displayed())
-#         self.assertFalse(edit_btn.is_displayed())
-#         for i in checking_elems:
-#             self.assertTrue(i.is_enabled())
-#         cancel_btn.click()
-#         for i in checking_elems:
-#             self.assertFalse(i.is_enabled())
-#
-#     def test_update(self):
-#         self.driver.get(url=f'{self.live_server_url}/kitchen/additional/{self.additional.pk}/')
-#         self.driver.find_element_by_id('edit_btn').click()
-#         self.driver.find_element_by_name('name').clear()
-#         self.driver.find_element_by_name('name').send_keys('updated additional name')
-#         self.driver.find_element_by_name('sampling_order').clear()
-#         self.driver.find_element_by_name('sampling_order').send_keys('3')
-#         self.driver.find_element_by_id('comment1').clear()
-#         self.driver.find_element_by_name('comment1').send_keys('updated comment 1')
-#         self.driver.find_element_by_id('pricing1').clear()
-#         self.driver.find_element_by_name('pricing1').send_keys('123')
-#         self.driver.find_element_by_id('comment2').clear()
-#         self.driver.find_element_by_name('comment2').send_keys('updated comment 2')
-#         self.driver.find_element_by_id('pricing2').clear()
-#         self.driver.find_element_by_name('pricing2').send_keys('123')
-#         self.driver.find_element_by_id('savePosition').click()
-#         self.additional.refresh_from_db()
-#         self.assertEqual('updated additional name', self.additional.name)
-#         self.assertEqual(3, self.additional.sampling_order)
-#         extra_dict = json.loads(self.additional.extra_price)
-#         self.assertEqual('updated comment 1', extra_dict['0.3']['comment'])
-#         self.assertEqual('updated comment 2', extra_dict['0.5']['comment'])
-#         self.assertEqual('123', extra_dict['0.3']['pricing'])
-#         self.assertEqual('123', extra_dict['0.5']['pricing'])
-#         self.assertEqual(f'{self.live_server_url}/kitchen/additional/list/', self.driver.current_url)
-#
-#
-#     def test_delete_extra_price(self):
-#         self.driver.get(url=f'{self.live_server_url}/kitchen/additional/{self.additional.pk}/')
-#         self.driver.find_element_by_id('edit_btn').click()
-#         self.driver.find_elements_by_xpath("//button[@onclick='removeExtraBtn2(event);']")[0].click()
-#         self.driver.find_element_by_id('savePosition').click()
-#         self.additional.refresh_from_db()
-#         self.assertFalse('0.3' in self.additional.extra_price)
+
+class AdditionalDetailUpdateViewTests(TestCase):
+
+    def setUp(self):
+        self.organization = OrganizationFactory()
+        self.employee = EmployeeFactory(organization_id=self.organization)
+        self.token = UserTokenFactory(user=self.employee)
+        self.client.get(reverse('profile', kwargs={'token': self.token.key}))
+        self.additional = AdditionalFactory()
+
+    def test_proper_template(self):
+        self.assertTemplateUsed("additional/detail_update.html")
+
+    def test_get_request_returns_200(self):
+        response = self.client.get(reverse("kitchen:additional_detail_update", kwargs={'pk': self.additional.pk}))
+        self.assertEqual(200, response.status_code)
+
+    def test_update_additional(self):
+        self.data_to_update = {
+            'name': 'another test ',
+            'sampling_order': 3,
+            'base_price': 432,
+            'extra_price': AdditionalFactory.create().extra_price
+        }
+        self.response = self.client.post(reverse('kitchen:additional_detail_update', kwargs={'pk': self.additional.pk}),
+                                    data=self.data_to_update)
+        self.assertEqual(302, self.response.status_code)
+        self.assertRedirects(self.response, reverse("kitchen:additional_list"))
+        self.additional.refresh_from_db()
+        self.assertEqual('another test ', self.additional.name)
+        self.assertEqual(3, self.additional.sampling_order)
+        self.assertEqual(432, self.additional.base_price)
+
