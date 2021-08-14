@@ -37,3 +37,10 @@ class CommandSendTests(TestCase):
             'notification_form-text': 'test text'
         }
         self.sending_command(data)
+
+    def test_delivery_arrival_command(self):
+        data = {
+            'delivery_arrival-organization': [OrganizationFactory(id=i).id for i in range(3)],
+            'delivery_arrival-text': 'test text'
+        }
+        self.sending_command(data)
