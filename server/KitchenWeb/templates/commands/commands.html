@@ -17,7 +17,7 @@
     <form action="{% url 'kitchen:commands' %}" method="post">
         <h5>Блок команды напоминания о заказе</h5>
         {% csrf_token %}
-        {{ close_form.as_p }}
+        {{ reminder_form.as_p }}
         <p>
             <button type="submit">Submit</button>
         </p>
@@ -27,7 +27,7 @@
     <form action="{% url 'kitchen:commands' %}" method="post">
         <h5>Блок команды о закрытии заказа</h5>
         {% csrf_token %}
-        {{ reminder_form.as_p }}
+        {{ close_form.as_p }}
         <p>
             <button type="submit">Submit</button>
         </p>
