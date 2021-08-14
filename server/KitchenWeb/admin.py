@@ -58,8 +58,8 @@ class OfferingAdmin(admin.ModelAdmin):
 
 
 class BasketAdmin(admin.ModelAdmin):
-    list_display = ['id', 'offering', 'user']
-    fields = ['id', 'offering', 'user', 'qty', 'price', 'portions']
+    list_display = ['id', 'offering', 'user', 'is_confirmed']
+    fields = ['id', 'offering', 'user', 'qty', 'price', 'portions', 'is_confirmed']
     search_fields = ['user']
     readonly_fields = ['id']
 
@@ -72,8 +72,8 @@ class OrderOffernigAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'created_at']
-    fields = ['id', 'user', 'created_at']
+    list_display = ['id', 'user', 'created_at', 'is_delivered']
+    fields = ['id', 'user', 'created_at', 'is_delivered']
     search_fields = ['user']
     readonly_fields = ['id', 'created_at']
 
