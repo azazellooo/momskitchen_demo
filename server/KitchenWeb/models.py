@@ -131,6 +131,7 @@ class Order(models.Model):
     user = models.ForeignKey('accounts.Employee', blank=False, null=False, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='order_user')
     offering = models.ManyToManyField('KitchenWeb.Offering', blank=False, null=False, through='KitchenWeb.OrderOffernig', verbose_name='Предложение', related_name='order_offering')
     created_at = models.DateTimeField(auto_now_add=True)
+    is_delivered = models.BooleanField(default=False, verbose_name='доставлен ли заказ')
 
     class Meta:
         db_table = 'order'

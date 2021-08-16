@@ -19,7 +19,7 @@ class OfferingCreateView(PermissionMixin, CreateView):
         return reverse('kitchen:offering_list')
 
 
-class OfferingListView(PermissionMixin, ListView):
+class OfferingListView(ListView):
     model = Offering
     template_name = 'offering/list.html'
     context_object_name = 'offerings'
@@ -37,13 +37,11 @@ class OfferingListView(PermissionMixin, ListView):
         queryset = super().get_queryset()
         for offering in queryset:
             dates.append(offering.date)
-        result_date = min(dates, key=lambda sub: abs(sub - now))
-        queryset = queryset.filter(date__exact=result_date)
-        if self.search_data:
-            queryset = queryset.filter(
-                position__name__icontains=self.search_data
-            )
-
+        if dates:
+            result_date = min(dates, key=lambda sub: abs(sub - now))
+            queryset = queryset.filter(date__exact=result_date)
+        else:
+            queryset = super().get_queryset()
         return queryset
 
     def get_search_data(self):
@@ -82,12 +80,13 @@ class OfferingListView(PermissionMixin, ListView):
         context['dates'] = []
         for offering in context.get('object_list'):
             dates.append(offering.date)
-        result_date = min(dates, key=lambda sub: abs(sub - now))
-        for offering in context.get('object_list'):
-            if offering.date > result_date and counter < 5:
-                context['dates'].append(str(offering.date))
-                counter += 1
-        context['date'] = result_date
+        if dates:
+            result_date = min(dates, key=lambda sub: abs(sub - now))
+            for offering in context.get('object_list'):
+                if offering.date > result_date and counter < 5:
+                    context['dates'].append(str(offering.date))
+                    counter += 1
+            context['date'] = result_date
         context['search_form'] = self.form
         context['to_js_offerings'] = {"offerings": list(context.get('offerings').values())}
         for o in context.get('offerings'):
