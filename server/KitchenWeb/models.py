@@ -109,6 +109,7 @@ class Cart(models.Model):
     portions = models.JSONField(blank=False, null=False, verbose_name='Порции')
     is_confirmed = models.BooleanField(default=False, blank=False, null=False)
     price = models.IntegerField(null=False, blank=False, default=0)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
         db_table = 'basket'
@@ -116,7 +117,7 @@ class Cart(models.Model):
         verbose_name_plural = 'Корзины'
 
     def __str__(self):
-        return f'{self.user} - {self.offering} : {self.is_confirmed}'
+        return f'{self.user} - {self.offering.position} : {self.is_confirmed}. {self.created_at}'
 
 
 class OrderOffernig(models.Model):
