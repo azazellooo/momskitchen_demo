@@ -41,7 +41,10 @@ from KitchenWeb.views.position import (
 from KitchenWeb.views.basket import (
     cart_create, confirm_cart, search_off_in_cart_and_delete, delete_view_cart
 )
-
+from KitchenWeb.views.orders import (
+    OrderListView,
+    OrderListViewForDate
+)
 from KitchenWeb.views.menu import OfferingListViewForDate
 from KitchenWeb.views.commands import CommandSendView
 
@@ -78,7 +81,9 @@ kitchen_urls = [
     path('confirm/cart/', confirm_cart, name='confirm_cart'),
     path('remove/back/from/cart/<int:pk>/', delete_view_cart, name='back_delete_cart'),
     path('offering/<int:pk>/', OfferingDetailUpdateView.as_view(), name='offering-detail'),
-    path('menu/<str:date>/', OfferingListViewForDate.as_view(), name='menu_for_date')
+    path('menu/<str:date>/', OfferingListViewForDate.as_view(), name='menu_for_date'),
+    path('orders/<str:date>/', OrderListViewForDate.as_view(), name='orders_for_date'),
+    path('orders/', OrderListView.as_view(), name='orders')
 
 ]
 
