@@ -46,7 +46,7 @@ class OfferingAdmin(admin.ModelAdmin):
     list_display = ['id', 'position', 'qty_portion', 'date']
     list_filter = ['date']
     search_fields = ['position']
-    fields = ['id', 'position', 'qty_portion', 'date']
+    fields = ['id', 'position', 'qty_portion', 'date', 'supplement']
     readonly_fields = ['id', ]
 
 # class OfferingGarnishAdmin(admin.ModelAdmin):
@@ -58,7 +58,7 @@ class OfferingAdmin(admin.ModelAdmin):
 
 
 class BasketAdmin(admin.ModelAdmin):
-    list_display = ['id', 'offering', 'user', 'is_confirmed']
+    list_display = ['id', 'offering', 'user', 'is_confirmed', 'created_at']
     fields = ['id', 'offering', 'user', 'qty', 'price', 'portions', 'is_confirmed']
     search_fields = ['user']
     readonly_fields = ['id']
