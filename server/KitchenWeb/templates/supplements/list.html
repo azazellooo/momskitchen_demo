@@ -1,42 +1,37 @@
 {% extends 'base.html'%}
-
-{% block menu %}
-{% endblock %}
-
 {% block content %}
-    {% if supplements %}
         <div class="mt-4">
+    {% if supplements %}
             {% include "partial/search_form.html" %}
-        </div>
     {% endif %}
+        </div>
 
     {% if supplements %}
         <h3 class="m-3 text-center">Надбавки</h3>
     {% endif %}
 
-
-        <div class="row">
+    <div class="row">
         {% for supplement in supplements %}
             <div class="col-lg-3 mb-4 mt-4">
                 <div class="card h-100">
                   <div class="card-body">
-                      {% if admin %}
-                          <p>Название: <a href="{% url "kitchen:detail_update_supplement" supplement.id %}"> {{ supplement.name }}</a></p>
-                      {% else %}
+                    {% if admin %}
+                        <p>Название: <a href="{% url "kitchen:detail_update_supplement" supplement.id %}">
+                            {{ supplement.name }}</a></p>
+                    {% else %}
                         <p>Название:>{{ supplement.name }}</p>
-                      {% endif %}
+                    {% endif %}
                   </div>
                   <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Базовая цена: {{ supplement.base_price }}</li>
+                    <li class="list-group-item">Базовая цена: {{ supplement.price }}</li>
                   </ul>
                 </div>
             </div>
+            {% empty %}
+            <h2 class="text-center">Надбавок нет.</h2>
+        {% endfor %}
         </div>
 
-{% empty %}
-    <h2 class="text-center">Надбавок нет.</h2>
-{% endfor %}
-<br>
     {% include 'partial/paginate.html' %}
 
 
