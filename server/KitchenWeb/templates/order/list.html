@@ -1,0 +1,55 @@
+{% extends 'base.html'%}
+{% block title %}Текущие заказы{% endblock title %}
+{% block content %}
+<br>
+{% if orders %}
+<h1>Заказы на {{ date }}</h1>
+{% endif %}
+{% for organization, users in order_data.items %}
+<h3 class="org-title"><a href="{% url 'kitchen:organization-detail-update' organization.id %}">{{ organization.name }}</a></h3>
+<div class="card-deck">
+    {% for user, order_offerings_and_carts in users.items %}
+      <div class="card border-success">
+        <div class="card-header"><h4>{{user.username}}</h4></div>
+          {% if order_offerings_and_carts.order_offerings.items %}
+        <div class="card-body">
+          <h5 class="card-title">Заказы пользователя:</h5>
+            {% for order_offering, offering in order_offerings_and_carts.order_offerings.items %}
+            <div class="order">
+                <p class="card-text">{{ offering.position }} (Порция: {{ order_offering.portions.Position.portion }})</p>
+                {% for garnish in offering.garnish.all  %}
+                    <p class="card-text">Гарнир: {{ garnish }}, ({{ order_offering.portions.Garnish.portion }})</p>
+                {% endfor %}
+                {% for additional in offering.additional.all %}
+                    <p class="card-text">Дополнение: {{ additional }}, ({{ order_offering.portions.Additional.portion }})</p>
+                {% endfor %}
+                 <hr>
+                </div>
+            {% endfor %}
+          {% endif %}
+          {% if order_offerings_and_carts.carts.items %}
+          <h5>Корзины пользователя:</h5>
+            {% for cart, offering in order_offerings_and_carts.carts.items %}
+                <p class="card-text">{{ offering.position }} (Порция: {{ cart.portions.Position.portion }})</p>
+                {% for garnish in offering.garnish.all  %}
+                    <p class="card-text">Гарнир: {{ garnish }}, ({{ cart.portions.Garnish.portion }})</p>
+                {% endfor %}
+                {% for additional in offering.additional.all %}
+                    <p class="card-text">Дополнение: {{ additional }}, ({{ cart.portions.Additional.portion }})</p>
+                {% endfor %}
+            {% endfor %}
+            {% endif %}
+            </div>
+        <div class="card-footer">
+            <p class="card-text">ОБЩАЯ СУММА: {{ order_offerings_and_carts.total_sum }} сом</p>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+<div>
+<h5>Общая сумма для {{ organization.name }}: {{ total_sum.organization }} сом</h5></div>
+{% empty %}
+<br>
+    <h2 class="text-center">Нет предстоящих заказов</h2>
+{% endfor %}
+{% endblock %}
