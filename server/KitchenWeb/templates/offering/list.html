@@ -23,7 +23,7 @@
 {% endif %}
 <div class="row">
     {% for offering in offerings %}
-<div class="col col-lg-6 col-sm-12 col-md-6 mb-4 mt-2 ">
+<div class="col col-lg-6 col-sm-12 mb-4 mt-2 ">
     <div class="card w-auto h-100" >
         {% if offering.position.image %}:
         <img src="/uploads/{{ offering.position.image }}" class="card-img-top" alt="...">
@@ -70,7 +70,7 @@
                 let selectedPositionPortion = $('#position{{ offering.id }}').val();
                 let position = POSITIONS['positions'].find(position => position.offering === {{ offering.id }});
                 $("#{{ offering.id }}positionDiv").hide()
-                $("#positionCancel{{ offering.id }}").css('visibility', 'hidden')
+                $("#positionCancel{{ offering.id }}").hide()
                 $("#garnish_portion{{ offering.id }}").hide()
                 $("#additional_portion{{ offering.id }}").hide()
                 $('#garnishCancelBtn{{ offering.id }}').hide()
@@ -78,27 +78,12 @@
 
 
                 $("#PositionBasePortion{{ offering.id }}").hide()
-                {#if (position.extra_price) {#}
-                {#    let sum = position.extra_price[selectedPositionPortion].pricing#}
-                {#    $('#position{{ offering.id }}Price').text(${sum}c)#}
-                {#}#}
-{#                {{ offering.id }}garnishDiv#}
                 let selectedGarnish = $('#garnish{{ offering.id }}');
                 let garnish_selects = $('#garnishRow{{ offering.id }}').find('select');
-                {#if (selectedGarnish.length > 0) {#}
-                {#    let garnish_class = selectedGarnish.find("option:selected").attr('class');#}
-                {#    let matching_garnish_portion = $('#garnishRow{{ offering.id }}')[0].getElementsByClassName(garnish_class)[1]#}
-                {#    for (let select of garnish_selects) {#}
-                {#        select.hidden = true#}
-                {#    }#}
-                {#    selectedGarnish[0].hidden = false#}
-                {#    console.log($('#garnishRow{{ offering.id }}')[0].getElementsByClassName(garnish_class)[0])#}
-                {#    matching_garnish_portion.hidden = false#}
-                    let garnish = GARNISHES['garnishes'].find(garnish => garnish.offering === {{ offering.id }})
-                    let garnishSum = $('#garnishSum{{ offering.id }}')
-                {#    let sum = garnish.extra_price[$(matching_garnish_portion).val()].pricing#}
-                    garnishSum.text(garnish.base_price)
-                {#}#}
+
+                let garnish = GARNISHES['garnishes'].find(garnish => garnish.offering === {{ offering.id }})
+                let garnishSum = $('#garnishSum{{ offering.id }}')
+                garnishSum.text(garnish.base_price)
 
 
                 let additional_selects = $('#additionalRow{{ offering.id }}').find('select');
@@ -122,7 +107,7 @@
 
                 $(document).on("click", "#positionPortionBtn{{ offering.id }}", function (){
                     this.hidden = true
-                    $("#positionCancel{{ offering.id }}").css('visibility', 'visible')
+                    $("#positionCancel{{ offering.id }}").toggle()
 
                     $("#{{ offering.id }}positionDiv").show()
                     let firstPortion =  $("#position{{ offering.id }}")[0].childNodes[1].innerText
@@ -135,7 +120,7 @@
                     $('#position{{ offering.id }}Price').text(`${position.base_price}c`)
                     $("#{{ offering.id }}positionDiv").hide()
                     $('#positionPortionBtn{{ offering.id }}')[0].hidden = false
-                    this.hidden = true
+                    $("#positionCancel{{ offering.id }}").toggle()
                 })
 
 
@@ -177,7 +162,7 @@
                     })
                     if (garnish[0].extra_price != null){
                         this.hidden = true
-                        $("#garnishCancelBtn{{ offering.id }}").show()
+                        $("#garnishCancelBtn{{ offering.id }}").toggle()
 
                         let classname = $("#garnish{{ offering.id }}").find("option:selected").attr('class')
                         let needeSelect = document.getElementById('garnishRow{{ offering.id }}').getElementsByClassName(classname)[1]
@@ -192,7 +177,6 @@
                 });
 
                 $('#garnishCancelBtn{{ offering.id }}').click(function (){
-                    console.log('eeeeeeeeee')
                     let garnish = GARNISHES['garnishes'].filter(function (v, i ){
                         return (v["name"] == $("#garnish{{ offering.id }}").find("option:selected").val() && v["offering"] == {{ offering.id }});
                     })
@@ -200,7 +184,8 @@
                     document.getElementById('garnishRow{{ offering.id }}').getElementsByClassName(classname)[1].hidden = true
                     let basePrice = garnish[0].base_price
                     $("#garnishSum{{ offering.id }}").text(basePrice)
-                    this.hidden = true
+                    {#this.hidden = true#}
+                    $("#garnishCancelBtn{{ offering.id }}").toggle()
                     $("#garnishPortionBtn{{ offering.id }}")[0].hidden = false
 
                 })
@@ -211,7 +196,7 @@
                     })
                     if (additional[0].extra_price != null){
                         this.hidden = true
-                        $("#additionalCancelBtn{{ offering.id }}").show()
+                        $("#additionalCancelBtn{{ offering.id }}").toggle()
 
                         let classname = $("#additional{{ offering.id }}").find("option:selected").attr('class')
                         let needeSelect = document.getElementById('additionalRow{{ offering.id }}').getElementsByClassName(classname)[1]
@@ -230,7 +215,7 @@
                     document.getElementById('additionalRow{{ offering.id }}').getElementsByClassName(classname)[1].hidden = true
                     let basePrice = additional[0].base_price
                     $("#additionalSum{{ offering.id }}").text(basePrice)
-                    this.hidden = true
+                    $("#additionalCancelBtn{{ offering.id }}").toggle()
                     $("#additionalPortionBtn{{ offering.id }}")[0].hidden = false
 
                 })
@@ -240,10 +225,7 @@
 
 
                 let garnish_portion_selects = document.querySelectorAll('[name="garnish_portion"]');
-                    {#console.log(garnish_portion_selects)#}
                 for (let i = 0; i < garnish_portion_selects.length; ++i){
-                {#$('#garnish_portion{{ offering.id }}').change(function (){#}
-                {#$( "select[id^='garnish_port']").change(function (){#}
                     garnish_portion_selects[i].addEventListener('change', function (e){
                         let selectedPortion = $(this).find("option:selected").val()
                         let garnishSum = $('#garnishSum{{ offering.id }}')
@@ -294,12 +276,6 @@
                     }
                     additional_selects[0].hidden = false
                 })
-                {#$("#offeringSumBtn{{ offering.id }}").click(function (){#}
-                {#    let position = $("#position{{ offering.id }}Price")[0].innerText#}
-                {#    let garnish = $("#garnishSum{{ offering.id }}")#}
-                {#    let additional = $("#additionalSum{{ offering.id }}")[0].innerText#}
-                {#})#}
-
 
                 })
 
