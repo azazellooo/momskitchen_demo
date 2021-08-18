@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block profile %}
-    <a class="nav-link" href="{% url 'user_update' %}">Редактировать профиль<span class="sr-only"></span></a>
+    <a class="dropdown-item" href="{% url 'user_update' %}">Редактировать профиль<span class="sr-only"></span></a>
     <a href="{% url 'employee-transactions' user.id %}">История транзакций</a>
 {% endblock profile %}
 
