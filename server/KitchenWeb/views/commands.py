@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
@@ -10,6 +11,7 @@ from telegram.constants import PARSEMODE_MARKDOWN, PARSEMODE_HTML
 from telegram.error import BadRequest
 
 from KitchenWeb.forms import OrderCreateForm, OrderCloseForm, OrderReminderForm, NotificationForm, DeliveryArrivalForm
+from KitchenWeb.models import Order, OrderOffernig
 from accounts.models import Organization, UserToken, Employee
 from bot.telegram_bot import TelegramBot
 
@@ -81,7 +83,6 @@ class CommandSendView(TemplateView):
                 messages.add_message(self.request, messages.SUCCESS,
                                      f'отправлено напоминание о закрытии заказа на дату {employee.cart_user.first().offering.date} организациям: {org_names}',)
 
-
     def delivery_arrival(self, organizations, optional_text):
         org_names = [Organization.objects.get(id=o).name for o in organizations]
         for org_id in organizations:
@@ -104,6 +105,45 @@ class CommandSendView(TemplateView):
                 messages.add_message(self.request, messages.SUCCESS,
                                      f'отправлено уведомление о прибытии доставки организациям: {org_names}')
 
+    def close(self, organizations):
+        for org_id in organizations:
+            org = Organization.objects.get(id=org_id)
+            for employee in org.employe_org.filter(is_active=True):
+
+                for cart in employee.cart_user.filter(created_at__date=today):
+                    message = f'Заказ на {cart.created_at.date()} успешно оформлен! Вы заказали: \n'
+                    if not cart.is_confirmed:
+                        order = Order.objects.create(user=employee)
+                        cart.is_confirmed = True
+                        cart.save()
+                        order_offering = OrderOffernig.objects.create(
+                            offering=cart.offering,
+                            portions=cart.portions,
+                            qty=cart.qty,
+                            order=order,
+                            price=cart.price
+                        )
+                    message += self.build_message(cart)
+                    bot.send_message(recipient=employee.tg_id, message=message,)
+
+    def build_message(self, cart):
+        portions = cart.portions
+        total_sum = float(portions.get('Position').get('price'))
+        position_info = f"Позиция: {cart.offering.position}, порция - {portions.get('Position').get('portion')}, сумма - {portions.get('Position').get('price')}"
+        garnish_info = ''
+        if portions.get('Garnish'):
+            garnish_info += f"Гарнир: {portions.get('Garnish').get('name')}, порция - {portions.get('Garnish').get('portion')}, сумма - {portions.get('Garnish').get('price')}"
+            total_sum += float(portions.get('Garnish').get('price'))
+        additional_info = ''
+        if portions.get('Additional'):
+            additional_info += f"Добавка: {portions.get('Additional').get('name')}, порция - {portions.get('Additional').get('portion')}, сумма - {portions.get('Additional').get('price')}"
+            total_sum += float(portions.get('Additional').get('price'))
+        supplements_info = ''
+        for s in cart.offering.supplement.all():
+            supplements_info += f'{s.name} - {s.price}, '
+            total_sum += s.price
+        return f'{position_info}\n{garnish_info}\n{additional_info}\n{supplements_info}\nИтого: {total_sum}'
+
     def post(self, request, *args, **kwargs):
         post_data = dict(request.POST)
         post_data_list = list(post_data)
@@ -115,4 +155,6 @@ class CommandSendView(TemplateView):
             self.remind(post_data.get('reminder_form-organization'), post_data.get('reminder_form-text'))
         if 'delivery_arrival-organization' in post_data_list:
             self.delivery_arrival(post_data.get('delivery_arrival-organization'), post_data.get('delivery_arrival-text'))
+        if 'close_form-organization' in post_data_list:
+            self.close(post_data.get('close_form-organization'))
         return redirect(reverse("kitchen:commands"))
