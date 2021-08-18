@@ -32,9 +32,8 @@ DEBUG = config('DEBUG')
 ALLOWED_HOSTS = ['*']
 
 TOKEN = '1920485677:AAHivPLMmhSxzUejTdvmIG1QV6YFFeDB4nY'
-# LISTEN_WEBHOOK = 'https://761d98ccac72.ngrok.io'
-LISTEN_WEBHOOK = "https://d23a719c76f9.ngrok.io"
-WEBHOOK_PORT = 8080
+LISTEN_WEBHOOK = 'https://0e021fd7c522.ngrok.io'
+WEBHOOK_PORT = 8000
 
 # Application definition
 
@@ -54,7 +53,6 @@ INSTALLED_APPS = [
     # custom apps,
     'accounts',
     'KitchenWeb',
-    'api',
     'psycopg2',
     'global_user',
 
