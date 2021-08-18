@@ -10,18 +10,21 @@
         {% for additional in additionals %}
             <div class="col-lg-3 mb-4 mt-4">
                 <div class="card h-100">
-                  <div class="card-body">
+                  <div class="card-body additional-card">
                       {% if admin %}
-                        <p>Название: <a  href="{% url 'kitchen:additional_detail_update' additional.id %}">{{ additional.name }}</a></p>
+                        <h5 class="card-title"><a  href="{% url 'kitchen:additional_detail_update' additional.id %}">{{ additional.name }}</a></h5>
                       {% else %}
-                        <p>Название:>{{ additional.name }}</p>
+                        <h5 class="card-title">{{ additional.name }}</h5>
                       {% endif %}
-                  </div>
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Очередность: {{ additional.order }}</li>
-                    <li class="list-group-item">Базовая цена: {{ additional.base_price }}</li>
-                      <li class="list-group-item">Базовая цена: {{ additional.extra_price }}</li>
+                      <ul class="list-group list-group-flush">
+                      <li class="list-group-item">Очередность: {{ additional.sampling_order }}</li>
+                      <li class="list-group-item">Базовая цена: {{ additional.base_price }}</li>
+                      <li class="list-group-item"> <i>Добавочные цены:</i></li>
+                      {% for portion, portion_info  in additional.extra_price.items %}
+                        <li class="list-group-item">{{portion_info.comment}} - {{ portion_info.pricing }}сом ({{ portion }})</li>
+                      {% endfor %}
                   </ul>
+                  </div>
                 </div>
             </div>
         {% empty %}
