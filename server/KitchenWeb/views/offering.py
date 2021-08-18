@@ -6,6 +6,7 @@ from django.views.generic import CreateView, ListView, UpdateView
 from KitchenWeb.forms import OfferingForm, SearchForm
 from KitchenWeb.mixin import PermissionMixin
 from KitchenWeb.models import Offering
+from datetime import datetime
 
 
 class OfferingCreateView(PermissionMixin, CreateView):
@@ -18,7 +19,7 @@ class OfferingCreateView(PermissionMixin, CreateView):
         return reverse('kitchen:offering_list')
 
 
-class OfferingListView(PermissionMixin, ListView):
+class OfferingListView(ListView):
     model = Offering
     template_name = 'offering/list.html'
     context_object_name = 'offerings'
@@ -31,12 +32,16 @@ class OfferingListView(PermissionMixin, ListView):
         return super(OfferingListView, self).get(request, **kwargs)
 
     def get_queryset(self):
+        dates = []
+        now = datetime.now().date()
         queryset = super().get_queryset()
-
-        if self.search_data:
-            queryset = queryset.filter(
-                position__name__icontains=self.search_data
-            )
+        for offering in queryset:
+            dates.append(offering.date)
+        if dates:
+            result_date = min(dates, key=lambda sub: abs(sub - now))
+            queryset = queryset.filter(date__exact=result_date)
+        else:
+            queryset = super().get_queryset()
         return queryset
 
     def get_search_data(self):
@@ -45,6 +50,9 @@ class OfferingListView(PermissionMixin, ListView):
         return None
 
     def get_context_data(self, **kwargs):
+        counter = 0
+        dates = []
+        now = datetime.now().date()
         needed_fields = ('id', 'name', 'description', 'category', 'base_price', 'offering_position', 'extra_price')
         dict_filter = lambda x, y: dict([(i, x[i]) for i in x if i in set(y)])
         positions = []
@@ -69,6 +77,16 @@ class OfferingListView(PermissionMixin, ListView):
                     additional.extra_price = json.loads(additional.extra_price)
                     additional.save()
                 o.save()
+        context['dates'] = []
+        for offering in context.get('object_list'):
+            dates.append(offering.date)
+        if dates:
+            result_date = min(dates, key=lambda sub: abs(sub - now))
+            for offering in context.get('object_list'):
+                if offering.date > result_date and counter < 5:
+                    context['dates'].append(str(offering.date))
+                    counter += 1
+            context['date'] = result_date
         context['search_form'] = self.form
         context['to_js_offerings'] = {"offerings": list(context.get('offerings').values())}
         for o in context.get('offerings'):
@@ -78,20 +96,9 @@ class OfferingListView(PermissionMixin, ListView):
         context['to_js_positions'] = {'positions': positions}
         context['to_js_garnishes'] = {'garnishes': garnishes}
         context['to_js_additionals'] = {'additionals': additionals}
-        # context['to_json_positions'] = {'positions': [dict_filter(model_to_dict(o.position), needed) for o in list(context.get('offerings'))]}
         if self.search_data:
             context['query'] = urlencode({'search_value': self.search_data})
         return context
-
-    # def build_list(self, object_list,needed_fields, field: models.Model):
-    #     dict_filter = lambda x, y: dict([(i, x[i]) for i in x if i in set(y)])
-    #     field_list = []
-    #     for o in object_list:
-    #         print(field)
-    #         expected_dict = dict_filter(model_to_dict(o.field), needed_fields)
-    #         expected_dict['offering'] = o.id
-    #         field_list.append(expected_dict)
-    #     return field_list
 
 
 class OfferingDetailUpdateView(UpdateView):

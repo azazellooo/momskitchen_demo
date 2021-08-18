@@ -33,7 +33,7 @@ class Supplement(BaseModel):
         verbose_name_plural = 'Надбавки'
 
     def __str__(self):
-        return f'{self.name}'
+        return f'надбавка: {self.name}'
 
 class Dish(models.Model):
     name = models.CharField(max_length=250, blank=False, null=False, verbose_name='Позиция')
@@ -86,8 +86,8 @@ class Offering(BaseModel):
     position = models.ForeignKey('KitchenWeb.Dish', blank=False, null=False, verbose_name='Позиция', on_delete=models.CASCADE, related_name='offering_position')
     garnish = models.ManyToManyField('KitchenWeb.Garnish', blank=True, null=True, verbose_name='Гарнир', related_name='offering_garnish')
     supplement = models.ManyToManyField('KitchenWeb.Supplement', blank=True, null=True, verbose_name='Надбавка', related_name='offering_supplement')
-    additional = models.ManyToManyField('KitchenWeb.Additional', blank=True, null=True, verbose_name='Дополнения',  related_name='offering_additional')
-    qty_portion = models.IntegerField(blank=False, null=False, default=0)
+    additional = models.ManyToManyField('KitchenWeb.Additional', blank=True, null=True, verbose_name='Дополнения', related_name='offering_additional')
+    qty_portion = models.DecimalField(blank=False, null=False, max_digits=5, decimal_places=2, default=0.00)
     date = models.DateField(blank=False, null=False, verbose_name='Дата')
     special_offering = models.BooleanField(default=False, blank=False, null=False)
     discount = models.IntegerField(default=False, blank=False, null=False, validators=(MinValueValidator(1), MaxValueValidator(30)))
@@ -101,10 +101,15 @@ class Offering(BaseModel):
         return f'{self.position}-{self.date}'
 
 
-class Basket(models.Model):
-    user = models.ForeignKey('accounts.Employee', blank=False, null=False, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='basket_user')
-    offering = models.ForeignKey('KitchenWeb.Offering', blank=False, null=False, verbose_name='Предложение', on_delete=models.CASCADE, related_name='basket_offering')
+
+class Cart(models.Model):
+    user = models.ForeignKey('accounts.Employee', blank=False, null=False, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='cart_user')
+    offering = models.ForeignKey('KitchenWeb.Offering', blank=False, null=False, verbose_name='Предложение', on_delete=models.CASCADE, related_name='cart_offering')
+    qty = models.IntegerField(null=False, blank=False, default=1, verbose_name='Кол-во товара')
+    portions = models.JSONField(blank=False, null=False, verbose_name='Порции')
     is_confirmed = models.BooleanField(default=False, blank=False, null=False)
+    price = models.IntegerField(null=False, blank=False, default=0)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
         db_table = 'basket'
@@ -112,15 +117,22 @@ class Basket(models.Model):
         verbose_name_plural = 'Корзины'
 
     def __str__(self):
-        return f'{self.user} - {self.offering} : {self.is_confirmed}'
+        return f'{self.user} - {self.offering.position} : {self.is_confirmed}. {self.created_at}'
+
+
+class OrderOffernig(models.Model):
+    offering = models.ForeignKey('KitchenWeb.Offering', blank=False, null=False, verbose_name='Предложение', on_delete=models.CASCADE, related_name='offering_o')
+    portions = models.JSONField(blank=False, null=False, verbose_name='Порции')
+    order = models.ForeignKey('KitchenWeb.Order', blank=False, null=False, verbose_name='Заказ', on_delete=models.CASCADE, related_name='order_o')
+    price = models.IntegerField(null=False, blank=False, default=0)
+    qty = models.IntegerField(null=False, blank=False)
 
 
 class Order(models.Model):
-    user = models.ForeignKey('accounts.Employee', blank=False, null=False, verbose_name='Пользователь',
-                             on_delete=models.CASCADE, related_name='order_user')
-    offering = models.ForeignKey('KitchenWeb.Offering', blank=False, null=False, verbose_name='Предложение',
-                                 on_delete=models.CASCADE, related_name='order_offering')
+    user = models.ForeignKey('accounts.Employee', blank=False, null=False, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='order_user')
+    offering = models.ManyToManyField('KitchenWeb.Offering', blank=False, null=False, through='KitchenWeb.OrderOffernig', verbose_name='Предложение', related_name='order_offering')
     created_at = models.DateTimeField(auto_now_add=True)
+    is_delivered = models.BooleanField(default=False, verbose_name='доставлен ли заказ')
 
     class Meta:
         db_table = 'order'
@@ -128,6 +140,17 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
 
     def __str__(self):
-        return f'{self.user} - {self.offering} : {self.created_at}'
+        return f'{self.user} - {self.offering}'
 
 
+class Command(models.Model):
+    organization = models.ManyToManyField('accounts.Organization', blank=False, null=False, related_name='commands', verbose_name='Организации')
+    text = models.TextField(max_length=500, blank=True, null=True, verbose_name='Текст')
+
+    class Meta:
+        db_table = 'commands'
+        verbose_name = 'Команда'
+        verbose_name_plural = 'Команды'
+
+    def __str__(self):
+        return f'{self.title}-{self.text}'

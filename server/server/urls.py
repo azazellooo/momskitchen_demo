@@ -25,5 +25,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('api/', include('api.urls')),
     path('', IndexView.as_view(), name='index'),
-    path('', include('KitchenWeb.urls'))
+    path('', include('KitchenWeb.urls')),
+    path('markdownx/', include('markdownx.urls')),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

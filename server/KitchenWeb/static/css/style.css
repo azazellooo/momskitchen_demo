@@ -45,7 +45,27 @@ body {
     margin-top: 50px;
 }
 
+.paginator-links {
+text-align: center;
+margin: 20px 0 0 ;
+padding: 10px 0;
+}
 
+.paginator-links ul{
+  list-style: none;
+  margin: 0 2px;
+  padding: 0;
+}
+
+.paginator-links li {
+   display: inline-block;
+   padding: 5px 5px;
+}
+
+.paginator-links a {
+  font-weight: normal;
+  padding: 10px 5px;
+}
 #123{
     margin-top: 100px;
 }

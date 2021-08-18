@@ -1,4 +1,4 @@
-from telegram import Bot
+from telegram import Bot, ParseMode
 from telegram.ext import Updater
 from telegram.utils.request import Request
 from server.settings import TOKEN, LISTEN_WEBHOOK, WEBHOOK_PORT
@@ -15,5 +15,5 @@ class TelegramBot:
         self.updater.start_webhook(listen='0.0.0.0', port=WEBHOOK_PORT, url_path=TOKEN,  webhook_url=url)
         self.updater.bot.set_webhook(url)
 
-    def send_message(self, recipient, message, keyboard=None, *args):
-        self.bot.send_message(chat_id=recipient, text=message, reply_markup=keyboard)
+    def send_message(self, recipient, message, keyboard=None, parse_mode=ParseMode, *args):
+        self.bot.send_message(chat_id=recipient, text=message, reply_markup=keyboard, parse_mode=parse_mode)

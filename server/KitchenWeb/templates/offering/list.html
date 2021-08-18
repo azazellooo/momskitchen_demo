@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{% load static %}
 {% block title %}{% endblock title %}
 {% block content %}
     {{ to_js_offerings|json_script:'offerings' }}
@@ -8,6 +9,18 @@
     {% if offerings %}
             {% include "partial/search_form.html" %}
     {% endif %}
+{% if dates %}
+        <ul class="paginator-links">
+        {% for sub_date in dates %}
+            <li>
+                <a class="paginator" href='{% url "kitchen:menu_for_date" sub_date %}'>{{ sub_date }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% if offerings %}
+<h1> Формирование заказа на {{ date|date:"d/m" }} </h1>
+{% endif %}
 <div class="row">
     {% for offering in offerings %}
 <div class="col col-lg-6 col-sm-12 col-md-6 mb-4 mt-2 ">
@@ -15,17 +28,15 @@
         {% if offering.position.image %}:
         <img src="/uploads/{{ offering.position.image }}" class="card-img-top" alt="...">
         {% else %}
-            <img src="/uploads/uploads/okroshka_s_kolbasoi-400436.jpeg" class="card-img-top" alt="...">
+            <img src="/uploads/uploads/no-image-icon-0.jpg" class="card-img-top" alt="...">
         {% endif %}
         <div class="card-body">
-            <h5 class="card-title"><a href="{% url 'kitchen:offering-detail' offering.id %}">{{ offering.position.name }}</a> на {{ offering.date }}</h5>
-            <p class="card-text">{{ offering.position.description }} </p>
-            <p>Размер скидки : {{ offering.discount }}</p>
+            <h5 class="card-title"><a id="position_name{{ offering.id }}" href="{% url 'kitchen:offering-detail' offering.id %}">{{ offering.position.name }}</a> на {{ offering.date|date:"d/m" }}</h5>
+            <p class="card-text">{{ offering.position.description }} {{ offering.id }}</p>
             <table class="table">
             <tbody>
             <tr>
             <th scope="row">
-
             {{ offering.position.name }}
                 <div id="{{ offering.id }}positionDiv" ><label for="position{{ offering.id }}">размер порции: </label>
                 <p id="{{ offering.id }}"><select name="position" id="position{{ offering.id }}">
@@ -45,7 +56,7 @@
                     ...
                 {% endif %}
             </td>
-            <td id="position{{ offering.id }}Price">{{ offering.position.base_price }}c</td>
+            <td id="position{{ offering.id }}Price">{{ offering.position.base_price }}</td>
 {#                {% if not offering.position.extra_price %}<td>{{ offering.position.base_price }}c</td>{% else %}<td><p id="position{{ offering.id }}Price">сумма</p></td>{% endif %}#}
             </tr>
 
@@ -142,7 +153,6 @@
                     let garnish = GARNISHES['garnishes'].filter(function (v, i ){
                         return (v["name"] == valueSelected && v["offering"] == {{ offering.id }});
                     })
-                    console.log(garnish)
                     let garnishSum = $('#garnishSum{{ offering.id }}')
                     if (garnish[0].extra_price){
                         let classSelected = optionSelected.attr("class");
@@ -365,7 +375,7 @@
 {#            </tr>#}
             </tbody>
             </table>
-            <p class="mt-3"><a href="#" class="btn btn-warning">купить</a></p>
+            <p class="mt-3"><button data-idoffering="{{ offering.id }}" onclick="AddToCart(event)" type="button" data-url="{% url 'kitchen:create_cart' %}" data-confirm="{% url 'kitchen:confirm_cart' %}" data-delete="{% url 'kitchen:delete_cart' %}">купить</button></p>
         </div>
     </div>
 </div>
@@ -375,6 +385,331 @@
 {% endfor %}
 <br>
 </div>
-    {% include 'partial/paginate.html' %}
+
+     <script>
+        function getCookie(name) {
+      if (!document.cookie) {
+        return null;
+      }
+      const xsrfCookies = document.cookie.split(';')
+        .map(c => c.trim())
+        .filter(c => c.startsWith(name + '='));
+
+      if (xsrfCookies.length === 0) {
+        return null;
+      }
+      return decodeURIComponent(xsrfCookies[0].split('=')[1]);
+    }
+
+
+    async function Delete_To_Cart(event) {
+        event.preventDefault()
+        const csrfToken = getCookie('csrftoken')
+        const headers = new Headers({
+        'Content-Type': 'x-www-form-urlencoded',
+         'X-CSRFToken' : csrfToken
+         });
+        let button = event.target
+        let div_cart_to_delete = document.getElementById(`div_cart${button.id}`)
+        let offering_id = button.id
+        let url = button.dataset.url
+        let pos_name = document.getElementById(`namePos${offering_id}`).textContent
+        let pos_port = document.getElementById(`portionPos${offering_id}`).textContent.split(':')[1].trim()
+        let pos_price = document.getElementById(`pricePos${offering_id}`).textContent.split(':')[1].trim()
+        let gar_name = null
+        let gar_port = null
+        let gar_price = null
+        let adi_name = null
+        let adi_price = null
+        let adi_port = null
+
+        if (document.getElementById(`nameGar${offering_id}`)) {
+            gar_name = document.getElementById(`nameGar${offering_id}`).textContent.split(':')[1].trim()
+            gar_port = document.getElementById(`portionGar${offering_id}`).textContent.split(':')[1].trim()
+            gar_price = document.getElementById(`priceGar${offering_id}`).textContent.split(':')[1].trim()
+        }
+
+        if (document.getElementById(`nameAdd${offering_id}`)) {
+            adi_name = document.getElementById(`nameAdd${offering_id}`).textContent.split(':')[1].trim()
+            adi_port = document.getElementById(`portionAdd${offering_id}`).textContent.split(':')[1].trim()
+            adi_price = document.getElementById(`priceAdd${offering_id}`).textContent.split(':')[1].trim()
+        }
+
+        if (gar_name !== null && adi_name !== null ) {
+            let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}, 'garnish': {'name': `${gar_name}` ,'portion': `${gar_port}`, 'price': `${gar_price}`}, 'additional': {'name': `${adi_name}`, 'price': `${adi_price}`, 'portion': `${adi_port}`}})})
+        .then(response => console.log(response))
+        }
+        else if (gar_name !== null && adi_name === null) {
+             let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}, 'garnish': {'name': `${gar_name}` ,'portion': `${gar_port}`, 'price': `${gar_price}`}})})
+        .then(response => console.log(response))
+        }
+        else if (gar_name === null && adi_name !== null) {
+         let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}, 'additional': {'name': `${adi_name}`, 'price': `${adi_price}`, 'portion': `${adi_port}`}})})
+        .then(response => console.log(response))
+        }
+        else {
+         let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}})})
+        .then(response => console.log(response))
+        }
+
+        if (parseInt(document.getElementById(`qty${offering_id}`).textContent) === 1) {
+            div_cart_to_delete.remove()
+        }
+        else {
+            qty = document.getElementById(`qty${offering_id}`)
+            qty_in_int = parseInt(qty.textContent)
+            output = qty_in_int - 1
+            qty.textContent = `${output}`
+        }
+
+
+
+
+
+
+
+
+    }
+
+
+    </script>
+
+    <script>
+        function getCookie(name) {
+      if (!document.cookie) {
+        return null;
+      }
+      const xsrfCookies = document.cookie.split(';')
+        .map(c => c.trim())
+        .filter(c => c.startsWith(name + '='));
+
+      if (xsrfCookies.length === 0) {
+        return null;
+      }
+      return decodeURIComponent(xsrfCookies[0].split('=')[1]);
+    }
+
+
+    async function AddToCart(event) {
+        event.preventDefault()
+        const button = event.target
+        const csrfToken = getCookie('csrftoken')
+        console.log(csrfToken);
+        const headers = new Headers({
+        'Content-Type': 'x-www-form-urlencoded',
+         'X-CSRFToken' : csrfToken
+         });
+        let url = button.dataset.url
+        let offering_id = button.dataset.idoffering
+        let pos_port = null
+        if (document.getElementById(`position${offering_id}`)){
+            pos_port = document.getElementById(`position${offering_id}`).value
+        }
+        else {
+            pos_port = '1.0'
+        }
+        console.log(offering_id)
+        console.log(document.getElementById(`position${offering_id}Price`))
+        let pos_price = parseInt(document.getElementById(`position${offering_id}Price`).textContent)
+        let gar_port = null
+        let gar_price = null
+        let gar_name = null
+        let adi_port = null
+        let adi_name = null
+        let adi_price = null
+        let divCart = document.getElementById('Cart')
+        let position_name = document.getElementById(`position_name${offering_id}`).textContent
+        let global_div = document.createElement('div')
+        let div_in_cart_position = document.createElement('div')
+        let div_in_cart_garnish = document.createElement('div')
+        let div_in_cart_additional = document.createElement('div')
+        let div_in_supplements = document.createElement('div')
+        let div_in_qty = document.createElement('div')
+        let p_qty_in_cart = document.createElement('p')
+        let p_name_position = document.createElement('p')
+        let p_portion_position = document.createElement('p')
+        let p_price_position = document.createElement('p')
+        p_name_position.id = `namePos${offering_id}`
+        p_portion_position.id = `portionPos${offering_id}`
+        p_price_position.id = `pricePos${offering_id}`
+        let p_name_garnish = document.createElement('p')
+        let p_portion_garnish = document.createElement('p')
+        let p_price_garnish = document.createElement('p')
+        p_name_garnish.id = `nameGar${offering_id}`
+        p_portion_garnish.id = `portionGar${offering_id}`
+        p_price_garnish.id = `priceGar${offering_id}`
+        let p_name_additional = document.createElement('p')
+        let p_portion_additional = document.createElement('p')
+        let p_price_additional= document.createElement('p')
+        p_name_additional.id = `nameAdd${offering_id}`
+        p_portion_additional.id = `portionAdd${offering_id}`
+        p_price_additional.id = `priceAdd${offering_id}`
+        let button_delete = document.createElement('button')
+        let p_name_qty = document.createElement('p')
+        p_name_qty.textContent = 'Кол-Во:'
+        div_in_qty.appendChild(p_name_qty)
+
+        if (document.getElementById(`garnish${offering_id}`)){
+             if (document.getElementById(`garnish_portion${offering_id}`)) {
+                gar_port = document.getElementById(`garnish_portion${offering_id}`).value
+             }
+             else {
+                gar_port = '1.0'
+             }
+             gar_price = document.getElementById(`garnishSum${offering_id}`).textContent
+             gar_name = document.getElementById(`garnish${offering_id}`).value
+        }
+        if (document.getElementById(`additional${offering_id}`)) {
+            if (document.getElementById(`additional_portion${offering_id}`)){
+                adi_port = document.getElementById(`additional_portion${offering_id}`).value
+            }
+            else {
+               adi_port = '1.0'
+            }
+        adi_name = document.getElementById(`additional${offering_id}`).value
+        adi_price = document.getElementById(`additionalSum${offering_id}`).textContent
+        }
+        if (document.getElementById(`qty${offering_id}`)){
+           let qty_off = document.getElementById(`qty${offering_id}`)
+           let integer = parseInt(qty_off.textContent)
+           let outcome = integer + 1
+            qty_off.textContent = `${outcome}`
+            let sum_in_cart = document.getElementById(`sum${offering_id}`)
+            sum_in_cart.textContent = '' + (parseInt(sum_in_cart.textContent) * parseInt(qty_off.textContent))
+
+            if (gar_name !== null && adi_name !== null ) {
+            let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}, 'garnish': {'name': `${gar_name}` ,'portion': `${gar_port}`, 'price': `${gar_price}`}, 'additional': {'name': `${adi_name}`, 'price': `${adi_price}`, 'portion': `${adi_port}`}})})
+        .then(response => console.log(response))
+        }
+        else if (gar_name !== null && adi_name === null) {
+             let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}, 'garnish': {'name': `${gar_name}` ,'portion': `${gar_port}`, 'price': `${gar_price}`}})})
+        .then(response => console.log(response))
+        }
+        else if (gar_name === null && adi_name !== null) {
+         let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}, 'additional': {'name': `${adi_name}`, 'price': `${adi_price}`, 'portion': `${adi_port}`}})})
+        .then(response => console.log(response))
+        }
+        else {
+         let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}})})
+        .then(response => console.log(response))
+        }
+        }
+        else {
+        p_qty_in_cart.textContent = '1'
+        p_qty_in_cart.id = `qty${offering_id}`
+        div_in_qty.appendChild(p_qty_in_cart)
+            button_delete.textContent = 'Удалить'
+        button_delete.setAttribute('onclick', "Delete_To_Cart(event)")
+        button_delete.setAttribute('id', `${offering_id}`)
+
+        button_delete.dataset.url = button.dataset.delete
+        p_name_position.textContent = position_name
+        p_portion_position.textContent = `Порция: ${pos_port}`
+        p_price_position.textContent = `Цена: ${pos_price}`
+        div_in_cart_position.appendChild(p_name_position)
+        div_in_cart_position.appendChild(p_portion_position)
+        div_in_cart_position.appendChild(p_price_position)
+        global_div.appendChild(div_in_cart_position)
+                        let div_to_sum = document.createElement('div')
+            let p_to_sum = document.createElement('p')
+            p_to_sum.id = `sum${offering_id}`
+
+
+        if (gar_name !== null && adi_name !== null ) {
+            let total_price = parseInt(pos_price) + parseInt(gar_price) + parseInt(adi_price)
+            let out = '' + total_price
+            p_to_sum.textContent = out
+            div_to_sum.appendChild(p_to_sum)
+            p_name_garnish.textContent = `Гарнир: ${gar_name}`
+            p_portion_garnish.textContent = `Порция: ${gar_port}`
+            p_price_garnish.textContent = `Цена: ${gar_price}`
+            p_name_additional.textContent = `Добавка: ${adi_name}`
+            p_portion_additional.textContent = `Порция: ${adi_port}`
+            p_price_additional.textContent = `Цена: ${adi_price}`
+            div_in_cart_garnish.appendChild(p_name_garnish)
+            div_in_cart_garnish.appendChild(p_portion_garnish)
+            div_in_cart_garnish.appendChild(p_price_garnish)
+            div_in_cart_additional.appendChild(p_name_additional)
+            div_in_cart_additional.appendChild(p_portion_additional)
+            div_in_cart_additional.appendChild(p_price_additional)
+            global_div.appendChild(div_in_cart_garnish)
+            global_div.appendChild(div_in_cart_additional)
+            let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}, 'garnish': {'name': `${gar_name}` ,'portion': `${gar_port}`, 'price': `${gar_price}`}, 'additional': {'name': `${adi_name}`, 'price': `${adi_price}`, 'portion': `${adi_port}`}})})
+        .then(response => console.log(response))
+        }
+        else if (gar_name !== null && adi_name === null) {
+            let total_price = parseInt(pos_price) + parseInt(gar_price)
+            let out = '' + total_price
+            p_to_sum.textContent = out
+            div_to_sum.appendChild(p_to_sum)
+            p_name_garnish.textContent = `Гарнир: ${gar_name}`
+            p_portion_garnish.textContent = `Порция: ${gar_port}`
+            p_price_garnish.textContent = `Цена: ${gar_price}`
+            div_in_cart_garnish.appendChild(p_name_garnish)
+            div_in_cart_garnish.appendChild(p_portion_garnish)
+            div_in_cart_garnish.appendChild(p_price_garnish)
+            global_div.appendChild(div_in_cart_garnish)
+             let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}, 'garnish': {'name': `${gar_name}` ,'portion': `${gar_port}`, 'price': `${gar_price}`}})})
+        .then(response => console.log(response))
+        }
+        else if (gar_name === null && adi_name !== null) {
+            let total_price = parseInt(pos_price) + parseInt(adi_price)
+            let out = '' + total_price
+            p_to_sum.textContent = out
+            div_to_sum.appendChild(p_to_sum)
+            p_name_additional.textContent = adi_name
+            p_portion_additional.textContent = adi_port
+            p_price_additional.textContent = adi_price
+            p_name_additional.textContent = `Добавка: ${adi_name}`
+            p_portion_additional.textContent = `Порция: ${adi_port}`
+            p_price_additional.textContent = `Цена: ${adi_price}`
+            global_div.appendChild(div_in_cart_additional)
+         let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}, 'additional': {'name': `${adi_name}`, 'price': `${adi_price}`, 'portion': `${adi_port}`}})})
+        .then(response => console.log(response))
+        }
+        else {
+            let total_price = parseInt(pos_price)
+            let out = '' + total_price
+            p_to_sum.textContent = out
+            div_to_sum.appendChild(p_to_sum)
+         let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify({'id': offering_id, 'position': {'portion': `${pos_port}`, 'price': `${pos_price}`}})})
+        .then(response => console.log(response))
+
+        }
+        global_div.id = `div_cart${offering_id}`
+            global_div.appendChild(div_to_sum)
+            global_div.appendChild(div_in_qty)
+            global_div.appendChild(button_delete)
+        divCart.appendChild(global_div)
+
+
+            if (!document.getElementById('confirm')) {
+            let confirm_button = document.createElement('button')
+            confirm_button.setAttribute('id', 'confirm')
+            confirm_button.setAttribute('onclick', 'Confirm(event)')
+            confirm_button.dataset.url = button.dataset.confirm
+            confirm_button.textContent = 'Confirm'
+            divCart.appendChild(confirm_button)
+        }
+
+    }
+        }
+
+            async function Confirm(event) {
+           event.preventDefault()
+           let button = event.target
+           let response = fetch(button.dataset.url, {
+               method: 'GET'
+           })
+           let global_div = document.getElementById('Cart')
+           global_div.innerHTML = ''
+
+
+        }
+
+
+
+    </script>
+
 
 {% endblock %}
