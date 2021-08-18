@@ -10,7 +10,7 @@ class CommandSendTests(TestCase):
         self.organization = OrganizationFactory(id=4)
         self.employee = EmployeeFactory(organization_id=self.organization)
         self.token = UserTokenFactory(user=self.employee)
-        self.client.get(reverse('profile', kwargs={'token': self.token.key, 'slug': 's'}))
+        self.client.get(reverse('profile', kwargs={'token': self.token.key}))
 
     def sending_command(self, data):
         response = self.client.post(reverse('kitchen:commands'), **data)
@@ -42,5 +42,11 @@ class CommandSendTests(TestCase):
         data = {
             'delivery_arrival-organization': [OrganizationFactory(id=i).id for i in range(3)],
             'delivery_arrival-text': 'test text'
+        }
+        self.sending_command(data)
+
+    def test_close_command(self):
+        data = {
+            'close_form-organization': [OrganizationFactory(id=i).id for i in range(3)]
         }
         self.sending_command(data)
