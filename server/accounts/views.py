@@ -52,6 +52,8 @@ class UserProfileView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['user'] = self.user
+        context['active_orders'] = self.user.order_user.filter(is_delivered=False)
+        context['orders'] = self.user.order_user.exclude(is_delivered=False)[0:5]
         return context
 
 
