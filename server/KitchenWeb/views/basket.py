@@ -1,16 +1,9 @@
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
-from django.views.generic import ListView, CreateView, UpdateView, View
-from accounts.models import Employee, UserToken
 import json
-from KitchenWeb.models import Category, Cart, Offering, Order, OrderOffernig
-from KitchenWeb.forms import SearchForm, CategoryForm
-from django.utils.http import urlencode
-from django.db.models import Q
-from KitchenWeb.mixin import PermissionMixin
-from accounts.tasks import extra_price_parcer, create_json_portions, json_parcer
-import math
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
+from KitchenWeb.models import Cart, Offering, Order, OrderOffernig
+from accounts.models import Employee, UserToken
+from accounts.tasks import create_json_portions
 
 
 def cart_create(request, *args, **kwargs):
@@ -87,21 +80,6 @@ def delete_view_cart(request, *args, **kwargs):
 def search_off_in_cart_and_delete(request, *args, **kwargs):
     body = request.body
     if body:
-        # token = request.session['token']
-        # user_token = UserToken.objects.get(key=token)
-        # user = Employe.objects.get(user_token=user_token)
-        # parse_body = json.loads(body)
-        # offering_id = int(parse_body['id'])
-        # total_sum = int(parse_body['total_sum'])
-        # offering = Offering.objects.get(id=offering_id)
-        # cart_to_delete = Cart.objects.filter(user=user, offering=offering)[0]
-        # if cart_to_delete.qty == 1:
-        #     cart_to_delete.delete()
-        # else:
-        #     cart_to_delete.qty = cart_to_delete.qty - 1
-        #     cart_to_delete.price = cart_to_delete.price - total_sum
-        #     cart_to_delete.save()
-
         parse_body = json.loads(body)
         position = parse_body['position']
         offering = Offering.objects.get(id=int(parse_body['id']))

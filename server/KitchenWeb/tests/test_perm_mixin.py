@@ -218,6 +218,3 @@ class OrganizationBalancePageViewTest(TestCase):
         self.employee.save()
         self.response = self.client.get(reverse('kitchen:organization-balance', kwargs={'pk': self.organization.id}))
         self.assertEqual(self.response.status_code, 401)
-#
-#
-#

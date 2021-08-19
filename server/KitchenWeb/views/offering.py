@@ -26,7 +26,6 @@ class OfferingListView(ListView):
     paginate_by = 5
     paginate_orphans = 1
 
-
     def get(self, request, **kwargs):
         self.form = SearchForm(request.GET)
         self.search_data = self.get_search_data()
@@ -80,7 +79,6 @@ class OfferingListView(ListView):
                 o.save()
         context['dates'] = []
         for offering in context.get('object_list'):
-            print(offering)
             dates.append(offering.date)
         if dates:
             result_date = min(dates, key=lambda sub: abs(sub - now))

@@ -3,7 +3,6 @@ from django.urls import reverse
 
 from KitchenWeb.models import Cart
 from accounts.tasks import get_user
-from django.utils.safestring import SafeString
 register = template.Library()
 
 

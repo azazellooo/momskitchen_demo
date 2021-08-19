@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.http import urlencode
 from django.views.generic import ListView, CreateView, UpdateView
-
 from KitchenWeb.forms import SearchForm, OrganizationForm, BalanceChangeForm
 from KitchenWeb.mixin import PermissionMixin
 from accounts.models import Organization, BalanceChange, Employee

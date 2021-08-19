@@ -61,21 +61,17 @@ class CommandSendView(TemplateView):
         org_names = [Organization.objects.get(id=o).name for o in organizations]
         for org in organizations:
             for employee in Organization.objects.get(id=org).employe_org.filter(is_active=True):
-                # try:
+
                 bot.send_message(recipient=employee.tg_id, message=optional_text, parse_mode=PARSEMODE_MARKDOWN)
                 messages.add_message(self.request, messages.SUCCESS,
                                      f'отправлено уведомление {optional_text[0]} организациям: {org_names}')
-                # except BadRequest:
-                #     messages.add_message(self.request, messages.ERROR, 'сообщение не отправлено')
 
     def remind(self, organizations, optional_text):
         org_names = [Organization.objects.get(id=o).name for o in organizations]
         for org_id in organizations:
             org = Organization.objects.get(id=org_id)
-            print(org)
 
             for employee in org.employe_org.filter(is_active=True, cart_user__is_confirmed=False):
-                print(org)
                 link = self.generate_link_to_offerings(employee)
                 bot.send_message(recipient=employee.tg_id,
                                  message=f"Зака на {employee.cart_user.first().offering.date} закроется, <a href='{link}'>поторопись</a> ! {optional_text[0]}",

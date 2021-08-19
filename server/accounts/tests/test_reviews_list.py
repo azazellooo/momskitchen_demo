@@ -1,9 +1,6 @@
-import json
-from django.contrib.sessions.middleware import SessionMiddleware
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from django.urls import reverse
 from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory
-from KitchenWeb.views import GarnishCreateView
 
 
 class ReviewListViewTests(TestCase):
