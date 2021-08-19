@@ -40,7 +40,7 @@ class Dish(models.Model):
     description = models.TextField(max_length=500, blank=False, null=False, verbose_name='Описание')
     category = models.ForeignKey('KitchenWeb.Category', blank=False, null=False, verbose_name='Категория', on_delete=models.PROTECT, related_name='dish')
     image = models.ImageField(blank=True, null=True, upload_to='uploads', verbose_name='Фото')
-    base_price = models.IntegerField(blank=False, null=False, verbose_name='Базовая цена')
+    base_price = models.PositiveIntegerField(blank=False, null=False, verbose_name='Базовая цена')
     extra_price = models.JSONField(blank=True, null=True, verbose_name='Дополнительная цена')
 
     class Meta:
@@ -55,7 +55,7 @@ class Dish(models.Model):
 class Garnish(BaseModel):
     name = models.CharField(max_length=250, blank=False, null=False, verbose_name='Гарнир')
     order = models.IntegerField(null=False, blank=False, verbose_name='Очередность', validators=(MinValueValidator(1),))
-    base_price = models.IntegerField(blank=False, null=False, verbose_name='Базовая цена')
+    base_price = models.PositiveIntegerField(blank=False, null=False, verbose_name='Базовая цена')
     extra_price = models.JSONField(blank=True, null=True, verbose_name='Дополнительная цена')
 
     class Meta:
@@ -70,7 +70,7 @@ class Garnish(BaseModel):
 class Additional(BaseModel):
     name = models.CharField(max_length=200, blank=False, null=False, verbose_name='Дополнение к позиции')
     sampling_order = models.IntegerField(blank=False, null=False, verbose_name='Очередность при выборке')
-    base_price = models.IntegerField(blank=False, null=False, verbose_name='Базовая цена')
+    base_price = models.PositiveIntegerField(blank=False, null=False, verbose_name='Базовая цена')
     extra_price = models.JSONField(blank=True, null=True, verbose_name='Дополнительная цена')
 
     class Meta:
@@ -108,7 +108,7 @@ class Cart(models.Model):
     qty = models.IntegerField(null=False, blank=False, default=1, verbose_name='Кол-во товара')
     portions = models.JSONField(blank=False, null=False, verbose_name='Порции')
     is_confirmed = models.BooleanField(default=False, blank=False, null=False)
-    price = models.IntegerField(null=False, blank=False, default=0)
+    price = models.PositiveIntegerField(null=False, blank=False, default=0)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
@@ -124,7 +124,7 @@ class OrderOffernig(models.Model):
     offering = models.ForeignKey('KitchenWeb.Offering', blank=False, null=False, verbose_name='Предложение', on_delete=models.CASCADE, related_name='offering_o')
     portions = models.JSONField(blank=False, null=False, verbose_name='Порции')
     order = models.ForeignKey('KitchenWeb.Order', blank=False, null=False, verbose_name='Заказ', on_delete=models.CASCADE, related_name='order_o')
-    price = models.IntegerField(null=False, blank=False, default=0)
+    price = models.PositiveIntegerField(null=False, blank=False, default=0)
     qty = models.IntegerField(null=False, blank=False)
 
 
