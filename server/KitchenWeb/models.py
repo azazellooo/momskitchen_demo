@@ -142,6 +142,12 @@ class Order(models.Model):
     def __str__(self):
         return f'{self.user} - {self.offering}'
 
+    def total_sum(self):
+        total = 0
+        for order_o in self.order_o.all():
+            total += order_o.price
+        return total
+
 
 class Command(models.Model):
     organization = models.ManyToManyField('accounts.Organization', blank=False, null=False, related_name='commands', verbose_name='Организации')
