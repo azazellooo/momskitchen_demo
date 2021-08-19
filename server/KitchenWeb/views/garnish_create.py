@@ -42,7 +42,7 @@ class GarnishCreateView(PermissionMixin, CreateView):
         except MultiValueDictKeyError:
             garnish.save()
         garnish.save()
-        return redirect('kitchen:organization-list')
+        return redirect('kitchen:list_garnish')
 
     def get_success_url(self):
         return reverse('index')
