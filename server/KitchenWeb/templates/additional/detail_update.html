@@ -4,10 +4,10 @@
 
 
 {% block content %}
-    {{ extra_price|json_script:'extra_price' }}
+    {{ additional.extra_price|json_script:'extra_price' }}
     {{ type|json_script:'types' }}
     <h2>
-        Гарнир {{ additional.id }}. {{ additional.name }}
+        Дополнение {{ additional.id }}. {{ additional.name }}
     </h2>
     <button type="button" id="edit_btn" class="btn btn-info">Редактировать</button>
     <button type="button" id="cancel_btn" class="btn btn-info">Отмена</button>
@@ -26,11 +26,18 @@
      const TYPES_UPDATE = JSON.parse(document.getElementById('types').textContent);
      let COUNT = 1
 
-     let extra_price = JSON.parse(document.getElementById('extra_price').textContent);
+     let extra_price_before_parsing = document.getElementById('extra_price').textContent
+     try {
+      let extra_price = JSON.parse(JSON.parse(extra_price_before_parsing));
+     } catch (e) {
+         if (e instanceof SyntaxError){
+             extra_price = JSON.parse(extra_price_before_parsing)
+         }
+     }
+
         if (extra_price) {
 
             for (let volume in extra_price) {
-                console.log(volume)
                 $("<div/>").attr({id: 'selectBlock' + COUNT}).appendTo(block)
                 $("<input/>").attr({
                     class: "extra_input", type: 'text', id: 'comment' + COUNT,required: true, value:
