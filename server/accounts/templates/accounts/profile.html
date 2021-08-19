@@ -6,24 +6,82 @@
 
 
 {% block content %}
-    <h1 class="text-center">Профиль пользователя</h1>
-
-    <div class="card text-center">
-      <div class="card-header">
-        Привет, {{ user.username }}!
-      </div>
-      <div class="card-body">
-        <p>Ваша организация: {{ user.organization_id.name }}</p>
-        {% if user.is_active %}
-            <p>Ваш текущий статус: Активен</p>
-        {% else %}
-            <p>Ваш текущий статус: Неактивен</p>
-        {% endif %}
-        <p>Ваш текущий баланс: {{ user.total_balance }} сом </p>
-      </div>
-      <div class="card-footer text-muted">
-        <p>Ваш активный заказ: </p>
-      </div>
+    <div class="row justify-content-between mt-5 ">
+        <div class="col-md-8"><h3 class="text-left text-uppercase font-weight-light" style="color: #eea236">Профиль</h3></div>
+        <div class="col-md-4 text-right"><a class="btn btn-outline-info btn-sm" href="{% url 'user_update' %}"><i class="far fa-edit "></i> редактировать профиль</a></div>
     </div>
+ <hr>
+
+    <div class="row bg-light justify-content-start">
+        <div class="col-md-3 font-weight-bold p-3">
+           <p class=""><i class="far fa-building" style="color: #66afe9"></i> Организация:</p>
+            <p><i class="fas fa-check text-secondary" ></i> Статус:</p>
+            <p><i class="fas fa-credit-card text-success"></i> Баланс:</p>
+            <p></p>
+        </div>
+
+        <div class="col-md-3 p-3 text-secondary">
+            <p style="color: #1e347b">{{ user.organization_id.name }}</p>
+            {% if user.is_active %}
+                <p>Активен <i class="fas fa-unlock text-secondary"></i> </p>
+            {% else %}
+                <p>Неактивен <i class="fas fa-lock text-secondary"></i></p>
+            {% endif %}
+            <p>{{ user.total_balance }} сом</p>
+        </div>
+
+        <div class="col-md-6 p-3">
+            {% if active_orders %}
+            <p><i class="far fa-circle text-success"></i> Активные заказы: </p>
+            {% for order in active_orders.all %}
+                <div class="border border-success rounded mb-2">
+                    <p class="m-2 mb-0">На {{ order.created_at.date }} :</p>
+                    <ol class="p-2">
+                    {% for offering in order.offering.all %}
+                        <li class="text-secondary text-center">{{ offering.position }}</li>
+                    {% endfor %}
+                    </ol>
+                </div>
+            {% endfor %}
+            {% else %}
+                <p class="text-secondary"><i class="far fa-circle text-secondary"></i> Активных заказов нет.</p>
+            {% endif %}
+        </div>
+    </div>
+<hr>
+    <div class="mt-5">
+    {% if orders %}
+
+    <h3 style="font-weight: normal; color: #e38d13">Недавние заказы: </h3>
+
+<table class="table mt-3 text-start">
+    <thead class="text-light text-uppercase" style="font-size: 13px; background-color: #1e347b">
+        <tr>
+            <th scope="col">дата</th>
+            <th scope="col">предложения</th>
+            <th scope="col">сумма</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for order in orders %}
+        <tr>
+            <td scope="row">{{ order.created_at }}</td>
+            <td>
+                {% for offering in order.offering.all %}
+                    <span>{{ offering.position }},</span>
+                {% endfor %}
+            </td>
+            <td>
+                <p>{{ order.total_sum }}</p>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+    {% else %}
+        <h4 class="text-secondary">Заказов еще нет.</h4>
+    {% endif %}
+    </div>
+
 
 {% endblock %}
