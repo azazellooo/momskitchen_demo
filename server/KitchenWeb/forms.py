@@ -45,7 +45,7 @@ class PositionForm(forms.ModelForm):
     class Meta:
         model = Dish
         category = forms.ModelChoiceField(queryset=Category.objects.all())
-        fields = ('name', 'description', 'category', 'image', 'base_price', 'extra_price')
+        fields = ('name', 'description', 'category', 'image', 'base_price')
 
 
 class GarnishForm(forms.ModelForm):
@@ -58,7 +58,7 @@ class GarnishForm(forms.ModelForm):
 
     class Meta:
         model = Garnish
-        fields = ['name', 'order', 'base_price', 'extra_price']
+        fields = ['name', 'order', 'base_price']
 
 
 
@@ -83,7 +83,7 @@ class AdditionalForm(forms.ModelForm):
 
     class Meta:
         model = Additional
-        fields = ('name', 'sampling_order', 'base_price', 'extra_price')
+        fields = ('name', 'sampling_order', 'base_price')
 
 
 class DateInput(forms.DateInput):

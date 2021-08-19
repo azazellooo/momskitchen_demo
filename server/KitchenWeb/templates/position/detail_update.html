@@ -15,7 +15,7 @@
         <form id="myForm" action="{% url "kitchen:detail_update_position" position.pk %}" method="post" enctype="multipart/form-data">
                 {% include "partial/kitchen_form.html"  %}
                 {% if not position.extra_price or position.extra_price == "{}" %}
-                    <btn class='btn' type="submit" id="add" onclick="addExtraBtn2(event);">Добавить дополнительные цены</btn>
+                    <btn class='btn btn-outline-info my-3' type="submit" id="add" onclick="addExtraBtn2(event);">Добавить дополнительные цены</btn>
                 {% endif %}
                 <div class="selects" id="selects"></div>
                 <p><input type="submit" id="savePosition" value="Обновить"></p>
@@ -94,8 +94,8 @@
                      option.innerHTML = i
                      select1.appendChild(option)
                  }
-                 $("<button>(+)</button>").attr({class:'plus-min-btn', onclick:"addExtraBtn2(event);"}).appendTo('#selectBlock'+COUNT);
-                 $("<button>(-)</button>").attr({class:'plus-min-btn', type:'submit', onclick:"removeExtraBtn2(event);"}).appendTo('#selectBlock'+COUNT);
+                 $("<button>(+)</button>").attr({class:'plus-min-btn btn btn-outline-primary btn-sm mx-2', onclick:"addExtraBtn2(event);"}).appendTo('#selectBlock'+COUNT);
+                 $("<button>(-)</button>").attr({class:'plus-min-btn btn btn-outline-danger btn-sm mx-2', type:'submit', onclick:"removeExtraBtn2(event);"}).appendTo('#selectBlock'+COUNT);
                  COUNT += 1
             }
             else {

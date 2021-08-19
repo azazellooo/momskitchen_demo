@@ -4,8 +4,9 @@
 
 
 {% block content %}
-    {{ extra_price|json_script:'extra_price' }}
+    {{ garnish.extra_price|json_script:'extra_price' }}
     {{ type|json_script:'types' }}
+
     <h2>
         Гарнир {{ garnish.id }}. {{ garnish.name }}
     </h2>
@@ -24,11 +25,20 @@
 
 
     <script>
+
      let block = document.getElementById('selects')
      const TYPES_UPDATE = JSON.parse(document.getElementById('types').textContent);
      let COUNT = 1
+     let extra_price_before_parsing = document.getElementById('extra_price').textContent
+     try {
+      let extra_price = JSON.parse(JSON.parse(extra_price_before_parsing));
+     } catch (e) {
+         if (e instanceof SyntaxError){
+             extra_price = JSON.parse(extra_price_before_parsing)
+             console.log('fghjk')
+         }
+     }
 
-     let extra_price = JSON.parse(document.getElementById('extra_price').textContent);
         if (extra_price) {
 
             for (let volume in extra_price) {
@@ -116,9 +126,7 @@
 
     $(document).ready(function() {
         let childNodes = document.getElementById("selects").getElementsByTagName('input', 'select', 'button');
-
         for (let i of childNodes) {
-            console.log(i);
             $(i).prop('disabled', true)
         }
 
