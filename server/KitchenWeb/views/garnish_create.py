@@ -5,10 +5,8 @@ import json
 from KitchenWeb.forms import GarnishForm
 from KitchenWeb.models import Garnish
 from KitchenWeb.mixin import PermissionMixin
-
-
-
 TYPES = [0.3, 0.5, 0.7, 1.3, 1.5, 1.7, 2]
+
 
 class GarnishCreateView(PermissionMixin, CreateView):
     model = Garnish
@@ -42,7 +40,7 @@ class GarnishCreateView(PermissionMixin, CreateView):
         except MultiValueDictKeyError:
             garnish.save()
         garnish.save()
-        return redirect('kitchen:organization-list')
+        return redirect('kitchen:list_garnish')
 
     def get_success_url(self):
         return reverse('index')

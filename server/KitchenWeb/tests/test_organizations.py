@@ -150,21 +150,3 @@ class OrganizationBalancePageViewTests(TestCase):
     def test_form_exists(self):
         if self.organization.employe_org.count() >= 1:
             self.assertContains(self.response, 'обновить баланс')
-
-    # def test_accrual(self):
-    #     self.assertEqual(10, self.employee.total_balance)
-    #     data = {"employee": self.employee.id, "type": 'accrual', "comment": 'test comment', "sum_balance": 100}
-    #     response = self.client.post(self.path, data=data)
-    #     self.assertRedirects(response, self.path)
-    #     self.assertEqual(302, response.status_code)
-    #     self.employee.refresh_from_db()
-    #     self.assertEqual(110, self.employee.total_balance)
-    #
-    # def test_write_off(self):
-    #     self.assertEqual(10, self.employee.total_balance)
-    #     data = {"employee": self.employee.id, "type": 'write-off', "comment": 'test comment', "sum_balance": 5}
-    #     response = self.client.post(self.path, data=data)
-    #     self.assertRedirects(response, self.path)
-    #     self.assertEqual(302, response.status_code)
-    #     self.employee.refresh_from_db()
-    #     self.assertEqual(5, self.employee.total_balance)

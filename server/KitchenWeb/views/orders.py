@@ -2,8 +2,8 @@ from datetime import datetime
 from django.views.generic import ListView
 from KitchenWeb.mixin import PermissionMixin
 from KitchenWeb.models import Cart
-from KitchenWeb.models import Order, OrderOffernig
-from accounts.models import Organization
+from KitchenWeb.models import Order
+
 
 
 class OrderListView(PermissionMixin, ListView):

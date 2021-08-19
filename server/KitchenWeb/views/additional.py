@@ -75,7 +75,6 @@ class AdditionalCreateView(PermissionMixin, CreateView):
                             "pricing": (form.data.getlist(f'pricing{counter}'))[0]
                         }
                         counter -= 1
-                # json_var = json.dumps(to_json)
                 additional.extra_price = to_json
         except MultiValueDictKeyError:
             additional.save()

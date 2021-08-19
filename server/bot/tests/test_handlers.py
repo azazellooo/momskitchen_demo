@@ -170,7 +170,6 @@ class TestMainCommandsHandler(BaseBot):
         telegram.review(update, context)
         self.assertTrue(telegram.bot.send_message.called)
         args, message = telegram.bot.send_message.call_args
-        print(telegram.bot.send_message.call_args)
         self.assertEqual(message.get('text'), REVIEW_ADMIN_SUCCESS)
 
 

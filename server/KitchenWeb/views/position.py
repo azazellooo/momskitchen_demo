@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.http import urlencode
 from django.views.generic import CreateView, ListView, UpdateView
-
 from KitchenWeb.forms import PositionForm, SearchForm
 from KitchenWeb.mixin import PermissionMixin
 from KitchenWeb.models import Dish, Category

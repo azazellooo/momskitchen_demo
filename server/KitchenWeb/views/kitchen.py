@@ -6,6 +6,7 @@ from KitchenWeb.forms import SearchForm, SupplementForm
 from django.utils.http import urlencode
 from KitchenWeb.mixin import PermissionMixin
 
+
 class SupplementListView(PermissionMixin, ListView):
     template_name = 'supplements/list.html'
     paginate_by = 5
@@ -48,7 +49,7 @@ class SupplementCreateView(PermissionMixin, CreateView):
     form_class = SupplementForm
 
     def get_success_url(self):
-        return reverse('kitchen:detail_update_supplement', kwargs={'pk': self.object.pk})
+        return reverse('kitchen:supplement-list')
 
 
 class SupplementDetailUpdateView(PermissionMixin, UpdateView):

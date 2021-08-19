@@ -1,21 +1,12 @@
 import json
-import time
-from time import sleep
-import requests
-from django.contrib.sessions.middleware import SessionMiddleware
-from webdriver_manager.chrome import ChromeDriverManager
 
-from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, AdditionalFactory
-from django.test import TestCase, RequestFactory, LiveServerTestCase, Client
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.sessions.middleware import SessionMiddleware
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
-from selenium.webdriver import Chrome
-from accounts.models import Employee, UserToken, Organization
+
 from KitchenWeb.models import Additional
-from KitchenWeb.views import OrganizationCreateView
-from KitchenWeb.views.additional import AdditionalCreateView, AdditionalDetailUpdateView
-from accounts.models import Organization
-from mixer.backend.django import mixer
+from KitchenWeb.tests.factory_boy import OrganizationFactory, EmployeeFactory, UserTokenFactory, AdditionalFactory
+from KitchenWeb.views.additional import AdditionalCreateView
 
 
 class AdditionalListViewTests(TestCase):

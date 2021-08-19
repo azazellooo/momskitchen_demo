@@ -1,6 +1,5 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from django.urls import reverse
-
 from KitchenWeb.tests.factory_boy import EmployeeFactory, UserTokenFactory
 from accounts.models import UserToken
 

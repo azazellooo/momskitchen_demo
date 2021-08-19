@@ -1,5 +1,4 @@
 import json
-
 import factory
 from KitchenWeb.models import Category, Offering, Dish, Garnish, Additional
 import random
