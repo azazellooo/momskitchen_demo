@@ -48,7 +48,7 @@ class Employee(models.Model):
     tg_firstname = models.CharField(max_length=128, null=True, blank=True, verbose_name='Имя телеграм юзера')
     tg_lastname = models.CharField(max_length=128, null=True, blank=True, verbose_name='Фамилия телеграм юзера')
     organization_id = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE,
-                                        null=True, related_name='employe_org', blank=True, verbose_name='Внешний ключ на организацию')
+                                        blank=False, null=False, related_name='employe_org', verbose_name='Внешний ключ на организацию')
     username = models.CharField(max_length=200, null=True, blank=True,
                                 unique=True, validators=[MinLengthValidator(3)], verbose_name='Username')
     is_active = models.BooleanField(default=True, verbose_name='Активен ли пользователь')
