@@ -11,12 +11,13 @@
         <div class="col-sm-6 mt-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title"><a href="{% url 'kitchen:organization-detail-update' organization.id %}">{{ organization.name }}</a></h5>
-        <p class="card-text">Сотрудники: {{ organization.employe_org.count }}</p>
+        <h5 class="card-title"><a href="{% url 'kitchen:organization-detail-update' organization.id %}">{{ organization.name }} </a></h5>
+          <p>ссылка для перехода: <span class="text-info"> {{ organization.generate_link }}</span></p>
+          <p class="card-text">Сотрудники: {{ organization.employe_org.count }}</p>
           {% if organization.payment == 'cumulative'  %}
         <p class="card-text"> </p>
         <a href="{% url 'kitchen:organization-balance' organization.id %}" class="btn btn-primary">страница балансов</a>
-                    {% endif %}
+                    {% endif %}q
       </div>
     </div>
   </div>
