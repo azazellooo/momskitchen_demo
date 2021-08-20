@@ -84,8 +84,14 @@ def search_off_in_cart_and_delete(request, *args, **kwargs):
         parse_body = json.loads(body)
         position = parse_body['position']
         offering = Offering.objects.get(id=int(parse_body['id']))
-        garnish = parse_body['garnish']
-        additional = parse_body['additional']
+        try:
+            garnish = parse_body['garnish']
+        except:
+            garnish = None
+        try:
+            additional = parse_body['additional']
+        except:
+            additional = None
         ready_json = create_json_portions(position, garnish, additional)
         offering_portion = float(ready_json['Position']['portion'])
         total_qty_portions = float(offering.qty_portion)
