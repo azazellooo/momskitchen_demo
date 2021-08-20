@@ -40,7 +40,8 @@ def cart_create(request, *args, **kwargs):
                 cart = Cart.objects.filter(
                     offering=offering,
                     user=user,
-                    portions=json_var
+                    portions=json_var,
+                    is_confirmed=False
                 )[0]
                 cart.qty += 1
                 for i in offering.supplement.all():
@@ -70,11 +71,11 @@ def delete_view_cart(request, *args, **kwargs):
     cart = Cart.objects.get(id=kwargs.get('pk'))
     if cart.qty == 1:
         cart.delete()
-        return redirect('kitchen:offering_list')
+        return redirect('kitchen:menu')
     else:
         cart.qty = cart.qty - 1
         cart.save()
-        return redirect('kitchen:offering_list')
+        return redirect('kitchen:menu')
 
 
 def search_off_in_cart_and_delete(request, *args, **kwargs):
