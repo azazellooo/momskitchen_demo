@@ -43,7 +43,7 @@ class Organization(models.Model):
 
 
 class Employee(models.Model):
-    tg_username = models.CharField(max_length=128, null=False, blank=False, verbose_name='Юзернейм телеграм юзера')
+    tg_username = models.CharField(max_length=128, null=True, blank=True, verbose_name='Юзернейм телеграм юзера')
     tg_id = models.CharField(max_length=128, null=False, blank=False, verbose_name='ID телеграм юзера')
     tg_firstname = models.CharField(max_length=128, null=True, blank=True, verbose_name='Имя телеграм юзера')
     tg_lastname = models.CharField(max_length=128, null=True, blank=True, verbose_name='Фамилия телеграм юзера')
