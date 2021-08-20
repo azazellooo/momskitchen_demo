@@ -10,14 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 import os
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.contrib.messages import constants as messages
-
 import server
 from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
+from django.conf.locale.ru import formats as ru_formats
 
 
 
@@ -32,7 +32,7 @@ DEBUG = config('DEBUG')
 ALLOWED_HOSTS = ['*']
 
 TOKEN = '1920485677:AAHivPLMmhSxzUejTdvmIG1QV6YFFeDB4nY'
-LISTEN_WEBHOOK = 'https://0e021fd7c522.ngrok.io'
+LISTEN_WEBHOOK = 'https://2930bdc4c179.ngrok.io'
 WEBHOOK_PORT = 8000
 
 # Application definition
@@ -123,21 +123,35 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LANGUAGES = [
+    ('en', _('English')),
+    ('ru', _('Russian')),
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
 
+LANGUAGE_CODE = 'ru-RU'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
+ru_formats.DATE_FORMAT = 'd.m.Y'
 
+ru_formats.TIME_FORMAT = 'H:i'
+
+ru_formats.DATETIME_FORMAT = 'd.m.Y H:i'
+
+DATE_FORMAT = 'j E Y'
+
+TIME_FORMAT = 'H:i'
+
+DATETIME_FORMAT = 'j E Y H:i'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -148,6 +162,11 @@ MEDIA_URL = '/uploads/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale')
+]
+
 
 
 # Default primary key field type
