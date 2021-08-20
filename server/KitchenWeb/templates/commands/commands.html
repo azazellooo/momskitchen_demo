@@ -3,60 +3,80 @@
 {% block content %}
 <div class="container">
     <br/>
+    <div class="row justify-content-between">
+        <div class="col-md-5 mr-3 border bg-secondary mt-5 text-light pt-3">
+            <form action="{% url 'kitchen:commands' %}" method="post">
+            <h5>Блок команды о создании заказа</h5>
+            {% csrf_token %}
+            {{ create_form.as_p }}
+            <p>
+                <button class="btn btn-warning" type="submit">отправить</button>
+            </p>
+            </form>
+        </div>
 
-    <form action="{% url 'kitchen:commands' %}" method="post">
-        <h5>Блок команды о создании заказа</h5>
-        {% csrf_token %}
-        {{ create_form.as_p }}
-        <p>
-            <button type="submit">Submit</button>
-        </p>
-    </form>
+        <div class="col-md-5 mr-3 border bg-secondary mt-5 text-light pt-3">
 
-
-    <form action="{% url 'kitchen:commands' %}" method="post">
-        <h5>Блок команды напоминания о заказе</h5>
-        {% csrf_token %}
-        {{ reminder_form.as_p }}
-        <p>
-            <button type="submit">Submit</button>
-        </p>
-    </form>
-
-
-    <form action="{% url 'kitchen:commands' %}" method="post">
-        <h5>Блок команды о закрытии заказа</h5>
-        {% csrf_token %}
-        {{ close_form.as_p }}
-        <p>
-            <button type="submit">Submit</button>
-        </p>
-    </form>
-
-    <form action="{% url 'kitchen:commands' %}" method="post">
-        <h5>Блок оповещения</h5>
-        {% csrf_token %}
-        {{ notification_form.as_p }}
-        {{ notification_form.media }}
-        <p>
-            <button type="submit">Submit</button>
-        </p>
-    <script>
-        $(document).ready(function (){
-            $('.markdownx')[0].setAttribute('class', 'row')
-            $('.markdownx-preview')[0].setAttribute('class', 'ml-2 mt-2 w-50 border py-3 px-3 ')
-        })
-    </script>
-    </form>
+            <form action="{% url 'kitchen:commands' %}" method="post">
+                <h5>Блок команды напоминания о заказе</h5>
+                {% csrf_token %}
+                {{ reminder_form.as_p }}
+                <p>
+                    <button class="btn btn-warning" type="submit">Submit</button>
+                </p>
+            </form>
+        </div>
 
 
-    <form action="{% url 'kitchen:commands' %}" method="post">
-        <h5>Блок команды о прибытии доставки</h5>
-        {% csrf_token %}
-        {{ delivery_arrival.as_p }}
-        <p>
-            <button type="submit">Submit</button>
-        </p>
-    </form>
+        <div class="col-md-5 mr-3 border bg-secondary mt-5 text-light pt-3">
+            <form action="{% url 'kitchen:commands' %}" method="post">
+                <h5>Блок команды о закрытии заказа</h5>
+                {% csrf_token %}
+                {{ close_form.as_p }}
+                <p>
+                    <button class="btn btn-warning" type="submit">Submit</button>
+                </p>
+            </form>
+        </div>
+
+        <div class="col-md-5 mr-3 border bg-secondary mt-5 text-light pt-3">
+            <form action="{% url 'kitchen:commands' %}" method="post">
+                <h5>Блок команды о прибытии доставки</h5>
+                {% csrf_token %}
+                {{ delivery_arrival.as_p }}
+                <p>
+                    <button class="btn btn-warning" type="submit">Submit</button>
+                </p>
+            </form>
+        </div>
+
+        <div class="col-md-12 mr-3  mt-5 pt-3">
+            <form action="{% url 'kitchen:commands' %}" method="post">
+                <h5>Блок оповещения</h5>
+                {% csrf_token %}
+                {{ notification_form.as_p }}
+                {{ notification_form.media }}
+                <p>
+                    <button class="btn btn-warning" type="submit">Submit</button>
+                </p>
+            <script>
+                $(document).ready(function (){
+                    $('.markdownx')[0].setAttribute('class', 'row')
+                    $('.markdownx-preview')[0].setAttribute('class', 'ml-2 mt-2 w-50 border py-3 px-3 ')
+                })
+            </script>
+            </form>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
 </div>
 {% endblock %}

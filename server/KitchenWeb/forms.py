@@ -124,10 +124,12 @@ class BalanceChangeForm(forms.ModelForm):
         fields = ('type', 'sum_balance', 'comment')
 
 
-
-
-
 class OrderCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(OrderCreateForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control', 'style': 'width: 300px;'})
 
     class Meta:
         model = Command
@@ -136,13 +138,22 @@ class OrderCreateForm(forms.ModelForm):
 
 class OrderReminderForm(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super(OrderReminderForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control', 'style': 'width: 300px;'})
+
     class Meta:
         model = Command
         fields = ('organization', 'text')
 
 
-
 class OrderCloseForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(OrderCloseForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control', 'style': 'width: 300px;'})
 
     class Meta:
         model = Command
@@ -150,6 +161,11 @@ class OrderCloseForm(forms.ModelForm):
 
 
 class DeliveryArrivalForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(DeliveryArrivalForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control', 'style': 'width: 300px;'})
 
     class Meta:
         model = Command
