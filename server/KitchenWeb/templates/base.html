@@ -45,7 +45,7 @@
                      Меню
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                       <li><a class="dropdown-item" href="{% url "kitchen:offering_list" %}">Предложения</a></li>
+                       <li><a class="dropdown-item" href="{% url "kitchen:menu" %}">Предложения</a></li>
                        <li><a class="dropdown-item" href="{% url "kitchen:list_position" %}">Позиции</a></li><br>
                         <li><a class="dropdown-item" href="{% url "kitchen:list_garnish" %}">Гарниры</a></li>
                         <li><a class="dropdown-item" href="{% url "kitchen:additional_list" %}">Дополнения к позициям</a></li>
@@ -74,8 +74,9 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item" href="{% url 'kitchen:organization-list' %}">Все компании</a></li>
-                                <li><a class="dropdown-item" href="{% url "kitchen:organization-create" %}">Добавить организацию</a><li>
-                                <li><a class="dropdown-item" href="{% url "reviews_list" %}">Отзывы</a><li>
+                                <li><a class="dropdown-item" href="{% url "kitchen:organization-create" %}">Добавить организацию</a></li>
+                                <li><a class="dropdown-item" href="{% url "reviews_list" %}">Отзывы</a></li>
+                                <li><a class="dropdown-item" href="{% url "kitchen:orders" %}">Заказы</a></li>
                             </ul>
                           </li>
                      {% endif %}
@@ -146,10 +147,7 @@
 <div class="container">
            {% block content %}
             {% endblock %}
-
 </div>
-
-
 </body>
 </html>
 

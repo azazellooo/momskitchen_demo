@@ -16,7 +16,7 @@ class OfferingCreateView(PermissionMixin, CreateView):
     context_object_name = 'offerings'
 
     def get_success_url(self):
-        return reverse('kitchen:offering_list')
+        return reverse('kitchen:menu')
 
 
 class OfferingListView(ListView):
@@ -84,7 +84,7 @@ class OfferingListView(ListView):
             result_date = min(dates, key=lambda sub: abs(sub - now))
             for offering in Offering.objects.all():
                 if offering.date > result_date and counter < 5:
-                    context['dates'].append(str(offering.date))
+                    context['dates'].append(str(offering.date)) if str(offering.date) not in context['dates'] else context['dates']
                     counter += 1
             context['date'] = result_date
         context['search_form'] = self.form

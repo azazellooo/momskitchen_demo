@@ -142,10 +142,11 @@ class Order(models.Model):
     def __str__(self):
         return f'{self.user} - {self.offering}'
 
-    def total_sum(self):
+    @staticmethod
+    def total_sum(array):
         total = 0
-        for order_o in self.order_o.all():
-            total += order_o.price
+        for order_offering in array:
+            total += order_offering.price
         return total
 
 

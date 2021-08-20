@@ -1,19 +1,30 @@
 {% extends 'base.html'%}
+{% load dict_filters %}
+{% load i18n %}
 {% block title %}Текущие заказы{% endblock title %}
 {% block content %}
-<br>
-{% if orders %}
-<h1>Заказы на {{ date }}</h1>
+{% if dates %}
+        <ul class="paginator-links">
+        {% for sub_date in dates %}
+            <li>
+                <a class="paginator" href='{% url "kitchen:orders_for_date" sub_date %}'>{{ sub_date }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% if order_data %}
+<br><br>
+    <h1>Заказы на {% blocktranslate %} {{ date }} {% endblocktranslate %} </h1>
 {% endif %}
 {% for organization, users in order_data.items %}
 <h3 class="org-title"><a href="{% url 'kitchen:organization-detail-update' organization.id %}">{{ organization.name }}</a></h3>
 <div class="card-deck">
     {% for user, order_offerings_and_carts in users.items %}
-      <div class="card border-success">
-        <div class="card-header"><h4>{{user.username}}</h4></div>
+      <div class="card border-warning"">
+        <div class="card-header text-dark bg-warning"><h4 style="font-weight: bold;">{{user.username}}</h4></div>
           {% if order_offerings_and_carts.order_offerings.items %}
         <div class="card-body">
-          <h5 class="card-title">Заказы пользователя:</h5>
+          <h5 class="card-title" style="font-weight: bold;">Заказы пользователя:</h5>
             {% for order_offering, offering in order_offerings_and_carts.order_offerings.items %}
             <div class="order">
                 <p class="card-text">{{ offering.position }} (Порция: {{ order_offering.portions.Position.portion }})</p>
@@ -47,7 +58,10 @@
     {% endfor %}
 </div>
 <div>
-<h5>Общая сумма для {{ organization.name }}: {{ total_sum.organization }} сом</h5></div>
+    <br>
+    <h5>Общая сумма для {{ organization.name }}: {{ organizations|get_item:organization }} сом</h5></div>
+<br>
+<hr>
 {% empty %}
 <br>
     <h2 class="text-center">Нет предстоящих заказов</h2>

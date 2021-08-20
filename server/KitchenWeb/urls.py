@@ -74,25 +74,25 @@ kitchen_urls = [
     path('additional/create/', AdditionalCreateView.as_view(), name='additional_create'),
     path('additional/<int:pk>/', AdditionalDetailUpdateView.as_view(), name='additional_detail_update'),
     path('offering/create/', OfferingCreateView.as_view(), name='offering_create'),
-    path('offering/list/', OfferingListView.as_view(), name='offering_list'),
     path('offering/<int:pk>/', OfferingDetailUpdateView.as_view(), name='offering-detail'),
     path('add/in/cart/', cart_create, name='create_cart'),
     path('remove/from/cart', search_off_in_cart_and_delete, name='delete_cart'),
     path('confirm/cart/', confirm_cart, name='confirm_cart'),
     path('remove/back/from/cart/<int:pk>/', delete_view_cart, name='back_delete_cart'),
     path('offering/<int:pk>/', OfferingDetailUpdateView.as_view(), name='offering-detail'),
-    path('menu/<str:date>/', OfferingListViewForDate.as_view(), name='menu_for_date'),
     path('orders/<str:date>/', OrderListViewForDate.as_view(), name='orders_for_date'),
     path('orders/', OrderListView.as_view(), name='orders')
 
 ]
-
 commands_urls = [
     path('', CommandSendView.as_view(), name='commands')
 ]
-
-
+menu_urls = [
+    path('menu/', OfferingListView.as_view(), name='menu'),
+    path('menu/<str:date>/', OfferingListViewForDate.as_view(), name='menu_for_date'),
+]
 urlpatterns = [
+    path('', include(menu_urls)),
     path("organizations/", include(organization_urls)),
     path('kitchen/', include(kitchen_urls)),
     path('commands/', include(commands_urls)),
