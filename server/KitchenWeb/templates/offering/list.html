@@ -19,13 +19,14 @@
         </ul>
     {% endif %}
 {% if offerings %}
+
 <h1> Формирование заказа на {{ date|date:"d/m" }} </h1>
 {% endif %}
 <div class="row">
     {% for offering in offerings %}
-<div class="col col-lg-6 col-sm-12 mb-4 mt-2 ">
+<div class="col col-lg-6 col-sm-12 mb-4 mt-2">
     <div class="card w-auto h-100" >
-        {% if offering.position.image %}:
+        {% if offering.position.image %}
         <img src="/uploads/{{ offering.position.image }}" class="card-img-top" alt="...">
         {% else %}
             <img src="/uploads/uploads/no-image-icon-0.jpg" class="card-img-top" alt="...">
@@ -48,10 +49,10 @@
 
             <td>
                 {% if offering.position.extra_price %}
-                    <button class="btn btn-sm btn-outline-success" id="positionPortionBtn{{ offering.id }}" >выбрать другую порцию</button>
+                    <button class="btn btn-sm btn-outline-warning" id="positionPortionBtn{{ offering.id }}" >выбрать другую порцию</button>
                     <input type="number" id="PositionBasePortion{{ offering.id }}">
 
-                    <button class="btn-sm btn-outline-warning " id="positionCancel{{ offering.id }}">отмена</button>
+                    <button class="btn-sm btn-outline-danger" id="positionCancel{{ offering.id }}">отмена</button>
                 {% else %}
                     ...
                 {% endif %}
@@ -299,8 +300,8 @@
                         </select>
                     {% endif %}
                 {% endfor %}
-            <button class="btn btn-sm btn-outline-success" id="garnishPortionBtn{{ offering.id }}">выбрать другую порцию</button>
-            <button class="btn btn-sm btn-outline-warning" id="garnishCancelBtn{{ offering.id }}">отмена</button>
+            <button class="btn btn-sm btn-outline-warning" id="garnishPortionBtn{{ offering.id }}">выбрать другую порцию</button>
+            <button class="btn btn-sm btn-outline-danger" id="garnishCancelBtn{{ offering.id }}">отмена</button>
 
             <td><p id="garnishSum{{ offering.id }}">...</p></td>
             </th>
@@ -327,8 +328,8 @@
                         </select>
                     {% endif %}
                 {% endfor %}
-                <button class="btn btn-sm btn-outline-success" id="additionalPortionBtn{{ offering.id }}">выбрать другую порцию</button>
-                <button class="btn btn-sm btn-outline-warning" id="additionalCancelBtn{{ offering.id }}">отмена</button>
+                <button class="btn btn-sm btn-outline-warning" id="additionalPortionBtn{{ offering.id }}">выбрать другую порцию</button>
+                <button class="btn btn-sm btn-outline-danger" id="additionalCancelBtn{{ offering.id }}">отмена</button>
             </td>
                 <td><p id="additionalSum{{ offering.id }}">...</p></td>
             </tr>{% endif %}
@@ -351,7 +352,7 @@
 {#            </tr>#}
             </tbody>
             </table>
-            <p class="mt-3"><button data-idoffering="{{ offering.id }}" onclick="AddToCart(event)" type="button" data-url="{% url 'kitchen:create_cart' %}" data-confirm="{% url 'kitchen:confirm_cart' %}" data-delete="{% url 'kitchen:delete_cart' %}">купить</button></p>
+            <p class="mt-3"><button class="btn btn-warning" style="font-size: 20px;" data-idoffering="{{ offering.id }}" onclick="AddToCart(event)" type="button" data-url="{% url 'kitchen:create_cart' %}" data-confirm="{% url 'kitchen:confirm_cart' %}" data-delete="{% url 'kitchen:delete_cart' %}">купить</button></p>
         </div>
     </div>
 </div>
