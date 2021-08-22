@@ -1,13 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Create category{% endblock %}
+{% block title %}Создать категорию{% endblock %}
 
 
 
 {% block content %}
-    <div>
-        <h1>Create category</h1>
-        <form method="post" action="{% url "kitchen:category_create" %}">
-            {% include "partial/form.html" with button_text="Create" %}
-        </form>
+    <div class="header-info-block">
+        <h1>Создать категорию</h1>
+        <div class="form_div">
+            <div class="forms_class">
+             <form method="post" action="{% url "kitchen:category_create" %}">
+                {% include "partial/form.html" with button_text="Сохранить" %}
+            </form>
+        </div>
+        </div>
     </div>
 {% endblock %}
