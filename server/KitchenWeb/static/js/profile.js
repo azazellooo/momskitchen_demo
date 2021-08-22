@@ -13,8 +13,9 @@
         $("#update_button").remove();
         $("<input/>").attr({type: 'submit', id:'save_button', value:
         'Сохранить', onclick: 'Save(event)'}).appendTo('#form');
-        console.log('fcghgjkj')
-        $("<button>Отменить</button>").attr({type:'submit', id:'cancel_button', onclick:'Cancel(event)'}).appendTo('.container-block');
+        $("<button>Отменить</button>").attr({type:'submit', id:'cancel_button', onclick:'Cancel(event)'}).appendTo('.form_profile');
+        $("#save_button").addClass("btn btn-info")
+        $("#cancel_button").addClass("btn btn-info")
 };
     function Cancel(event){
         window.location.reload()

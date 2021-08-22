@@ -3,8 +3,11 @@
 {% block content %}
     <div class="header-info-block">
         <h1>Новая организация</h1>
-        <form action="{% url "kitchen:organization-create" %}" method="post">
-            {% include "partial/form.html" with button_text="Создать" %}
+        <div class="form_accounts">
+            <form action="{% url "kitchen:organization-create" %}" method="post">
+            {% include "partial/form_without_submit.html" with button_text="Создать" %}
+                <p><input type="submit" id="savePosition" value="Создать" class='btn btn-info'></p>
         </form>
+        </div>
     </div>
 {% endblock %}

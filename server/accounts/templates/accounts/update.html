@@ -2,10 +2,12 @@
 {% load static %}
 {% block content %}
     <div class="container-block">
-    <form action="{% url 'user_update'%}" method='post' id="form">
+    <div class="form_accounts">
+        <form action="{% url 'user_update'%}" method='post' id="form">
     {% include 'partial/form_without_submit.html' %}
 </form>
- <input id='update_button' type="submit" onclick='update_button(event)' value="Редактировать"/>
+ <input id='update_button' class='btn btn-info' type="submit" onclick='update_button(event)' value="Редактировать"/>
+    </div>
     </div>
 <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

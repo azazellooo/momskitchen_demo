@@ -35,6 +35,14 @@ body {
     background-image: url("/uploads/uploads/back.jpg");
     z-index:1
 }
+.form_accounts {
+	border: 4px solid #17a2b8;
+    border-radius: 15px;
+	margin: 50px 0;
+	padding: 50px;
+    font-size: 20px;
+    width: fit-content;
+}
 .forms_class {
 	border: 4px solid #fbbb0b;
 	text-align: center;

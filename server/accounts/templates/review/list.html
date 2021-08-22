@@ -2,14 +2,13 @@
 {% load i18n %}
 {% block title %}Текущие заказы{% endblock title %}
 {% block content %}
-<br>
+<div class="header-info-block mt-5 mb-5">
 <h1>Отзывы</h1>
-<br>
-<div class="row row-cols-1 row-cols-md-2 g-4">
+<div class="row row-cols-1 row-cols-md-2 g-4 mt-5">
     {% for review in reviews %}
       <div class="col col-xl-4 col-lg-6 col-sm-12 col-md-6 mb-4 mt-2 ">
-        <div class="card h-100 border-warning" style="max-width: 17rem;">
-            <div class="card-header text-dark bg-warning" style="font-weight: bold;">{{ review.created_at }}</div>
+        <div class="card h-100 border-info" style="max-width: 17rem;">
+            <div class="card-header text-dark bg-info" style="font-weight: bold;">{{ review.created_at }}</div>
             <div class="card-body">
                 <h5 class="card-title">Организация: {{ review.user_name.organization_id }}</h5>
                 <p class="card-text">Пользователь: {{review.user_name.username}}</p>
@@ -21,6 +20,7 @@
         <br>
         <h2 class="text-center">Отзывов еще нет :(</h2>
     {% endfor %}
+</div>
 </div>
 {% if is_paginated %}
     {% include 'partial/paginate.html' %}
