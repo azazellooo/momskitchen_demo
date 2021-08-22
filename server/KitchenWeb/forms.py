@@ -2,7 +2,6 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import TextInput, EmailInput
 from markdownx.fields import MarkdownxFormField
-
 from KitchenWeb.models import Supplement, Dish, Category, Garnish, Additional, Offering, Command
 from accounts.models import Organization, BalanceChange
 
@@ -44,6 +43,7 @@ class PositionForm(forms.ModelForm):
 
     class Meta:
         model = Dish
+
         category = forms.ModelChoiceField(queryset=Category.objects.all())
         fields = ('name', 'description', 'category', 'image', 'base_price')
 
@@ -86,11 +86,41 @@ class AdditionalForm(forms.ModelForm):
         fields = ('name', 'sampling_order', 'base_price')
 
 
+class AdditionalUpdateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(AdditionalUpdateForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control', 'style': 'width: 300px;'})
+
+    class Meta:
+        model = Additional
+        fields = ('name', 'sampling_order', 'base_price')
+
+
 class DateInput(forms.DateInput):
     input_type = 'date'
 
 
 class OfferingForm(forms.ModelForm):
+    garnish = forms.ModelMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='Гарниры',
+        queryset=Garnish.objects.all()
+    )
+    additional = forms.ModelMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='Дополнения',
+        queryset=Additional.objects.all()
+    )
+    supplement = forms.ModelMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='Надбавки',
+        queryset=Supplement.objects.all()
+    )
 
     def __init__(self, *args, **kwargs):
         super(OfferingForm, self).__init__(*args, **kwargs)
@@ -99,9 +129,9 @@ class OfferingForm(forms.ModelForm):
 
     class Meta:
         model = Offering
-        fields = ('position', 'garnish', 'additional', 'supplement', 'qty_portion', 'date', 'special_offering', 'discount')
+        fields = ('position', 'garnish', 'additional', 'supplement', 'qty_portion', 'date')
         widgets = {
-            'date': DateInput(),
+            'date': DateInput()
         }
 
     def clean_position(self):
