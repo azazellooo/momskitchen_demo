@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{% load i18n %}
 {% block title %}Текущие заказы{% endblock title %}
 {% block content %}
 <br>
@@ -8,7 +9,7 @@
     {% for review in reviews %}
       <div class="col col-xl-4 col-lg-6 col-sm-12 col-md-6 mb-4 mt-2 ">
         <div class="card h-100 border-warning" style="max-width: 17rem;">
-            <div class="card-header text-dark bg-warning" style="font-weight: bold;">От {{ review.created_at|date:'Y-m-d H:i' }}</div>
+            <div class="card-header text-dark bg-warning" style="font-weight: bold;">{{ review.created_at }}</div>
             <div class="card-body">
                 <h5 class="card-title">Организация: {{ review.user_name.organization_id }}</h5>
                 <p class="card-text">Пользователь: {{review.user_name.username}}</p>
@@ -21,4 +22,7 @@
         <h2 class="text-center">Отзывов еще нет :(</h2>
     {% endfor %}
 </div>
+{% if is_paginated %}
+    {% include 'partial/paginate.html' %}
+{% endif %}
 {% endblock %}
