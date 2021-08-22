@@ -1,10 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Create organization{% endblock %}
-
-
-
+{% block title %}Создать Организацию{% endblock %}
 {% block content %}
-    <div>
+    <div class="header-info-block">
         <h1>Новая организация</h1>
         <form action="{% url "kitchen:organization-create" %}" method="post">
             {% include "partial/form.html" with button_text="Создать" %}

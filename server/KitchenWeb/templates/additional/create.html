@@ -3,14 +3,19 @@
 {% block title %}Create garnish{% endblock %}
 {% block content %}
 {{ type|json_script:'types' }}
-    <div>
-        <h1>Новый гарнир</h1>
+    <div class="header-info-block">
+        <h1>Новое дополнение к позиции</h1>
+        <div class="form_div">
+        <div class="forms_class">
         <form id="myForm" action="{% url 'kitchen:additional_create' %}" method="post">
             {% include "partial/kitchen_form.html"  %}
-            <btn class="btn btn-secondary" type="submit" id="add" onclick="addExtra(event);">Добавить дополнительные цены</btn>
+            <btn class='btn btn-warning' type="submit" id="add" onclick="addExtra(event);">Добавить дополнительные цены</btn>
 			<div class="selects" id="selects"></div>
-			<p><input type="submit" id="savePosition" value="Создать" class='btn btn-dark'></p>
+            <br>
+			<p><input type="submit" id="savePosition" value="Создать" class='btn btn-warning'></p>
         </form>
+        </div>
+        </div>
     </div>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="

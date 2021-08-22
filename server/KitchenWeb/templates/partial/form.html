@@ -9,21 +9,16 @@
                 {% for field in form %}
                     <div class="form-group">
                     <p><label for="{{ field.id_for_label }}">{{ field.label }}</label></p>
-
                    {% for error in field.errors %}
                        <p class="form-error">{{ error }}</p>
                    {% endfor %}
                    <p {% if field.errors %} class="form-field-error"{% endif %}>{{ field }}</p>
-                    <br>
                     </div>
                 {% endfor %}
             {% if not fields_only %}
-                <br/>
-                <input id="submit" type="submit" value="{{ button_text|default:"Submit" }}"/>
+                <input id="submit" class="btn btn-warning"  type="submit" value="{{ button_text|default:"Submit" }}"/>
              </div>
             </form>
-
-
 {% endif %}
 
 

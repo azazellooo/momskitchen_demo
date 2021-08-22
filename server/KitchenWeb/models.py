@@ -11,8 +11,8 @@ class BaseModel(models.Model):
 
 
 class Category(models.Model):
-    category_name = models.TextField(max_length=30, null=False, blank=False, verbose_name='Category')
-    order = models.IntegerField(null=False, blank=False, verbose_name='Category Order', validators=(MinValueValidator(1),))
+    category_name = models.TextField(max_length=30, null=False, blank=False, verbose_name='Категория')
+    order = models.IntegerField(null=False, blank=False, verbose_name='Очередность Категории', validators=(MinValueValidator(1),))
 
     class Meta:
         db_table = 'categories'
@@ -33,7 +33,7 @@ class Supplement(BaseModel):
         verbose_name_plural = 'Надбавки'
 
     def __str__(self):
-        return f'надбавка: {self.name}'
+        return self.name
 
 class Dish(models.Model):
     name = models.CharField(max_length=250, blank=False, null=False, verbose_name='Позиция')
@@ -87,10 +87,8 @@ class Offering(BaseModel):
     garnish = models.ManyToManyField('KitchenWeb.Garnish', blank=True, null=True, verbose_name='Гарнир', related_name='offering_garnish')
     supplement = models.ManyToManyField('KitchenWeb.Supplement', blank=True, null=True, verbose_name='Надбавка', related_name='offering_supplement')
     additional = models.ManyToManyField('KitchenWeb.Additional', blank=True, null=True, verbose_name='Дополнения', related_name='offering_additional')
-    qty_portion = models.DecimalField(blank=False, null=False, max_digits=5, decimal_places=2, default=0.00)
+    qty_portion = models.DecimalField(blank=False, null=False, max_digits=5, decimal_places=2, default=0.00, verbose_name='Количество доступных порций на дату')
     date = models.DateField(blank=False, null=False, verbose_name='Дата')
-    special_offering = models.BooleanField(default=False, blank=False, null=False)
-    discount = models.IntegerField(default=False, blank=False, null=False, validators=(MinValueValidator(1), MaxValueValidator(30)))
 
     class Meta:
         db_table = 'offerings'
@@ -99,7 +97,6 @@ class Offering(BaseModel):
 
     def __str__(self):
         return f'{self.position}-{self.date}'
-
 
 
 class Cart(models.Model):

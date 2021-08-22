@@ -18,7 +18,8 @@
 </head>
 <body>
         <div class="menu">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+            <div class="container">
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -46,10 +47,12 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                        <li><a class="dropdown-item" href="{% url "kitchen:menu" %}">Предложения</a></li>
+                        {% if admin %}
                        <li><a class="dropdown-item" href="{% url "kitchen:list_position" %}">Позиции</a></li><br>
                         <li><a class="dropdown-item" href="{% url "kitchen:list_garnish" %}">Гарниры</a></li>
                         <li><a class="dropdown-item" href="{% url "kitchen:additional_list" %}">Дополнения к позициям</a></li>
                         <li><a class="dropdown-item" href="{% url "kitchen:supplement-list" %}">Надбавки</a></li>
+                        {% endif %}
                     </ul>
                   </li>
                 {% if admin %}
@@ -126,9 +129,8 @@
                    {% block menu %}{% endblock menu %}
                 </ul>
               </div>
+            </div>
             </nav>
-
-
             {% block page_header %}{% endblock %}
     {% if messages %}
             {% for message in messages %}
@@ -149,6 +151,11 @@
            {% block content %}
             {% endblock %}
 </div>
+<footer>
+    <div class="container">
+        <p>© 2021 MOM'S KITCHEN BOT Landing Page By ESDP Team 1</p>
+    </div>
+</footer>
 </body>
 </html>
 

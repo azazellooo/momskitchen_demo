@@ -1,16 +1,58 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="main-page" style="">
-        <div class="main-page-block row">
+{#    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">#}
+{#      <div class="carousel-inner">#}
+{#            <div class="carousel-item active">#}
+{#                <img class="d-block w-100" src="/uploads/uploads/back.jpg" alt="First slide">#}
+{#                <div class="carousel-caption d-none d-md-block">#}
+{#                    <h5 class="caption-title mt-5  text-uppercase text-center">Закажи <span>поесть</span></h5>#}
+{#                    <h5 class="caption-title text-center text-uppercase" >прямо в телеграме</h5>#}
+{#                </div>#}
+{#            </div>#}
+{#      </div>#}
+{#</div>#}
+    <div class="main-page mt-5 mb-5" >
+        <div class="main-page-block row mt-5 mb-5">
             <div class="main-text col-sm-8 ">
-                <h1 class="mom-s-kitchen" id="mom">Mom's Kitchen</h1>
-                <p class="" id="slogan">Вкусная домашняя еда как у мамы</p>
+                <h5 class="caption-title mt-5  text-uppercase text-center">Закажи <span>поесть</span></h5>
+                <h5 class="caption-title text-center text-uppercase" >прямо в телеграме</h5>
             </div>
             <div class="main-image col-sm-4">
-                <img src="../static/images/tarelka.png" alt="Tarelka" width="500" height="500">
+                <img src="" alt="Tarelka" width="500" height="500">
             </div>
         </div>
+    </div>
+
+    <div class="cards-block mt-5 mb-5 text-center text-uppercase">
+    <div class="container mt-5">
+        <div class="row row-cols-1 row-cols-lg-4 row-cols-md-2 row-cols-sm-1">
+            <div class="col mb-4">
+              <div class="card step">
+                <div class="card-body ">
+                  <h2><i class="fas fa-link"></i></h2>
+                  <p class="card-text text-uppercase pt-3">Получи ссылку к боту</p>
+                </div>
+              </div>
+        </div>
+            <div class="col mb-4">
+              <div class="card step">
+                <div class="card-body">
+                  <h2><i class="fab fa-telegram-plane"></i></h2>
+                  <p class="card-text text-uppercase pt-3">Пройди регистрацию</p>
+                </div>
+              </div>
+        </div>
+            <div class="col mb-4">
+              <div class="card step">
+                <div class="card-body">
+                  <h2><i class="fas fa-utensils"></i></h2>
+                  <p class="card-text text-uppercase pt-3">Заказывай еду</p>
+                </div>
+              </div>
+        </div>
+        </div>
+    </div>
     </div>
 
 {% endblock %}

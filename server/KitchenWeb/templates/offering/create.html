@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Create offering{% endblock %}
-
-
-
 {% block content %}
-    <div>
-        <h1>Create offering</h1>
+    <div class="header-info-block">
+        <h1>Сборка Предложения на дату</h1>
+        <div class="form_div">
+            <div class="forms_class">
         <form method="post" action="{% url "kitchen:offering_create" %}">
-            {% include "partial/form.html" with button_text="Create" %}
+            {% include "partial/form.html" with button_text="Собрать Предложение" %}
         </form>
+       </div>
+        </div>
     </div>
+    <br><br>
 {% endblock %}

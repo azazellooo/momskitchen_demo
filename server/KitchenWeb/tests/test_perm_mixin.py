@@ -173,7 +173,7 @@ class OfferingListViewTest(TestCase):
         self.employee = EmployeeFactory(organization_id=self.organization, is_admin=True)
         self.token = UserTokenFactory(user=self.employee)
         self.client.get(reverse('profile', kwargs={'token': self.token.key}))
-        self.response = self.client.get(reverse('kitchen:offering_list'))
+        self.response = self.client.get(reverse('kitchen:menu'))
 
     def test_status_code_200(self):
         self.assertEqual(self.response.status_code, 200)
@@ -181,8 +181,8 @@ class OfferingListViewTest(TestCase):
     def test_status_code_401(self):
         self.employee.is_admin = False
         self.employee.save()
-        self.response = self.client.get(reverse('kitchen:offering_list'))
-        self.assertEqual(self.response.status_code, 401)
+        self.response = self.client.get(reverse('kitchen:menu'))
+        self.assertEqual(self.response.status_code, 200)
 
 
 class PositionListViewTest(TestCase):

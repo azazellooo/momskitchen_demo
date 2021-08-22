@@ -23,10 +23,9 @@ function addExtra(event){
         select.appendChild(option)
 
     }
-    $("<button class='btn btn-success m-1'>+</button>").attr({type:'submit', onclick:" return addExtraBtn(event);"}).appendTo('#selectBlock');
-    $("<button class='btn btn-success m-1'>-</button>").attr({type:'submit', onclick:" return removeExtraBtn(event);"}).appendTo('#selectBlock');
+    $("<button class='btn btn-warning m-1'>+</button>").attr({type:'submit', onclick:" return addExtraBtn(event);"}).appendTo('#selectBlock');
+    $("<button class='btn btn-warning m-1'>-</button>").attr({type:'submit', onclick:" return removeExtraBtn(event);"}).appendTo('#selectBlock');
 }
-
  function  addExtraBtn(event) {
 	event.stopPropagation()
 	if (TYPES.length > 1){
@@ -52,8 +51,8 @@ function addExtra(event){
 			 option.innerHTML = i
 			 select1.appendChild(option)
 		 }
-		 $("<button class='btn btn-success m-1'>+</button>").attr({ onclick:"return addExtraBtn(event);"}).appendTo('#selectBlock1');
-		 $("<button class='btn btn-success m-1'>-</button>").attr({type:'submit', onclick:" return removeExtraBtn(event);"}).appendTo('#selectBlock1');
+		 $("<button class='btn btn-warning m-1'>+</button>").attr({ onclick:"return addExtraBtn(event);"}).appendTo('#selectBlock1');
+		 $("<button class='btn btn-warning m-1'>-</button>").attr({type:'submit', onclick:" return removeExtraBtn(event);"}).appendTo('#selectBlock1');
 		 return false
 	}
 	else {

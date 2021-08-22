@@ -5,8 +5,6 @@
             {% include "partial/search_form.html" %}
         {% endif %}
     </div>
-
-
     {% for organization in organizations %}
         <div class="col-sm-6 mt-4">
     <div class="card">
@@ -17,7 +15,7 @@
           {% if organization.payment == 'cumulative'  %}
         <p class="card-text"> </p>
         <a href="{% url 'kitchen:organization-balance' organization.id %}" class="btn btn-primary">страница балансов</a>
-                    {% endif %}q
+                    {% endif %}
       </div>
     </div>
   </div>

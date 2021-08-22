@@ -1,16 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Create position{% endblock %}
+{% block title %}Создать Позицию{% endblock %}
 {% block content %}
 {{ type|json_script:'types' }}
-    <div>
+    <div class="header-info-block">
         <h1>Новая позиция</h1>
+        <div class="form_div">
+            <div class="forms_class">
         <form id="myForm" action="{% url 'kitchen:create_position' %}" method="post" enctype="multipart/form-data">
             {% include "partial/kitchen_form.html"  %}
-            <btn class='btn btn-secondary' type="submit" id="add" onclick="return addExtra(event);">Добавить дополнительные цены</btn>
+            <btn class='btn btn-warning' type="submit" id="add" onclick="return addExtra(event);">Добавить дополнительные цены</btn>
 			<div class="selects" id="selects"></div>
-			<p><input type="submit" id="savePosition" value="Создать" class='btn btn-dark'></p>
+            <br>
+			<p><input type="submit"  id="savePosition" value="Сохранить" class='btn btn-warning'></p>
         </form>
+            </div>
+        </div>
     </div>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
