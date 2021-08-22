@@ -149,7 +149,7 @@ class TestMainCommandsHandler(BaseBot):
         telegram.login(update, context)
         self.assertTrue(telegram.bot.send_message.called)
         args, message = telegram.bot.send_message.call_args
-        self.assertEqual(message.get('text'), GIVE_TOKEN+str((UserToken.objects.get(user=self.my_user)).key)+'/')
+        self.assertEqual(message.get('text'), GIVE_TOKEN[0]+str((UserToken.objects.get(user=self.my_user)).key)+GIVE_TOKEN[1])
 
     def test_command_login_real_user_with_token(self):
         self.my_user = EmployeeFactory()
