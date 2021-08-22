@@ -1,12 +1,26 @@
 body {
     margin: 0;
-    background-color: #f1f1f1;
+    /*background-color: #f1f1f1;*/
     color: #000;
     font-size: 16px;
     line-height: 1.3;
     font-family: 'Raleway', sans-serif;
 }
-
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 0 auto;
+}
+.header-info-block {
+	color: #424242;
+    position:relative;
+    margin-bottom: 100px;
+}
+	.header-info-block h1{
+        text-align: center;
+		text-transform: uppercase;
+		font-weight: bold;
+	}
 .form-error {
     color: red;
     font-size: 12px;
@@ -17,14 +31,62 @@ body {
     box-shadow: red 0 0 3px;
     display: inline-block;
 }
+.form_div {
+    background-image: url("/uploads/uploads/back.jpg");
+    z-index:1
+}
+.forms_class {
+	border: 4px solid #fbbb0b;
+	text-align: center;
+	margin: 50px 0;
+	padding: 50px;
+	color: #fbbb0b;
+    font-size: 20px;
+}
+form {
+    padding: 20px;
+    width: fit-content;
+    background: white;
+    border-radius: 20px;
+}
+.forms_class input, select, textarea {
+    margin: auto;
+}
 
+	.forms_class label{
+		font-weight: bold;
+	}
+    .forms_class ul {
+        list-style-type:none;
+    }
+.selectBlock {
+    width: auto;
+}
+.caption-title{
+    color: #fbbb0b;
+    font-size: 48px;
+    font-weight: 800;
+}
+.caption-title span {
+    color: #000;
+	font-size: 48px;
+	font-weight: 800;
+}
+.cards-block h3 {
+	font-size: 30px;
+	color: #8d8d8d;
+	font-weight: 800;
+}
+.cards-block span {
+	font-size: 30px;
+	color: #fbbb0b;
+	font-weight: 800;
+}
 .main-page {
-    background-color: #F0F3F4;
     max-width: 1000px;
     margin: 0 auto;
     padding: 0 15px;
 }
-
 
 .main-page h1 {
     font-size: 40px;
@@ -34,13 +96,7 @@ body {
     margin-top: 100px;
 }
 
-.main-page #slogan {
-    color: #85929E ;
-    text-align: center;
-}
-
 .main-text {
-    border: 5px black;
     margin-top: 50px;
 }
 
@@ -68,37 +124,24 @@ padding: 10px 0;
 #123{
     margin-top: 100px;
 }
-
-
-.main-text h1 {
-  font-family: 'Niconne', cursive;
-  font-size: 50px;
-  color: #e12527;
-  text-align: center;
+.additional-card {
+    text-align: center;
 }
 
-
-.main-text  {
-  color: #fff;
-  font-size: 12em;
-  font-weight: bold;
-  font-family: Helvetica;
-  text-shadow:
-    0 1px 0 #ccc,
-    0 2px 0 #c9c9c9,
-    0 3px 0 #bbb,
-    0 4px 0 #b9b9b9,
-    0 5px 0 #aaa,
-    0 6px 1px rgba(0,0,0,.1),
-    0 0 5px rgba(0,0,0,.1),
-    0 1px 3px rgba(0,0,0,.3),
-    0 3px 5px rgba(0,0,0,.2),
-    0 5px 10px rgba(0,0,0,.25),
-    0 10px 10px rgba(0,0,0,.2),
-    0 20px 20px rgba(0,0,0,.15);
+.step :hover{
+    background: #fbbb0b;
+}
+footer {
+    padding-top: 10px;
+	background-color: #141414;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    height: 50px;
+	line-height: 28px;
+	font-weight: 600;
+	color:  #e0e0e0;
+	font-size: 12px;
 }
 
-.main-text p {
-  text-align: center;
-    font-size: 25px;
-}
