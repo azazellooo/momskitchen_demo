@@ -1,5 +1,6 @@
 import telegram
-from telegram import Update
+from telegram import Update, ParseMode
+from telegram.constants import PARSEMODE_HTML
 from telegram.ext import CommandHandler, CallbackContext, MessageHandler, Filters, ConversationHandler
 from KitchenWeb.parse_and_validations.parces import deep_link_parce, review_text_parse
 from KitchenWeb.parse_and_validations.validations import *
@@ -58,7 +59,6 @@ class MainCommandsHandler(TelegramBot):
             else:
                 self.send_message(recipient=chat_id, message=USER_NOT_FOUND)
 
-
     def restart(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
         try:
@@ -96,7 +96,11 @@ class MainCommandsHandler(TelegramBot):
             else:
                 models.UserToken.objects.create(user=user)
                 token2 = models.UserToken.objects.get(user=user)
-                self.send_message(recipient=chat_id, message=GIVE_TOKEN+str(token2.key)+'/')
+                self.send_message(
+                    recipient=chat_id,
+                    message=(GIVE_TOKEN[0]+str(token2.key)+GIVE_TOKEN[1]),
+                    parse_mode=ParseMode.HTML
+                )
         except ObjectDoesNotExist:
             self.send_message(recipient=chat_id, message=CANNOT_GIVE_TOKEN)
 
@@ -107,7 +111,6 @@ class MainCommandsHandler(TelegramBot):
         tg_user.save()
         self.send_message(recipient=chat_id, message=DATA_SAVED)
         return END
-
 
     def review(self, update: Update, context:CallbackContext):
         chat_id = update.message.chat.id
