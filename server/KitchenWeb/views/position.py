@@ -74,8 +74,7 @@ class PositionCreateView(PermissionMixin, CreateView):
                         to_json[value] = {"comment": (form.data.getlist(f'comment{counter}'))[0],
                                           "pricing": (form.data.getlist(f'pricing{counter}'))[0]}
                         counter -= 1
-                json_var = json.dumps(to_json)
-                position.extra_price = json_var
+                position.extra_price = to_json
         except MultiValueDictKeyError:
             position.save()
         position.save()
@@ -99,7 +98,7 @@ class PositionDetailUpdateView(UpdateView):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['type'] = TYPES
         if position.extra_price:
-            context['extra_price'] = json.loads(position.extra_price)
+            context['extra_price'] = position.extra_price
         if position.image:
             context['image'] = self.get_object().image
         return context
