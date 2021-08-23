@@ -132,7 +132,12 @@ class OfferingForm(forms.ModelForm):
         fields = ('position', 'garnish', 'additional', 'supplement', 'qty_portion', 'date')
         widgets = {
             'date': DateInput()
+
         }
+
+
+
+class OfferingCreateView(OfferingForm):
 
     def clean_position(self):
         position = self.cleaned_data.get('position')
@@ -140,6 +145,7 @@ class OfferingForm(forms.ModelForm):
         if Offering.objects.filter(position=position, date=date).exists():
             raise ValidationError(f"предложение на дату {date} с такой позицией уже есть( ")
         return position
+
 
 
 class BalanceChangeForm(forms.ModelForm):

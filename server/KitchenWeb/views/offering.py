@@ -3,7 +3,7 @@ from django.forms import model_to_dict
 from django.shortcuts import reverse
 from django.utils.http import urlencode
 from django.views.generic import CreateView, ListView, UpdateView
-from KitchenWeb.forms import OfferingForm, SearchForm
+from KitchenWeb.forms import OfferingForm, SearchForm, OfferingCreateView
 from KitchenWeb.mixin import PermissionMixin
 from KitchenWeb.models import Offering
 from datetime import datetime
@@ -11,7 +11,7 @@ from datetime import datetime
 
 class OfferingCreateView(PermissionMixin, CreateView):
     model = Offering
-    form_class = OfferingForm
+    form_class = OfferingCreateView
     template_name = 'offering/create.html'
     context_object_name = 'offerings'
 
@@ -61,7 +61,7 @@ class OfferingListView(ListView):
         context = super().get_context_data(**kwargs)
         for o in context.get('object_list'):
             if o.position.extra_price:
-                o.position.extra_price = json.loads(o.position.extra_price)
+                o.position.extra_price = o.position.extra_price
             for garnish in list(o.garnish.all()):
                 garnish_dict = dict_filter(model_to_dict(garnish), needed_fields)
                 garnish_dict['offering'] = o.id
@@ -108,7 +108,7 @@ class OfferingDetailUpdateView(UpdateView):
     context_object_name = 'offering'
 
     def get_success_url(self):
-        return reverse('kitchen:offering_list')
+        return reverse('kitchen:menu')
 
 
 
