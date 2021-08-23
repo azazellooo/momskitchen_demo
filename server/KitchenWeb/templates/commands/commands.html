@@ -22,7 +22,7 @@
                 {% csrf_token %}
                 {{ reminder_form.as_p }}
                 <p>
-                    <button class="btn btn-warning" type="submit">Submit</button>
+                    <button class="btn btn-warning" type="submit">отправить</button>
                 </p>
             </form>
         </div>
@@ -34,7 +34,7 @@
                 {% csrf_token %}
                 {{ close_form.as_p }}
                 <p>
-                    <button class="btn btn-warning" type="submit">Submit</button>
+                    <button class="btn btn-warning" type="submit">отправить</button>
                 </p>
             </form>
         </div>
@@ -45,7 +45,7 @@
                 {% csrf_token %}
                 {{ delivery_arrival.as_p }}
                 <p>
-                    <button class="btn btn-warning" type="submit">Submit</button>
+                    <button class="btn btn-warning" type="submit">отправить</button>
                 </p>
             </form>
         </div>
@@ -57,12 +57,13 @@
                 {{ notification_form.as_p }}
                 {{ notification_form.media }}
                 <p>
-                    <button class="btn btn-warning" type="submit">Submit</button>
+                    <button class="btn btn-warning" type="submit">отправить</button>
                 </p>
             <script>
                 $(document).ready(function (){
                     $('.markdownx')[0].setAttribute('class', 'row')
                     $('.markdownx-preview')[0].setAttribute('class', 'ml-2 mt-2 w-50 border py-3 px-3 ')
+                    $( "ul" ).css( "list-style", "none" );
                 })
             </script>
             </form>

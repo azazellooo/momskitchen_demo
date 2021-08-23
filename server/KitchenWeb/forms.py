@@ -125,7 +125,7 @@ class OfferingForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(OfferingForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control', 'style': 'width: 300px;'})
+            self.fields[field].widget.attrs.update({'class': 'form-control', 'style': 'width: 300px; list-style: none'})
 
     class Meta:
         model = Offering
@@ -155,6 +155,12 @@ class BalanceChangeForm(forms.ModelForm):
 
 
 class OrderCreateForm(forms.ModelForm):
+    organization = forms.ModelMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='Организации',
+        queryset=Organization.objects.all()
+    )
 
     def __init__(self, *args, **kwargs):
         super(OrderCreateForm, self).__init__(*args, **kwargs)
@@ -167,6 +173,12 @@ class OrderCreateForm(forms.ModelForm):
 
 
 class OrderReminderForm(forms.ModelForm):
+    organization = forms.ModelMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='Организации',
+        queryset=Organization.objects.all()
+    )
 
     def __init__(self, *args, **kwargs):
         super(OrderReminderForm, self).__init__(*args, **kwargs)
@@ -179,6 +191,12 @@ class OrderReminderForm(forms.ModelForm):
 
 
 class OrderCloseForm(forms.ModelForm):
+    organization = forms.ModelMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='Организации',
+        queryset=Organization.objects.all()
+    )
 
     def __init__(self, *args, **kwargs):
         super(OrderCloseForm, self).__init__(*args, **kwargs)
@@ -191,6 +209,12 @@ class OrderCloseForm(forms.ModelForm):
 
 
 class DeliveryArrivalForm(forms.ModelForm):
+    organization = forms.ModelMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='Организации',
+        queryset=Organization.objects.all()
+    )
 
     def __init__(self, *args, **kwargs):
         super(DeliveryArrivalForm, self).__init__(*args, **kwargs)
@@ -203,6 +227,12 @@ class DeliveryArrivalForm(forms.ModelForm):
 
 
 class NotificationForm(forms.ModelForm):
+    organization = forms.ModelMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='Организации',
+        queryset=Organization.objects.all()
+    )
     text = MarkdownxFormField()
 
     class Meta:
