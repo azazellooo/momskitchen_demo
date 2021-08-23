@@ -65,7 +65,7 @@ class TestMainCommandsHandler(BaseBot):
         telegram.start(update, context)
         self.assertTrue(telegram.bot.send_message.called)
         args, message = telegram.bot.send_message.call_args
-        self.assertEqual(message.get('text'), WELCOME[0]+'qwe'+WELCOME[1])
+        self.assertEqual(message.get('text'), WELCOME)
         self.assertTrue(telegram.bot.send_message.call_args.reply_markup is not None)
 
     def test_command_start_nextstep(self):
@@ -162,26 +162,6 @@ class TestMainCommandsHandler(BaseBot):
         self.assertEqual(message.get('text'), TOKEN_ALREADY_GIVEN)
         self.assertTrue(UserToken.objects.filter(user=self.my_user).exists())
 
-
-    def test_command_review_admin_success(self):
-        self.my_user = EmployeeFactory()
-        update, context = self.send_bot_message(self.my_user.tg_id, '/review')
-        telegram = self.get_telegram_instance()
-        telegram.review(update, context)
-        self.assertTrue(telegram.bot.send_message.called)
-        args, message = telegram.bot.send_message.call_args
-        self.assertEqual(message.get('text'), REVIEW_ADMIN_SUCCESS)
-
-
-    def test_command_review_success(self):
-        my_user = EmployeeFactory(tg_username='qwe', tg_id='123', is_admin=False, organization_id=self.my_organization)
-        update, context = self.send_bot_message(my_user.tg_id, '/review')
-        telegram = self.get_telegram_instance()
-        telegram.review(update, context)
-        self.assertTrue(telegram.bot.send_message.called)
-        args, message = telegram.bot.send_message.call_args
-        self.assertTrue(Review.objects.filter(user_name=my_user).exists())
-        self.assertEqual(message.get('text'), REVIEW_SUCCESS)
 
     def test_command_review_not_real_user(self):
         update, context = self.send_bot_message('111', '/review')
