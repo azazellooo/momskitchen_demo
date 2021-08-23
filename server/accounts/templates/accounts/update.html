@@ -2,12 +2,12 @@
 {% load static %}
 {% block content %}
     <div class="container-block">
-    <div class="form_accounts">
-        <form action="{% url 'user_update'%}" method='post' id="form">
-    {% include 'partial/form_without_submit.html' %}
-</form>
- <input id='update_button' class='btn btn-info' type="submit" onclick='update_button(event)' value="Редактировать"/>
-    </div>
+        <div class="border border-warning rounded m-5" id="update_block" style="">
+            <form class="p-5" action="{% url 'user_update'%}" method='post' id="form">
+            {% include 'partial/form_without_submit.html' %}
+            </form>
+         <input id='update_button' class="btn m-3" style="background: rgb(251,207,63); background: radial-gradient(circle, rgba(251,207,63,0.5924769810267857) 0%, rgba(252,71,70,0.35718286337972693) 100%);" type="button" onclick='update_button(event)' value="Редактировать"/>
+        </div>
     </div>
 <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

@@ -35,12 +35,12 @@
             <p><i class="far fa-circle text-success"></i> Активные заказы: </p>
             {% for order in active_orders.all %}
                 <div class="border border-success rounded mb-2">
-                    <p class="m-2 mb-0">На {{ order.created_at.date }} :</p>
-                    <ol class="p-2">
+                    <p class="m-2 mb-0 font-italic">На {{ order.created_at.date }} :</p>
+                    <ul class="list-unstyled p-2">
                     {% for offering in order.offering.all %}
-                        <li class="text-secondary text-center">{{ offering.position }}</li>
+                        <li class="text-secondary text-left ml-3">Предложение с позицией: <span style="color: #1e347b">{{ offering.position }}</span></li>
                     {% endfor %}
-                    </ol>
+                    </ul>
                 </div>
             {% endfor %}
             {% else %}
