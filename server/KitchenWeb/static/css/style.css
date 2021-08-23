@@ -32,7 +32,7 @@ body {
     display: inline-block;
 }
 .form_div {
-    background-image: url("/uploads/uploads/back.jpg");
+    background-image: url("../images/back.jpg");
     z-index:1
 }
 .form_accounts {
