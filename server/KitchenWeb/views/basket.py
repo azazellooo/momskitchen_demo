@@ -126,8 +126,7 @@ def search_off_in_cart_and_delete(request, *args, **kwargs):
 def confirm_cart(request, *args, **kwargs):
     user_token = UserToken.objects.get(key=request.session['token'])
     user = Employee.objects.get(user_token=user_token)
-    users_carts = Cart.objects.filter(user=user)
-    users_carts.update(is_confirmed=True)
+    users_carts = Cart.objects.filter(user=user, is_confirmed=False)
     order = Order.objects.create(
         user=user
     )
@@ -139,6 +138,7 @@ def confirm_cart(request, *args, **kwargs):
             price=i.price,
             qty=i.qty
         )
+    users_carts.update(is_confirmed=True)
     return render(request, 'basket/confirm.html')
 
 

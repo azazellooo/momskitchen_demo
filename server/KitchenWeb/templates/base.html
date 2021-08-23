@@ -18,7 +18,7 @@
 </head>
 <body>
         <div class="menu">
-            <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -119,11 +119,12 @@
                              {% endfor %}
                         </div>
                         <h6>Итог с предложения: {{ cart.price }} с</h6>
-                                <a type="button" href="{% url 'kitchen:back_delete_cart' cart.pk %}">Удалить</a>
+                                <a type="button" class="btn btn-outline-secondary text-white" href="{% url 'kitchen:back_delete_cart' cart.pk %}">Удалить</a>
                         </div>
                         {% endfor %}
                     {% if carts %}
-                    <div><a id="confirm" type="button" href="{% url 'kitchen:confirm_cart' %}">Confirm</a></div>
+                        <br>
+                    <div><a id="confirm" type="button" class="btn btn-outline-secondary text-white" href="{% url 'kitchen:confirm_cart' %}">Confirm</a></div>
                     </div>
                     {% endif %}
                    {% block menu %}{% endblock menu %}
