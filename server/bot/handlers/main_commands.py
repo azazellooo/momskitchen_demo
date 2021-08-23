@@ -10,7 +10,7 @@ from messages.bot_messages import *
 
 END = ConversationHandler.END
 NEXTSTEP = range(1)
-
+NEXTSTEP_REVIEW = range(1)
 
 class MainCommandsHandler(TelegramBot):
     def __init__(self, dispatcher):
@@ -24,11 +24,16 @@ class MainCommandsHandler(TelegramBot):
                     states={
                         NEXTSTEP: [MessageHandler(Filters.text & ~Filters.command, self.nextstep)]},
                     fallbacks=[CommandHandler('cancel', callback=[])]))
+        self.dispatcher.add_handler(ConversationHandler(
+            entry_points=[CommandHandler('review', self.review)],
+            states={
+                NEXTSTEP_REVIEW: [MessageHandler(Filters.text & ~Filters.command, self.nextstep_review)]},
+            fallbacks=[CommandHandler('cancel', callback=[])]))
         self.dispatcher.add_handler(CommandHandler('start', self.start))
         self.dispatcher.add_handler(CommandHandler('restart', self.restart))
         self.dispatcher.add_handler(CommandHandler('stop', self.stop))
         self.dispatcher.add_handler(CommandHandler('login', self.login))
-        self.dispatcher.add_handler(CommandHandler('review', self.review))
+        # self.dispatcher.add_handler(CommandHandler('review', self.review))
 
     def start(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
@@ -47,7 +52,7 @@ class MainCommandsHandler(TelegramBot):
                         tg_id=chat_id,
                         organization_id=org
                     )
-                    self.send_message(recipient=chat_id, message=WELCOME[0]+update.message.chat.username+WELCOME[1], keyboard=reply_markup)
+                    self.send_message(recipient=chat_id, message=WELCOME, keyboard=reply_markup)
                     return NEXTSTEP
             else:
                 self.send_message(recipient=chat_id, message=INVALID_LINK)
@@ -115,12 +120,32 @@ class MainCommandsHandler(TelegramBot):
     def review(self, update: Update, context:CallbackContext):
         chat_id = update.message.chat.id
         if models.Employee.objects.filter(tg_id=chat_id).exists():
-            text = review_text_parse(update.message.text)
-            employee = models.Employee.objects.get(tg_id=chat_id)
-            review = Review.objects.create(user_name=employee, text_review=text)
-            self.send_message(recipient=chat_id, message=REVIEW_SUCCESS)
-            for admin in models.Employee.objects.filter(is_admin=True):
-                self.send_message(recipient=chat_id, message=text)
-                self.send_message(recipient=admin.tg_id, message=REVIEW_ADMIN_SUCCESS + text)
+            reply_markup = telegram.ForceReply(force_reply=True, selective=False, input_field_placeholder='Отзыв')
+            self.send_message(recipient=chat_id, message=REVIEW, keyboard=reply_markup)
+            return NEXTSTEP_REVIEW
         else:
             self.send_message(recipient=chat_id, message=USER_NOT_FOUND)
+
+    def nextstep_review(self, update: Update, context: CallbackContext):
+        chat_id = update.message.chat.id
+        employee = models.Employee.objects.get(tg_id=chat_id)
+        text = update.message.text
+        review = Review.objects.create(user_name=employee, text_review=text)
+        review.save()
+        self.send_message(recipient=chat_id, message=REVIEW_SUCCESS)
+        for admin in models.Employee.objects.filter(is_admin=True):
+            self.send_message(recipient=admin.tg_id, message=REVIEW_ADMIN_SUCCESS + text)
+        return END
+
+    # def review(self, update: Update, context:CallbackContext):
+    #     chat_id = update.message.chat.id
+    #     if models.Employee.objects.filter(tg_id=chat_id).exists():
+    #         text = review_text_parse(update.message.text)
+    #         employee = models.Employee.objects.get(tg_id=chat_id)
+    #         review = Review.objects.create(user_name=employee, text_review=text)
+    #         self.send_message(recipient=chat_id, message=REVIEW_SUCCESS)
+    #         for admin in models.Employee.objects.filter(is_admin=True):
+    #             self.send_message(recipient=chat_id, message=text)
+    #             self.send_message(recipient=admin.tg_id, message=REVIEW_ADMIN_SUCCESS + text)
+    #     else:
+    #         self.send_message(recipient=chat_id, message=USER_NOT_FOUND)

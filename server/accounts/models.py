@@ -9,12 +9,14 @@ BASE_URL = 'http://t.me/MommyKitchenbot/'
 
 choice_types = [('accrual', 'Начисление'), ('write-off', 'Списание')]
 
+
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
+
 
 class Organization(models.Model):
     PAYMENT_TYPES = [('actual', 'фактический расчет'), ('cumulative', 'накопительный расчет')]
@@ -61,7 +63,7 @@ class Employee(models.Model):
         verbose_name_plural = 'Пользователи'
 
     def __str__(self):
-        return self.tg_username
+        return self.tg_id
 
 
 class BalanceChange(models.Model):
