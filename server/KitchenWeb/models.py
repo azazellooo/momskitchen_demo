@@ -1,5 +1,8 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.dispatch import receiver
+from bot.telegram_bot import TelegramBot
+from django.db.models.signals import post_save
 
 
 class BaseModel(models.Model):
@@ -145,6 +148,17 @@ class Order(models.Model):
         for order_offering in array:
             total += order_offering.price
         return total
+
+
+@receiver(post_save, sender=Order)
+def send_notification(sender, instance, created, **kwargs):
+    order = instance
+    employee = order.user
+    chat_user_id = employee.tg_id
+    bot = TelegramBot()
+    message = 'Ваш заказ успешно подтвержден!'
+    if created:
+        bot.send_message(recipient=chat_user_id, message=message)
 
 
 class Command(models.Model):
