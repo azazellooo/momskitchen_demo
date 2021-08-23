@@ -35,7 +35,7 @@ class GarnishCreateView(PermissionMixin, CreateView):
                             "pricing": (form.data.getlist(f'pricing{counter}'))[0]
                         }
                         counter -= 1
-            json_var = json.dumps(to_json)
+            json_var = to_json
             garnish.extra_price = json_var
         except MultiValueDictKeyError:
             garnish.save()

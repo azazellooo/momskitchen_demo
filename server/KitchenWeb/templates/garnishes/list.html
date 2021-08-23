@@ -8,20 +8,25 @@
             <h3 class="m-3 text-center">Гарниры</h3>
         {% endif %}
 
+
         <div class="row">
         {% for garnish in garnishes %}
             <div class="col-lg-3 mb-4 mt-4">
                 <div class="card h-100">
                   <div class="card-body">
                       {% if admin %}
-                    <p>Название: <a href="{% url 'kitchen:garnish-detail-update' garnish.id %}">{{ garnish.name }}</a>
+                    <p><a href="{% url 'kitchen:garnish-detail-update' garnish.id %}">{{ garnish.name }}</a>
                       {% else %}
-                        <p>Название:>{{ garnish.name }}</p>
+                        <p>{{ garnish.name }}</p>
                       {% endif %}
                   </div>
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Очередность: {{ garnish.order }}</li>
-                    <li class="list-group-item">Базовая цена: {{ garnish.base_price }}</li>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item">Очередность: {{ garnish.order }}</li>
+                      <li class="list-group-item">Базовая цена: {{ garnish.base_price }}</li>
+                      <li class="list-group-item"> <i>Добавочные цены:</i></li>
+                      {% for portion, portion_info  in garnish.extra_price.items %}
+                        <li class="list-group-item">{{portion_info.comment}} - {{ portion_info.pricing }}сом ({{ portion }})</li>
+                      {% endfor %}
                   </ul>
                 </div>
             </div>
@@ -29,8 +34,9 @@
             <h2 class="text-center">Такого гарнира еще нет! </h2>
         {% endfor %}
         </div>
-
-
     {% include 'partial/paginate.html' %}
 
 {% endblock %}
+
+
+
