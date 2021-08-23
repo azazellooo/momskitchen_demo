@@ -7,7 +7,7 @@
 
 {% block content %}
     <div class="row justify-content-between mt-5 ">
-        <div class="col-md-8"><h3 class="text-left text-uppercase font-weight-light" style="color: #eea236">Профиль</h3></div>
+        <div class="col-md-8"><h3 class="text-left text-uppercase font-weight-light" style="color: #eea236">Профиль <span style="font-size: 20px; color: #1e347b" class="font-italic">{{ user.username }}</span></h3></div>
         <div class="col-md-4 text-right"><a class="btn btn-outline-info btn-sm" href="{% url 'user_update' %}"><i class="far fa-edit "></i> редактировать профиль</a></div>
     </div>
  <hr>
