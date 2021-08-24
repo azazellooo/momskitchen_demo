@@ -33,7 +33,6 @@ class MainCommandsHandler(TelegramBot):
         self.dispatcher.add_handler(CommandHandler('restart', self.restart))
         self.dispatcher.add_handler(CommandHandler('stop', self.stop))
         self.dispatcher.add_handler(CommandHandler('login', self.login))
-        # self.dispatcher.add_handler(CommandHandler('review', self.review))
 
     def start(self, update: Update, context: CallbackContext):
         chat_id = update.message.chat.id
@@ -136,16 +135,3 @@ class MainCommandsHandler(TelegramBot):
         for admin in models.Employee.objects.filter(is_admin=True):
             self.send_message(recipient=admin.tg_id, message=REVIEW_ADMIN_SUCCESS + text)
         return END
-
-    # def review(self, update: Update, context:CallbackContext):
-    #     chat_id = update.message.chat.id
-    #     if models.Employee.objects.filter(tg_id=chat_id).exists():
-    #         text = review_text_parse(update.message.text)
-    #         employee = models.Employee.objects.get(tg_id=chat_id)
-    #         review = Review.objects.create(user_name=employee, text_review=text)
-    #         self.send_message(recipient=chat_id, message=REVIEW_SUCCESS)
-    #         for admin in models.Employee.objects.filter(is_admin=True):
-    #             self.send_message(recipient=chat_id, message=text)
-    #             self.send_message(recipient=admin.tg_id, message=REVIEW_ADMIN_SUCCESS + text)
-    #     else:
-    #         self.send_message(recipient=chat_id, message=USER_NOT_FOUND)

@@ -10,7 +10,6 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title"><a href="{% url 'kitchen:organization-detail-update' organization.id %}">{{ organization.name }} </a></h5>
-{#          <p>ссылка для перехода: <span class="text-info"> {{ organization.generate_link }}</span></p>#}
       <p>ссылка для перехода:
             <input class="form-control mb-2 mt-2" type="text" value="{{ organization.generate_link }}" id="link" readonly>
             <button class='btn btn-info' onclick="myFunction()">Копировать ссылку</button>

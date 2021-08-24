@@ -78,7 +78,6 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'created_at']
 
 
-
 admin.site.register(Dish, DishAdmin)
 admin.site.register(Supplement, SupplementAdmin)
 admin.site.register(Category, CategoryAdmin)
@@ -88,4 +87,4 @@ admin.site.register(Offering, OfferingAdmin)
 admin.site.register(Cart, BasketAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderOffernig, OrderOffernigAdmin)
-# admin.site.register(offerings_garnish)
+

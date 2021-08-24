@@ -118,8 +118,6 @@ class PositionDetailUpdateView(UpdateView):
         position = self.get_object()
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['type'] = TYPES
-        # if position.extra_price:
-        #     context['extra_price'] = position.extra_price
         if position.image:
             context['image'] = self.get_object().image
         if position.extra_price:
