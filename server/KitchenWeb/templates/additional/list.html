@@ -1,7 +1,9 @@
 {% extends 'base.html'%}
 {% block content %}
-    {% if dishes %}
-            {% include "partial/search_form.html" %}
+    {% if additionals %}
+        <div class="d-flex justify-content-center">
+                {% include "partial/search_form.html" %}
+            </div>
     {% endif %}
         <div class="header-info-block"><h1 class="text-center mt-4">Дополнения к позициям</h1></div>
         <div class="row">
@@ -29,13 +31,6 @@
             <h2 class="text-center">Дополнений еще нет! </h2>
         {% endfor %}
         </div>
-
-
-
-
-
-
-
 
     {% include 'partial/paginate.html' %}
 

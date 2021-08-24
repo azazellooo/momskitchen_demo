@@ -2,61 +2,47 @@
 {% block content %}
     <div class="mt-4">
         {% if dishes %}
-            {% include "partial/search_form.html" %}
+            <div class="d-flex justify-content-center">
+                {% include "partial/search_form.html" %}
+            </div>
+
         {% endif %}
     </div>
 
-        {% if dishes %}
-            <h3 class="m-3 text-center">Позиции</h3>
-        {% endif %}
+        {% if dishes %}        <div class="header-info-block"><h1 class="text-center mt-4">Позиции</h1></div>{% endif %}
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap">
 
-    <div class="row">
-        {% for dish in dishes %}
-{#            <div class="col-lg-3 mb-4 mt-4">#}
-{#                <div class="card h-100">#}
-{#            <div class="card" style="width: 18rem;">#}
-{#              <img class="card-img-top" src="/uploads/{{ dish.image }}" width="140" height="140" alt="Card image cap"#}
-{#              <div class="card-body position_body">#}
-{#                <h5 class="card-title"><a href="{% url 'kitchen:detail_update_position' dish.pk %}">{{ dish.name }}</a></h5>#}
-{#                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>#}
-{#              </div>#}
-{#              <ul class="list-group list-group-flush">#}
-{#                <li class="list-group-item">Описание: {{ dish.description}}</li>#}
-{#                <li class="list-group-item">Категория: {{ dish.category }}</li>#}
-{#                <li class="list-group-item">Цена: {{ dish.base_price}} сом</li>#}
-{#                  {% for portion, portion_info  in dish.extra_price.items %}#}
-{#                        <li class="list-group-item">{{portion_info.comment}} - {{ portion_info.pricing }}сом ({{ portion }})</li>#}
-{#                  {% endfor %}#}
-{#              </ul>#}
-{#                </div>#}
-{#            </div>#}
-{#            </div>#}
+  {% for dish in dishes %}
+  {#  Single Card Template:#}
+  <div class="card" style="width: 18rem; margin: 10px">
+      <img class="card-img-top w-auto h-50" src="/uploads/{{ dish.image }}" alt="Card image cap">
+    <div class="card-body">
+    {% if admin %}
+    <h5 class="card-title text-center text-uppercase"><a href="{% url 'kitchen:detail_update_position' dish.pk %}">{{ dish.name }}</a></h5>
+    {% else %}
+        <h5 class="card-title text-center text-uppercase">{{ dish.name }}</h5>
+    {% endif %}
+      <div style="display: flex; flex-direction: row">
+          <ul class="list-group list-group-flush mb-auto mt-0">
+            <li class="list-group-item">Описание: {{ dish.description}}</li>
+            <li class="list-group-item">Цена: {{ dish.base_price}} сом</li>
+              {% for portion, portion_info  in dish.extra_price.items %}
+                <li class="list-group-item">{{portion_info.comment}} - {{ portion_info.pricing }}сом ({{ portion }})</li>
+              {% endfor %}
+          </ul>
+      </div>
+    </div>
+      <div class="card-footer">
+      <small class="text-muted text-center">Категория: {{ dish.category }}</small>
+    </div>
+  </div>
+  {% empty %}
+<h2 class="text-center">Позиции отсутствуют</h2>
+  {% endfor %}
+
+</div>
 
 
-
-
-            <div class="col-lg-3 mb-4 mt-4">
-                <div class="card h-100">
-                  <div class="card-body">
-                      <img class="card-img-top" src="/uploads/{{ dish.image }}" width="140" height="140" alt="Card image cap"#}
-                    <h5 class="card-title"><a href="{% url 'kitchen:detail_update_position' dish.pk %}">
-                        {{ dish.name }}</a></h5>
-                  </div>
-
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Описание: {{ dish.description}}</li>
-                    <li class="list-group-item">Категория: {{ dish.category }}</li>
-                    <li class="list-group-item">Цена: {{ dish.base_price}} сом</li>
-                      {% for portion, portion_info  in dish.extra_price.items %}
-                        <li class="list-group-item">{{portion_info.comment}} - {{ portion_info.pricing }}сом ({{ portion }})</li>
-                      {% endfor %}
-                  </ul>
-                </div>
-            </div>
-        {% empty %}
-            <h2 class="text-center">Такого блюда еще нет! </h2>
-        {% endfor %}
-        </div>
 
     {% include 'partial/paginate.html' %}
 

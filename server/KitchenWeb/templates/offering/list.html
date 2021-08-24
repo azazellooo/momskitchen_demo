@@ -7,7 +7,9 @@
     {{ to_js_garnishes|json_script:'to_js_garnishes' }}
     {{ to_js_additionals|json_script:'to_js_additionals' }}
     {% if offerings %}
-            {% include "partial/search_form.html" %}
+        <div class="d-flex justify-content-center">
+                {% include "partial/search_form.html" %}
+            </div>
     {% endif %}
 {% if dates %}
         <ul class="paginator-links">
@@ -19,8 +21,7 @@
         </ul>
     {% endif %}
 {% if offerings %}
-
-<h1> Формирование заказа на {{ date|date:"d/m" }} </h1>
+     <div class="header-info-block"><h1 class="text-center mt-4">Формирование заказа на {{ date|date:"d/m" }}</h1></div>
 {% endif %}
 <div class="row">
     {% for offering in offerings %}
