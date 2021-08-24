@@ -14,8 +14,9 @@ from KitchenWeb.forms import OrderCreateForm, OrderCloseForm, OrderReminderForm,
 from KitchenWeb.models import Order, OrderOffernig
 from accounts.models import Organization, UserToken, Employee
 from bot.telegram_bot import TelegramBot
+from server.settings import BASE_URL
 
-BASE_URL = 'https://f6ea2a483fd1.ngrok.io'
+
 bot = TelegramBot()
 today = date.today()
 
@@ -53,7 +54,7 @@ class CommandSendView(TemplateView):
             for employee in org.employe_org.filter(is_active=True):
                 link = self.generate_link_to_offerings(employee)
                 bot.send_message(recipient=employee.tg_id,
-                                 message=f"Заказ на эту дату уже создан, скорее <a href='{link}'>заходи</a>! {optional_text[0]}", parse_mode=ParseMode.HTML)
+                                 message=f"Заказ на дату {today} уже создан, скорее <a href='{link}'>заходи</a>! {optional_text[0]}", parse_mode=ParseMode.HTML)
         org_names = [Organization.objects.get(id=o).name for o in organizations]
         messages.add_message(self.request, messages.SUCCESS, f'отправлено уведомление о новом предложении организациям: {org_names}')
 
@@ -70,11 +71,10 @@ class CommandSendView(TemplateView):
         org_names = [Organization.objects.get(id=o).name for o in organizations]
         for org_id in organizations:
             org = Organization.objects.get(id=org_id)
-
             for employee in org.employe_org.filter(is_active=True, cart_user__is_confirmed=False):
                 link = self.generate_link_to_offerings(employee)
                 bot.send_message(recipient=employee.tg_id,
-                                 message=f"Зака на {employee.cart_user.first().offering.date} закроется, <a href='{link}'>поторопись</a> ! {optional_text[0]}",
+                                 message=f"Заказ на {employee.cart_user.first().offering.date} закроется, <a href='{link}'>поторопись</a> ! {optional_text[0]}",
                                  parse_mode=ParseMode.HTML)
                 messages.add_message(self.request, messages.SUCCESS,
                                      f'отправлено напоминание о закрытии заказа на дату {employee.cart_user.first().offering.date} организациям: {org_names}',)
