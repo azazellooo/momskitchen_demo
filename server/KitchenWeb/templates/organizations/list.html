@@ -10,7 +10,11 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title"><a href="{% url 'kitchen:organization-detail-update' organization.id %}">{{ organization.name }} </a></h5>
-          <p>ссылка для перехода: <span class="text-info"> {{ organization.generate_link }}</span></p>
+{#          <p>ссылка для перехода: <span class="text-info"> {{ organization.generate_link }}</span></p>#}
+      <p>ссылка для перехода:
+            <input class="form-control mb-2 mt-2" type="text" value="{{ organization.generate_link }}" id="link" readonly>
+            <button class='btn btn-info' onclick="myFunction()">Копировать ссылку</button>
+      </p>
           <p class="card-text">Сотрудники: {{ organization.employe_org.count }}</p>
           {% if organization.payment == 'cumulative'  %}
         <p class="card-text"> </p>
@@ -25,5 +29,13 @@
 {% endfor %}
 <br>
     {% include 'partial/paginate.html' %}
-
+    <script>
+    function myFunction() {
+      let copyText = document.getElementById("link");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(copyText.value);
+      alert("Ссылка скопирована: " + copyText.value);
+    }
+    </script>
 {% endblock %}
