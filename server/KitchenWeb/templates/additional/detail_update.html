@@ -11,14 +11,14 @@
     </h2>
     <button type="button" id="edit_btn" class="btn btn-info">Редактировать</button>
     <button type="button" id="cancel_btn" class="btn btn-info">Отмена</button>
-    <div id="Form" class="d-grid gap-5">
+    <div id="Form" class="d-grid gap-5 border border-warning border-5 rounded my-3 ">
         <form id="myForm" action="{% url "kitchen:additional_detail_update" additional.pk %}" method="post" enctype="multipart/form-data">
                 {% include "partial/kitchen_form.html"  %}
                 {% if not additional.extra_price or additional.extra_price == "{}" %}
                     <btn class='btn' type="submit" id="add" onclick="addExtraBtn2(event);">Добавить дополнительные цены</btn>
                 {% endif %}
                 <div class="selects" id="selects"></div>
-                <p><input type="submit" id="savePosition" value="Обновить"></p>
+                <p><input class="btn mt-3 btn-outline-info" type="submit" id="savePosition" value="Обновить"></p>
         </form>
     </div>
     <script>
@@ -35,7 +35,7 @@
          }
      }
 
-        if (extra_price) {
+        if (Object.keys(extra_price).length > 0) {
 
             for (let volume in extra_price) {
                 $("<div/>").attr({id: 'selectBlock' + COUNT}).appendTo(block)
