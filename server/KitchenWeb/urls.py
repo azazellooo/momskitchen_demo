@@ -89,6 +89,7 @@ commands_urls = [
 ]
 menu_urls = [
     path('menu/', OfferingListView.as_view(), name='menu'),
+    path('menu/<slug:slug>/', OfferingListView.as_view(), name='menu'),
     path('menu/<str:date>/', OfferingListViewForDate.as_view(), name='menu_for_date'),
 ]
 urlpatterns = [

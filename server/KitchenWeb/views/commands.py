@@ -46,7 +46,7 @@ class CommandSendView(TemplateView):
         if token.activated:
             token.delete()
             token = UserToken.objects.create(user=employee)
-        return f'{BASE_URL}/accounts/{token.key}/to-offerings'
+        return f'{BASE_URL}accounts/{token.key}/to-offerings'
 
     def announce_new_offering(self, organizations, optional_text):
         for org_id in organizations:

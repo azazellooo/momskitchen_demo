@@ -28,12 +28,12 @@ class UserProfileView(TemplateView):
                     user_token.save()
                     if slug == 'to-offerings':
                         request.session['token'] = str(kwargs.get('token'))
-                        return redirect('kitchen:offering_list')
+                        return redirect('kitchen:menu')
                     return redirect('profile_distoken')
                 else:
                     if slug == 'to-offerings':
                         request.session['token'] = str(kwargs.get('token'))
-                        return redirect('kitchen:offering_list')
+                        return redirect('kitchen:menu')
                     return redirect('disposability_error')
             else:
                 return redirect('invalid_token')
