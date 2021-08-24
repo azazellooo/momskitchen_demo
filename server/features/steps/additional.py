@@ -1,20 +1,20 @@
 from behave import when, then, given
+from server.settings import BASE_URL
 
 
-URL = 'http://localhost:8000/'
-my_token = '8c2334ed-f09c-4eb5-b89c-aadd651dce9f'
+my_token = '4e346bad-54e9-4fad-a3db-90ff2efbd700'
 
 @given(u'Я открыл страницу создания дополнения')
 def open_position_create_page(context):
-    context.browser.get(f'{URL}kitchen/additional/create/')
+    context.browser.get(f'{BASE_URL}kitchen/additional/create/')
 
 @given(u'Я попадаю на страницу просмотра детального просмотра дополнения')
 def should_be_at_detail_additional(context):
-    context.browser.get(f'{URL}kitchen/additional/1/')
+    context.browser.get(f'{BASE_URL}kitchen/additional/1/')
 
 @given(u'Я зашел на "{page}"')
 def visit(context, page):
-    context.browser.get(f'{URL}accounts/{my_token}')
+    context.browser.get(f'{BASE_URL}accounts/{my_token}')
 
 
 @when(u'Я ввожу "{text}" в поле "{name}"')
@@ -35,14 +35,14 @@ def submit_form(context):
 
 @when(u'Я попадаю на страницу просмотра списка дополнений')
 def should_be_at_additional_list(context):
-    assert context.browser.current_url == f'{URL}kitchen/additional/list/'
+    assert context.browser.current_url == f'{BASE_URL}kitchen/additional/list/'
 
 
 @then(u'Я должен быть на странице создания дополнения')
 def should_be_at_create(context):
-    assert context.browser.current_url == f'{URL}kitchen/additional/create/'
+    assert context.browser.current_url == f'{BASE_URL}kitchen/additional/create/'
 
 
 @then(u'Я попадаю на страницу просмотра списка дополнений')
 def should_be_at_main(context):
-    assert context.browser.current_url == f'{URL}kitchen/additional/list/'
+    assert context.browser.current_url == f'{BASE_URL}kitchen/additional/list/'
