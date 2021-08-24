@@ -23,12 +23,22 @@
     </div>
 
 
+
     <script>
+
      let block = document.getElementById('selects')
      const TYPES_UPDATE = JSON.parse(document.getElementById('types').textContent);
      let COUNT = 1
+     let extra_price_before_parsing = document.getElementById('extra_price').textContent
+     try {
+      let extra_price = JSON.parse(JSON.parse(extra_price_before_parsing));
+     } catch (e) {
+         if (e instanceof SyntaxError){
+             extra_price = JSON.parse(extra_price_before_parsing)
+             console.log('fghjk')
+         }
+     }
 
-     let extra_price = JSON.parse(document.getElementById('extra_price').textContent);
         if (extra_price) {
 
             for (let volume in extra_price) {
@@ -94,8 +104,8 @@
                      option.innerHTML = i
                      select1.appendChild(option)
                  }
-                 $("<button>(+)</button>").attr({class:'plus-min-btn btn btn-outline-primary btn-sm mx-2', onclick:"addExtraBtn2(event);"}).appendTo('#selectBlock'+COUNT);
-                 $("<button>(-)</button>").attr({class:'plus-min-btn btn btn-outline-danger btn-sm mx-2', type:'submit', onclick:"removeExtraBtn2(event);"}).appendTo('#selectBlock'+COUNT);
+                 $("<button>(+)</button>").attr({class:'plus-min-btn', onclick:"addExtraBtn2(event);"}).appendTo('#selectBlock'+COUNT);
+                 $("<button>(-)</button>").attr({class:'plus-min-btn', type:'submit', onclick:"removeExtraBtn2(event);"}).appendTo('#selectBlock'+COUNT);
                  COUNT += 1
             }
             else {
@@ -116,9 +126,7 @@
 
     $(document).ready(function() {
         let childNodes = document.getElementById("selects").getElementsByTagName('input', 'select', 'button');
-
         for (let i of childNodes) {
-            console.log(i);
             $(i).prop('disabled', true)
         }
 

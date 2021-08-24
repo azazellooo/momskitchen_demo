@@ -93,16 +93,6 @@ class PositionDetailUpdateView(UpdateView):
     def get_object(self, queryset=None):
         return get_object_or_404(Dish, pk=self.kwargs.get('pk'))
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        position = self.get_object()
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        context['type'] = TYPES
-        if position.extra_price:
-            context['extra_price'] = position.extra_price
-        if position.image:
-            context['image'] = self.get_object().image
-        return context
-
     def form_valid(self, form):
         position = self.get_object()
         position.name = form.data['name']
@@ -122,5 +112,17 @@ class PositionDetailUpdateView(UpdateView):
         except MultiValueDictKeyError:
             position.save()
         position.save()
-
         return redirect('kitchen:list_position')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        position = self.get_object()
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['type'] = TYPES
+        # if position.extra_price:
+        #     context['extra_price'] = position.extra_price
+        if position.image:
+            context['image'] = self.get_object().image
+        if position.extra_price:
+            if isinstance(position.extra_price, str):
+                context['extra_price'] = json.loads(position.extra_price)
+        return context
