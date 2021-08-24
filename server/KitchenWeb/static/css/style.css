@@ -152,3 +152,12 @@ footer {
 	font-size: 12px;
 }
 
+.choices_ul{
+    list-style: none;
+    padding: 3px;
+}
+
+.btn-text{
+    font-size: 14px;
+    font-weight: bolder;
+}

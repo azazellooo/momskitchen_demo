@@ -33,7 +33,7 @@
         <form method="post">
             {% include "partial/kitchen_form.html" %}
             <p><label>Сотрудник:</label></p>
-            <select name="employee" >
+            <select class="form-control" name="employee" >
                 {% for employee in organization.employe_org.all %}
                     <option value="{{ employee.id }}">{{ employee }}</option>
                 {% endfor %}

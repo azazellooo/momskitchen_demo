@@ -33,7 +33,7 @@
             <img src="/uploads/uploads/no-image-icon-0.jpg" class="card-img-top" alt="...">
         {% endif %}
         <div class="card-body">
-            <h5 class="card-title"><a id="position_name{{ offering.id }}" href="{% url 'kitchen:offering-detail' offering.id %}">{{ offering.position.name }}</a> на {{ offering.date|date:"d/m" }}</h5>
+            <h5 class="card-title"><a id="position_name{{ offering.id }}" href="{% if admin %}{% url 'kitchen:offering-detail' offering.id %}{% else %}#{% endif %}">{{ offering.position.name }}</a> на {{ offering.date|date:"d/m" }}</h5>
             <p class="card-text">{{ offering.position.description }} {{ offering.id }}</p>
             <table class="table">
             <tbody>
@@ -50,10 +50,10 @@
 
             <td>
                 {% if offering.position.extra_price %}
-                    <button class="btn btn-sm btn-outline-warning" id="positionPortionBtn{{ offering.id }}" >выбрать другую порцию</button>
+                    <button class="btn btn-sm btn-outline-warning btn-text" id="positionPortionBtn{{ offering.id }}" >выбрать другую порцию</button>
                     <input type="number" id="PositionBasePortion{{ offering.id }}">
 
-                    <button class="btn-sm btn-outline-danger" id="positionCancel{{ offering.id }}">отмена</button>
+                    <button class="btn-sm btn-outline-danger btn-text" id="positionCancel{{ offering.id }}">отмена</button>
                 {% else %}
                     ...
                 {% endif %}
@@ -285,7 +285,7 @@
             {% if offering.garnish.all %}
             <tr id="garnishRow{{ offering.id }}">
             <th scope="row">
-                <p><select class="mb-2" name="garnish" id="garnish{{ offering.id }}">
+                <p><select class="mb-2 form-control btn-text" name="garnish" id="garnish{{ offering.id }}">
                 {% for garnish in offering.garnish.all %}
                     <option class="garnishClass{{ garnish.id }}" value="{{ garnish }}" >{{ garnish }}</option>
                 {% endfor %}
@@ -301,8 +301,8 @@
                         </select>
                     {% endif %}
                 {% endfor %}
-            <button class="btn btn-sm btn-outline-warning" id="garnishPortionBtn{{ offering.id }}">выбрать другую порцию</button>
-            <button class="btn btn-sm btn-outline-danger" id="garnishCancelBtn{{ offering.id }}">отмена</button>
+            <button class="btn btn-sm btn-outline-warning btn-text" id="garnishPortionBtn{{ offering.id }}">выбрать другую порцию</button>
+            <button class="btn btn-sm btn-outline-danger btn-text" id="garnishCancelBtn{{ offering.id }}">отмена</button>
 
             <td><p id="garnishSum{{ offering.id }}">...</p></td>
             </th>
@@ -312,7 +312,7 @@
             <tr id="additionalRow{{ offering.id }}">
             <th scope="row">
             {% if offering.additional.all %}
-                <p><select class="mb-2" name="additional" id="additional{{ offering.id }}">
+                <p><select class="mb-2 form-control btn-text" name="additional" id="additional{{ offering.id }}">
                 {% for additional in offering.additional.all %}
                     <option class="additionalClass{{ additional.id }}" value="{{ additional }}">{{ additional }}</option>
                 {% endfor %}
@@ -329,8 +329,8 @@
                         </select>
                     {% endif %}
                 {% endfor %}
-                <button class="btn btn-sm btn-outline-warning" id="additionalPortionBtn{{ offering.id }}">выбрать другую порцию</button>
-                <button class="btn btn-sm btn-outline-danger" id="additionalCancelBtn{{ offering.id }}">отмена</button>
+                <button class="btn btn-sm btn-outline-warning btn-text" id="additionalPortionBtn{{ offering.id }}">выбрать другую порцию</button>
+                <button class="btn btn-sm btn-outline-danger btn-text" id="additionalCancelBtn{{ offering.id }}">отмена</button>
             </td>
                 <td><p id="additionalSum{{ offering.id }}">...</p></td>
             </tr>{% endif %}
