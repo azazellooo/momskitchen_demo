@@ -101,7 +101,7 @@ class OfferingListView(ListView):
         return context
 
 
-class OfferingDetailUpdateView(UpdateView):
+class OfferingDetailUpdateView(PermissionMixin, UpdateView):
     template_name = 'offering/detail_update.html'
     model = Offering
     form_class = OfferingForm
