@@ -1,11 +1,12 @@
 from django.contrib import admin
 from accounts.models import Organization, UserToken, BalanceChange, Employee, Review
 
+
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'secondary_key', 'generate_link']
     list_filter = ['name']
     search_fields = ['name']
-    fields = ['id', 'name', 'secondary_key']
+    fields = ['id', 'name', 'secondary_key', 'payment']
     readonly_fields = ['id', 'secondary_key']
 
 

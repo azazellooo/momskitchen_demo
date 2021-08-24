@@ -12,7 +12,7 @@
         <h5 class="card-title"><a href="{% url 'kitchen:organization-detail-update' organization.id %}">{{ organization.name }} </a></h5>
       <p>ссылка для перехода:
             <input class="form-control mb-2 mt-2" type="text" value="{{ organization.generate_link }}" id="link" readonly>
-            <button class='btn btn-info' onclick="myFunction()">Копировать ссылку</button>
+            <button class='btn btn-info' onclick="myFunction()">Скопировать ссылку</button>
       </p>
           <p class="card-text">Сотрудники: {{ organization.employe_org.count }}</p>
           {% if organization.payment == 'cumulative'  %}
