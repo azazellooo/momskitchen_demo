@@ -12,9 +12,9 @@
             <li>
         {% endif %}
     <li>
-        <form method="get">
+        <form class="form-control"  method="get">
             {% if search_value %}<input type="hidden" name="search" value="{{ search_value }}">{% endif %}
-            Страница <input type="text" name="page" id="page" value="{{ page_obj.number }}">
+            Страница <input class="border rounded border-warning text-center text-secondary" type="text" name="page" id="page" value="{{ page_obj.number }}">
             из {{ page_obj.paginator.num_pages }}.
         </form>
     </li>
