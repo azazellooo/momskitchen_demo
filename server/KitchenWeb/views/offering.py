@@ -61,7 +61,7 @@ class OfferingListView(ListView):
         context = super().get_context_data(**kwargs)
         for o in context.get('object_list'):
             if o.position.extra_price:
-                o.position.extra_price = o.position.extra_price
+                o.position.extra_price = json.loads(o.position.extra_price)
             for garnish in list(o.garnish.all()):
                 garnish_dict = dict_filter(model_to_dict(garnish), needed_fields)
                 garnish_dict['offering'] = o.id
