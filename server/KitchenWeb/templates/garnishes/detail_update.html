@@ -15,9 +15,7 @@
     <div id="Form" class="d-grid gap-5 border border-warning border-5 rounded my-3 ">
         <form id="myForm" action="{% url "kitchen:garnish-detail-update" garnish.pk %}" method="post" enctype="multipart/form-data">
                 {% include "partial/kitchen_form.html"  %}
-                {% if not garnish.extra_price or garnish.extra_price == "{}" %}
-                    <btn class='btn' type="submit" id="add" onclick="addExtraBtn2(event);">Добавить дополнительные цены</btn>
-                {% endif %}
+        <btn class='btn btn-outline-info my-3' type="submit" id="add" onclick="addExtraBtn2(event);">Добавить дополнительные цены</btn>
                 <div class="selects" id="selects"></div>
                 <p><input class="btn mt-3 btn-outline-info" type="submit" id="savePosition" value="Обновить"></p>
         </form>
