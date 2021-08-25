@@ -63,6 +63,8 @@ class Employee(models.Model):
         verbose_name_plural = 'Пользователи'
 
     def __str__(self):
+        if self.tg_username:
+            return self.tg_username
         return self.tg_id
 
 
@@ -90,7 +92,7 @@ def send_notification(sender, instance, created, **kwargs):
         if transaction.type == 'accrual':
             current_balance = employee.total_balance + int(transaction.sum_balance)
             message = f'на ваш баланс было начислено {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}'
-            bot.send_message(recipient=chat_user_id,message=message)
+            bot.send_message(recipient=chat_user_id, message=message, parse_mode=None)
         else:
             current_balance = employee.total_balance - int(transaction.sum_balance)
             message = f'С Вашего баланса было списано {transaction.sum_balance} сомов. Ваш текущий баланс: {current_balance} сомов.Комментарий к транзакции: {transaction.comment}'

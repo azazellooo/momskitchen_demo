@@ -56,7 +56,7 @@ class CommandSendView(TemplateView):
                 bot.send_message(recipient=employee.tg_id,
                                  message=f"Заказ на дату {today} уже создан, скорее <a href='{link}'>заходи</a>! {optional_text[0]}", parse_mode=ParseMode.HTML)
         org_names = [Organization.objects.get(id=o).name for o in organizations]
-        messages.add_message(self.request, messages.SUCCESS, f'отправлено уведомление о новом предложении организациям: {org_names}')
+        messages.add_message(self.request, messages.SUCCESS, f'отправлено уведомление о новом предложении организациям: {",".join(org_names)}')
 
     def notify(self, organizations, optional_text):
         org_names = [Organization.objects.get(id=o).name for o in organizations]
@@ -65,7 +65,7 @@ class CommandSendView(TemplateView):
 
                 bot.send_message(recipient=employee.tg_id, message=optional_text, parse_mode=PARSEMODE_MARKDOWN)
                 messages.add_message(self.request, messages.SUCCESS,
-                                     f'отправлено уведомление {optional_text[0]} организациям: {org_names}')
+                                     f'отправлено уведомление {optional_text[0]} организациям: {",".join(org_names)}')
 
     def remind(self, organizations, optional_text):
         org_names = [Organization.objects.get(id=o).name for o in organizations]
@@ -77,7 +77,7 @@ class CommandSendView(TemplateView):
                                  message=f"Заказ на {employee.cart_user.first().offering.date} закроется, <a href='{link}'>поторопись</a> ! {optional_text[0]}",
                                  parse_mode=ParseMode.HTML)
                 messages.add_message(self.request, messages.SUCCESS,
-                                     f'отправлено напоминание о закрытии заказа на дату {employee.cart_user.first().offering.date} организациям: {org_names}',)
+                                     f'отправлено напоминание о закрытии заказа на дату {employee.cart_user.first().offering.date} организациям: {",".join(org_names)}',)
 
     def delivery_arrival(self, organizations, optional_text):
         org_names = [Organization.objects.get(id=o).name for o in organizations]
