@@ -135,13 +135,14 @@
             {% block page_header %}{% endblock %}
     {% if messages %}
             {% for message in messages %}
-
+                <div class="container">
                 <div class="w-50 text-left mt-3">
                 <div class="alert alert-{{ message.tags }}">
                     {{ message }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                </div>
                 </div>
                 </div>
 
