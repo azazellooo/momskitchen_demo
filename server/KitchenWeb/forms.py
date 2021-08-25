@@ -167,6 +167,7 @@ class OrderCreateForm(forms.ModelForm):
         label='Организации',
         queryset=Organization.objects.all()
     )
+    text = forms.CharField(label='Текст')
 
     def __init__(self, *args, **kwargs):
         super(OrderCreateForm, self).__init__(*args, **kwargs)
@@ -185,6 +186,7 @@ class OrderReminderForm(forms.ModelForm):
         label='Организации',
         queryset=Organization.objects.all()
     )
+    text = forms.CharField()
 
     def __init__(self, *args, **kwargs):
         super(OrderReminderForm, self).__init__(*args, **kwargs)
@@ -203,6 +205,7 @@ class OrderCloseForm(forms.ModelForm):
         label='Организации',
         queryset=Organization.objects.all()
     )
+    text = forms.CharField(label='Текст')
 
     def __init__(self, *args, **kwargs):
         super(OrderCloseForm, self).__init__(*args, **kwargs)
@@ -221,6 +224,7 @@ class DeliveryArrivalForm(forms.ModelForm):
         label='Организации',
         queryset=Organization.objects.all()
     )
+    text = forms.CharField(label='Текст')
 
     def __init__(self, *args, **kwargs):
         super(DeliveryArrivalForm, self).__init__(*args, **kwargs)
@@ -239,7 +243,7 @@ class NotificationForm(forms.ModelForm):
         label='Организации',
         queryset=Organization.objects.all()
     )
-    text = MarkdownxFormField()
+    text = MarkdownxFormField(label='Текст')
 
     class Meta:
         model = Command

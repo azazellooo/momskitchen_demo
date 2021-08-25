@@ -4,60 +4,60 @@
 <div class="container">
     <br/>
     <div class="row justify-content-between">
-        <div class="col-md-5 mr-3 border bg-secondary mt-5 text-light pt-3">
+        <div class="col-md-5 mr-3 border command-bg  mt-5 text-dark p-3">
             <form action="{% url 'kitchen:commands' %}" method="post">
-            <h5>Блок команды о создании заказа</h5>
+            <h5>Cоздание заказа</h5>
             {% csrf_token %}
             {{ create_form.as_p }}
             <p>
-                <button class="btn btn-warning" type="submit">отправить</button>
+                <button class="btn btn-secondary" type="submit">отправить</button>
             </p>
             </form>
         </div>
 
-        <div class="col-md-5 mr-3 border bg-secondary mt-5 text-light pt-3">
+        <div class="col-md-5 mr-3 border command-bg mt-5 text-dark p-3">
 
             <form action="{% url 'kitchen:commands' %}" method="post">
-                <h5>Блок команды напоминания о заказе</h5>
+                <h5>Напоминание о заказе</h5>
                 {% csrf_token %}
                 {{ reminder_form.as_p }}
                 <p>
-                    <button class="btn btn-warning" type="submit">отправить</button>
+                    <button class="btn btn-secondary" type="submit">отправить</button>
                 </p>
             </form>
         </div>
 
 
-        <div class="col-md-5 mr-3 border bg-secondary mt-5 text-light pt-3">
+        <div class="col-md-5 mr-3 border command-bg mt-5 text-dark p-3">
             <form action="{% url 'kitchen:commands' %}" method="post">
-                <h5>Блок команды о закрытии заказа</h5>
+                <h5>Закрытие заказа</h5>
                 {% csrf_token %}
                 {{ close_form.as_p }}
                 <p>
-                    <button class="btn btn-warning" type="submit">отправить</button>
+                    <button class="btn btn-secondary" type="submit">отправить</button>
                 </p>
             </form>
         </div>
 
-        <div class="col-md-5 mr-3 border bg-secondary mt-5 text-light pt-3">
+        <div class="col-md-5 mr-3 border command-bg mt-5 text-dark p-3">
             <form action="{% url 'kitchen:commands' %}" method="post">
-                <h5>Блок команды о прибытии доставки</h5>
+                <h5>Прибытие доставки</h5>
                 {% csrf_token %}
                 {{ delivery_arrival.as_p }}
                 <p>
-                    <button class="btn btn-warning" type="submit">отправить</button>
+                    <button class="btn btn-secondary" type="submit">отправить</button>
                 </p>
             </form>
         </div>
 
         <div class="col-md-12 mr-3  mt-5 pt-3">
             <form action="{% url 'kitchen:commands' %}" method="post">
-                <h5>Блок оповещения</h5>
+                <h5>Оповещение</h5>
                 {% csrf_token %}
                 {{ notification_form.as_p }}
                 {{ notification_form.media }}
                 <p>
-                    <button class="btn btn-warning" type="submit">отправить</button>
+                    <button class="btn btn-secondary" type="submit">отправить</button>
                 </p>
             <script>
                 $(document).ready(function (){
@@ -70,8 +70,6 @@
         </div>
 
     </div>
-
-
 
 
 

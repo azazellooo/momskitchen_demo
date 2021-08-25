@@ -161,3 +161,8 @@ footer {
     font-size: 14px;
     font-weight: bolder;
 }
+
+.command-bg{
+    border-radius: 8px;
+    background-color: #2596be;
+}
