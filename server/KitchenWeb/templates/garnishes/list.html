@@ -21,10 +21,13 @@
           <ul class="list-group list-group-flush">
               <li class="list-group-item">Очередность: {{ garnish.order }}</li>
               <li class="list-group-item">Базовая цена: {{ garnish.base_price }}</li>
+               {% if not garnish.extra_price  or garnish.extra_price == "{}" %}
+          {% else %}
               <li class="list-group-item"> <i>Добавочные цены:</i></li>
-              {% for portion, portion_info  in garnish.extra_price.items %}
-                <li class="list-group-item">{{portion_info.comment}} - {{ portion_info.pricing }}сом ({{ portion }})</li>
+              {% for garnish, garnish_info  in garnish.extra_price.items %}
+                <li class="list-group-item">{{garnish_info.comment}} - {{ garnish_info.pricing }}сом ({{ garnish }})</li>
               {% endfor %}
+          {% endif %}
             </ul>
       </div>
     </div>
