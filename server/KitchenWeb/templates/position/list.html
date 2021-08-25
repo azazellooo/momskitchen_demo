@@ -13,9 +13,8 @@
     <div style="display: flex; flex-direction: row; flex-wrap: wrap">
 
   {% for dish in dishes %}
-  {#  Single Card Template:#}
   <div class="card" style="width: 18rem; margin: 10px">
-      <img class="card-img-top w-auto h-50" src="/uploads/{{ dish.image }}" alt="Card image cap">
+      <img class="card-img-top " src="/uploads/{{ dish.image }}" width="100" height="230" alt="Card image cap">
     <div class="card-body">
     {% if admin %}
     <h5 class="card-title text-center text-uppercase"><a href="{% url 'kitchen:detail_update_position' dish.pk %}">{{ dish.name }}</a></h5>
@@ -26,9 +25,13 @@
           <ul class="list-group list-group-flush mb-auto mt-0">
             <li class="list-group-item">Описание: {{ dish.description}}</li>
             <li class="list-group-item">Цена: {{ dish.base_price}} сом</li>
+          {% if  not dish.extra_price or  dish.extra_price == "{}"  %}
+          {% else %}
+                              <li class="list-group-item">Добавочные цены:</li>
               {% for portion, portion_info  in dish.extra_price.items %}
                 <li class="list-group-item">{{portion_info.comment}} - {{ portion_info.pricing }}сом ({{ portion }})</li>
               {% endfor %}
+          {% endif %}
           </ul>
       </div>
     </div>

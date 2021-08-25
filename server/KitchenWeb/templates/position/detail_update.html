@@ -14,9 +14,7 @@
     <div id="Form" class="d-grid gap-5 border border-warning border-5 rounded my-3 ">
         <form id="myForm" action="{% url "kitchen:detail_update_position" position.pk %}" method="post" enctype="multipart/form-data">
                 {% include "partial/kitchen_form.html"  %}
-                {% if not position.extra_price or position.extra_price == "{}" %}
                     <btn class='btn btn-outline-info my-3' type="submit" id="add" onclick="addExtraBtn2(event);">Добавить дополнительные цены</btn>
-                {% endif %}
                 <div class="selects" id="selects"></div>
                 <p><input class="btn btn-outline-info" type="submit" id="savePosition" value="Обновить"></p>
         </form>

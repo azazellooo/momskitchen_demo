@@ -107,7 +107,7 @@ class PositionDetailUpdateView(UpdateView):
                     counter = int(key.replace('select', ""))
                     to_json[value] = {"comment": (form.data.get(f'comment{counter}')),
                                       "pricing": (form.data.get(f'pricing{counter}'))}
-            json_var = json.dumps(to_json)
+            json_var = to_json
             position.extra_price = json_var
         except MultiValueDictKeyError:
             position.save()
