@@ -480,7 +480,7 @@
         let url = button.dataset.url
         let offering_id = button.dataset.idoffering
         let pos_port = null
-        if (document.getElementById(`position${offering_id}` && document.getElementById(`position${offering_id}`).value !== '')){
+        if (document.getElementById(`position${offering_id}`).value) {
             pos_port = document.getElementById(`position${offering_id}`).value
         }
         else {
