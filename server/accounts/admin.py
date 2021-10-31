@@ -3,7 +3,7 @@ from accounts.models import Organization, UserToken, BalanceChange, Employee, Re
 
 
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'secondary_key', 'generate_link']
+    list_display = ['id', 'name', 'secondary_key', 'generate_link', 'payment']
     list_filter = ['name']
     search_fields = ['name']
     fields = ['id', 'name', 'secondary_key', 'payment']
